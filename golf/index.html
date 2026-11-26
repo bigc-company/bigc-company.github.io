@@ -1,0 +1,418 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="골프 여행사의 견적, 입금, 배차, 정산을 대표님 회사의 업무 방식 그대로 연결합니다."><meta property="og:type" content="website"><meta property="og:site_name" content="bigC company"><meta property="og:url" content="https://keunpan.com/golf/"><link rel="canonical" href="https://keunpan.com/golf/"><meta property="og:image" content="https://keunpan.com/golf/og.jpg?v=1"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="600"><meta name="twitter:card" content="summary_large_image"><meta property="og:title" content="예약은 늘었는데, 남는 돈은 그대로입니까?"><meta property="og:description" content="견적부터 정산까지, 쓰시던 방식 그대로 연결합니다."><style>:root{color-scheme:light}body{margin:0;font:14px system-ui}img{max-width:100%}[hidden]{display:none!important}</style></head><body><title>골프 여행사 업무 제안</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Nanum+Myeongjo:wght@700&family=Gowun+Dodum&display=swap">
+<style>
+/* Layout: one 1120 column on a 4-column grid. Each price step = heading row, full-width scene, 4 comments on the same columns.
+   Scenes are drawn in em; 1em = 1cqw (wide 100x62) or 2.5cqw (compact 40x46), so one source feeds the page, the thumbnails and the KakaoTalk cards. */
+:root{
+  --bg:#fff;--panel:#F3F6F4;--ink:#0D1512;--soft:#56635D;--line:#DFE6E2;--go:#0A6B49;--go-ink:#fff;--stop:#BF2B1D;--warn:#8A5A00;
+  --sans:"IBM Plex Sans KR","Pretendard","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  --ease:cubic-bezier(.22,.8,.24,1);color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0C1110;--panel:#151C19;--ink:#EEF3F0;--soft:#9DABA4;--line:#26302B;--go:#4CC795;--go-ink:#06251A;--stop:#FF8577;--warn:#E5B356;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0C1110;--panel:#151C19;--ink:#EEF3F0;--soft:#9DABA4;--line:#26302B;--go:#4CC795;--go-ink:#06251A;--stop:#FF8577;--warn:#E5B356;color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:80px}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.6 var(--sans);-webkit-font-smoothing:antialiased;word-break:keep-all;overflow-wrap:anywhere}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--bg)}
+h1,h2,h3,p,ul,ol,figure{margin:0;padding:0}ul,ol{list-style:none}
+a{color:inherit;text-decoration:none}
+button,textarea{font:inherit;color:inherit}
+button{background:none;border:0;padding:0;cursor:pointer;text-align:inherit}
+:focus-visible{outline:2px solid var(--go);outline-offset:3px}
+.n{font-variant-numeric:tabular-nums;white-space:nowrap}
+.w{max-width:1168px;margin:0 auto;padding-left:max(24px,env(safe-area-inset-left,0px));padding-right:max(24px,env(safe-area-inset-right,0px))}
+
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);border-bottom:1px solid var(--line)}
+.top .w{display:grid;grid-template-columns:1fr auto;align-items:center;height:64px;gap:24px}
+.brand{font-weight:700;white-space:nowrap}
+.rail{position:relative;display:flex}
+.rail a{padding:0 16px;height:64px;display:flex;align-items:center;font-size:14px;color:var(--soft);white-space:nowrap}
+.rail a:hover{color:var(--ink)}
+.rail a[aria-current]{color:var(--ink);font-weight:600}
+.rail i{position:absolute;left:0;bottom:-1px;height:2px;background:var(--go);transition:transform .35s var(--ease),width .35s var(--ease)}
+
+.hero{background:#D5D7D9;color:#0D1512;padding-block:56px 0;position:relative;overflow:hidden;min-height:min(52vw,820px)}
+.hero::before{content:"";position:absolute;inset:0;background:radial-gradient(62% 72% at 16% 26%,rgba(236,232,228,.9),rgba(236,232,228,.5) 48%,transparent 78%),url(photo/fair.jpg) 50% 70%/cover}
+.hero .w{position:relative;z-index:1}
+.hero h1{font-size:clamp(32px,4.4vw,56px);line-height:1.18;font-weight:700;letter-spacing:-.035em;text-wrap:balance;max-width:14em}.hero h1 span{display:inline-block}
+.hero .sub{margin-top:16px;font-size:18px;color:#27322D;max-width:31em}
+.pain{margin-top:32px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.pain span{font-size:14px;color:#27322D;width:100%;margin-bottom:2px}
+.pain button{min-height:46px;padding:0 18px;border:1px solid #fff;background:#fff;border-radius:8px;font-weight:500;transition:border-color .15s,background .15s}
+.pain button:hover{border-color:#0D1512}
+.pain button[aria-pressed="true"]{border-color:#0A6B49;color:#0A6B49;font-weight:600}
+
+.ladder{padding-top:40px;display:grid;grid-template-columns:repeat(6,1fr);gap:16px;align-items:end;padding-bottom:88px}
+.ladder a{display:block;transition:transform .35s var(--ease)}
+.ladder a:hover{transform:translateY(-6px)}
+.ladder a>b{display:block;margin-top:12px;font-size:18px;line-height:1.3}
+.ladder a>small{font-size:14px;color:var(--soft)}
+
+.step{padding-block:0 80px}
+.mom{background-size:cover;min-height:min(38vw,560px);display:flex;align-items:flex-end;margin-bottom:40px;position:relative;color:#fff}
+.mom::before{content:"";position:absolute;inset:0;background:linear-gradient(rgba(4,10,14,.1) 20%,rgba(4,10,14,.82))}
+.mom .w{position:relative;width:100%;padding-block:40px;display:flex;justify-content:space-between;align-items:flex-end;gap:24px}
+.mom h2{font-size:clamp(26px,3.2vw,44px);line-height:1.28;letter-spacing:-.03em;font-weight:600}.mom h2 span{display:block}
+.pr{display:flex;gap:14px;align-items:baseline;font-size:18px;margin-bottom:10px}.pr b{font-weight:600}.pr span{opacity:.85}
+.hit .mom h2{color:#A9E9CB}
+.mom .per small{color:#fff;opacity:.8}.mom .per:hover{color:#A9E9CB}
+.g{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
+.sh{align-items:end;margin-bottom:32px}
+.sh h2 span,.card h2 span{display:inline-block}
+.price b{display:block;font-size:36px;line-height:1.15;font-weight:700;letter-spacing:-.03em}
+.price small,.per small{display:block;font-size:14px;font-weight:400;color:var(--soft);white-space:nowrap}
+.sh .h{grid-column:2/4}
+.sh h2 span,.card h2 span{display:inline-block}
+.sh h2{font-size:clamp(24px,2.6vw,36px);line-height:1.25;letter-spacing:-.03em;text-wrap:balance}
+.per{text-align:right;font-weight:600;justify-self:end}.per:hover{color:var(--go)}
+.cm{margin-top:32px}
+.cm h3{font-size:16px;line-height:1.45;margin-bottom:4px}
+.cm p{font-size:16px;color:var(--soft)}
+.cm .k{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--soft);margin-bottom:8px}
+.cm .k i{flex:none;width:24px;height:24px;border-radius:50%;background:var(--ink);color:var(--bg);font:600 14px/24px var(--sans);text-align:center}
+.cm .k u{text-decoration:none}
+.cm .ok u{color:var(--go)}.cm .if u{color:var(--warn)}.cm .ask u{color:var(--stop)}
+.hit .sh h2{color:var(--go)}
+.note{margin-top:16px;font-size:14px;color:var(--soft)}
+
+.end{padding-block:80px;border-top:1px solid var(--line)}
+.end h2{font-size:clamp(24px,2.6vw,36px);line-height:1.25;letter-spacing:-.03em;margin-bottom:24px}
+.way li{border-top:2px solid var(--ink);padding-top:12px}
+.way b{display:block}
+.way p{color:var(--soft)}
+.ask .pick{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.ask .pick button{min-height:46px;padding:0 16px;border:1px solid var(--line);border-radius:8px}
+.ask .pick button[aria-pressed="true"]{border-color:var(--go);color:var(--go);font-weight:600}
+.ask textarea{display:block;width:100%;min-height:232px;padding:16px;border:1px solid var(--line);border-radius:8px;background:var(--panel);line-height:1.6;resize:vertical}
+.cta{margin-top:12px;min-height:52px;padding:0 24px;border-radius:8px;background:var(--go);color:var(--go-ink);font-weight:600}
+.cta:active{transform:scale(.97)}
+.cards{display:flex;gap:16px;overflow-x:auto;padding-bottom:12px;scroll-snap-type:x proximity}
+.cards img{flex:none;width:270px;height:auto;border:1px solid var(--line);scroll-snap-align:start}
+footer{padding-block:32px 56px;border-top:1px solid var(--line);font-size:14px;color:var(--soft)}
+
+/* ---------- scenes: fixed picture palette, independent of the page theme ---------- */
+.sc{container-type:inline-size;position:relative;overflow:hidden;aspect-ratio:100/62;background:var(--sb);color:#0D1512;border-radius:4px;user-select:none}
+.sc canvas{position:absolute;inset:0;width:100%;height:100%}
+.st{position:absolute;inset:0;font-size:1cqw;line-height:1.4;font-family:var(--sans)}
+.s0{--sb:#E6EDF2;--ct:rgba(40,80,110,.13)}.s1{--sb:#DDEBE1;--ct:rgba(10,107,73,.15)}.s2{--sb:#CFE3D6;--ct:rgba(10,107,73,.17)}
+.s3{--sb:#0A6B49;--ct:rgba(255,255,255,.13)}.s4{--sb:#0C4A5E;--ct:rgba(255,255,255,.13)}.s5{--sb:#0A1626;--ct:rgba(140,190,255,.16)}
+.st b{font-weight:600}
+.ph,.bd,.fl{position:absolute;background:#fff}
+.ph{width:25em;height:53em;border-radius:3.2em;border:.65em solid #0D1512;overflow:hidden;box-shadow:0 2.2em 4em -1.6em rgba(5,20,14,.45)}
+.ph>div{padding:2.2em 1.5em 1.5em;height:100%;position:relative}
+.ph .t{font-size:1.2em;color:#56635D}.ph .t.r{color:#BF2B1D}
+.ph .h{font-size:1.75em;font-weight:700;line-height:1.3;letter-spacing:-.02em}
+.cus{border-top:1px solid var(--line);padding-bottom:80px}
+.cusimg{background:url(photo/swatch.jpg) 50% 50%/cover;min-height:min(30vw,420px);display:flex;align-items:flex-end;color:#fff;position:relative;margin-bottom:40px}
+.cusimg::before{content:"";position:absolute;inset:0;background:linear-gradient(rgba(4,10,14,.1) 20%,rgba(4,10,14,.8))}
+.cusimg .w{position:relative;width:100%;padding-block:40px}.cusimg h2{font-size:clamp(26px,3.2vw,44px);line-height:1.28;letter-spacing:-.03em;font-weight:600}.cusimg h2 span{display:inline-block}
+.cusg{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,8fr);gap:40px;align-items:start}
+.opt{display:grid;gap:20px}.opt fieldset{border:0;margin:0;padding:0;min-width:0}.opt legend,.fld span,.msgw label{display:block;font-size:14px;color:var(--soft);padding:0;margin-bottom:8px}
+.fld input{width:100%;min-height:48px;padding:0 14px;border:1px solid var(--line);border-radius:6px;background:var(--panel);font:inherit;color:inherit}
+.sw{display:flex;gap:10px;flex-wrap:wrap}.sw button{width:44px;height:44px;border-radius:50%;background:var(--c);border:3px solid var(--bg);box-shadow:0 0 0 1px var(--line)}.sw [aria-pressed="true"]{box-shadow:0 0 0 2px var(--ink)}
+.seg{display:flex;flex-wrap:wrap;gap:8px}.seg button{min-height:44px;padding:0 14px;border:1px solid var(--line);border-radius:6px;font-size:16px}.seg [aria-pressed="true"]{border-color:var(--ink);background:var(--ink);color:var(--bg)}
+.msgw{margin-top:40px}.msgw textarea{display:block;width:100%;min-height:330px;padding:16px;border:1px solid var(--line);border-radius:6px;background:var(--panel);line-height:1.6;resize:vertical}
+.pv{--ac:#0A6B49;--pb:#fff;--pi:#0D1512;--ps:#56635D;--pl:#DFE6E2;--pr:.9em;--pf:var(--sans);--sb:#E9ECEB;transition:background .3s}
+.pv .st{font-family:var(--pf)}.pv .bd,.pv .ph{background:var(--pb);color:var(--pi);transition:background .3s,color .3s,border-radius .3s}.pv .bd{border-radius:var(--pr);height:53em}.pv .ph2{height:33em}.pv .pk{padding-top:3em}
+.pv .ph2{padding:2em 2.4em 2.6em;color:#fff;background:linear-gradient(color-mix(in srgb,var(--ac) 88%,transparent),color-mix(in srgb,var(--ac) 45%,transparent)),url(photo/fair.jpg) 50% 60%/cover;height:30em;transition:background .3s}
+.pv .ph2 header{display:flex;gap:2em;align-items:center;font-size:1.3em}.pv .ph2 header b{font-size:1.4em;margin-right:auto}.pv .ph2 header em{font-style:normal;opacity:.85}
+.pv .ph2 h4{margin:1.3em 0 0;font-size:3.2em;line-height:1.3;letter-spacing:-.02em}
+.pv .se{position:relative;display:grid;grid-template-columns:1.2fr 1.2fr .8fr 1fr;background:#fff;color:#0D1512;border-radius:var(--pr);margin-top:2.2em;overflow:hidden}.pv .se span{padding:1em 1.3em;font-size:1.25em;border-right:.08em solid #E6EBE8}.pv .se span:last-child{background:var(--ac)!important;color:#fff;display:grid;place-items:center;border:0;font-weight:600}.pv .se small{display:block;font-size:.85em;color:#56635D}
+.pv .pk div,.pv .pk div:nth-child(n){border-color:var(--ac)}.pv .pk span,.pv .ph .t,.pv .row em{color:var(--ps)}.pv .row{border-color:var(--pl)}.pv .btn{background:var(--ac);border-radius:var(--pr)}.pv .btn.b2{background:transparent;color:var(--pi);box-shadow:inset 0 0 0 .1em var(--pl)}
+.pv.dk{--pb:#14191B;--pi:#F0F3F2;--ps:#A3AFAA;--pl:#2C3437;--sb:#2A3033}
+.ph .big{font-size:2.9em;font-weight:700;letter-spacing:-.04em;line-height:1.2}
+.bd{width:63em;height:46em;border-radius:1.1em;overflow:hidden;box-shadow:0 2.2em 4em -1.6em rgba(5,20,14,.38)}
+.bd>header{display:flex;justify-content:space-between;align-items:center;height:5em;padding:0 2em;border-bottom:.1em solid #DFE6E2}
+.bd>header b{font-size:1.6em}.bd>header span{font-size:1.2em;color:#56635D}
+.fl{border-radius:.9em;padding:1.1em 1.4em;box-shadow:0 1.4em 2.6em -1em rgba(5,20,14,.42);font-size:1em}
+.fl p{font-size:1.25em}.fl .t{font-size:1.1em;color:#56635D}
+.row{display:flex;justify-content:space-between;align-items:center;gap:1em;padding:.75em 0;border-bottom:.08em solid #E6EBE8;font-size:1.3em}
+.row em{font-style:normal;color:#56635D}
+.row span:last-child{font-variant-numeric:tabular-nums;white-space:nowrap}
+.r{color:#BF2B1D}.gr{color:#0A6B49}
+.btn{display:block;text-align:center;border-radius:.7em;padding:.8em;font-size:1.4em;font-weight:600;background:#0A6B49;color:#fff}
+.btn.off{background:#FBE9E6;color:#BF2B1D}
+.bub{font-size:1.3em;border-radius:1em;padding:.7em 1em;margin-bottom:.7em;max-width:86%}
+.bub.me{background:#DFF0E6;margin-left:auto}.bub.yo{background:#F0F3F1}
+.chips{display:grid;gap:.6em;margin-top:.6em}.chips i{font-style:normal;font-size:1.3em;border:.09em solid #0A6B49;color:#0A6B49;border-radius:.7em;text-align:center;padding:.5em;font-weight:600}
+.pin{position:absolute;width:2.6em;height:2.6em;border-radius:50%;background:#0D1512;color:#fff;z-index:5;display:grid;place-items:center;box-shadow:0 0 0 .35em rgba(255,255,255,.85)}
+.pin::before{font-style:normal;content:attr(data-n);font-size:1.35em;font-weight:600;line-height:1}
+.cal{display:grid;grid-template-columns:8em repeat(4,1fr);height:41em;grid-template-rows:4em repeat(4,1fr)}
+.cal>*{border-bottom:.08em solid #E6EBE8;border-left:.08em solid #E6EBE8;padding:.6em .7em;min-width:0}
+.cal>.d,.cal>.l{border-left:0}.cal .d b,.cal .l b{font-size:1.3em}.cal .d,.cal .l{display:flex;align-items:center}
+.ev{border-radius:.6em;padding:.5em .7em;background:#E3F1EA;margin-bottom:.5em;border:.12em solid transparent}
+.ev b{display:block;font-size:1.2em;color:#0A6B49;white-space:nowrap}.ev span{font-size:1.1em;color:#56635D;white-space:nowrap}
+.ev.x{background:#FDF0EE;border:.12em dashed #BF2B1D}.ev.x b{color:#BF2B1D}.ev.sv{background:#E9EEF5}.ev.sv b{color:#28506E}.ev.sn{background:#FBF3E2}.ev.sn b{color:#8A5A00}
+.kp{display:grid;grid-template-columns:repeat(3,1fr);padding:1.6em 2em;gap:2em}
+.kp small{display:block;font-size:1.2em;color:#56635D}.kp b{display:block;font-size:2.5em;letter-spacing:-.03em;line-height:1.35;white-space:nowrap}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:2em;padding:0 2em}
+.two h4{margin:0;font-size:1.3em;padding:.5em 0;border-bottom:.15em solid #0D1512}
+.bars{display:flex;align-items:end;gap:1.1em;height:11em;padding:0 2em;margin-top:1.6em}
+.bars i{flex:1;background:#CFE3D6;border-radius:.3em .3em 0 0;position:relative}.bars i.hi{background:#0A6B49}
+.bars i::after{content:attr(data-d);position:absolute;bottom:-1.7em;left:0;right:0;text-align:center;font:500 1.1em/1.4 var(--sans);color:#56635D}
+.site{padding:0}
+.site .hv{height:22em;background:linear-gradient(170deg,#0C4A5E,#0A6B49 70%,#7DB58C);color:#fff;padding:3em 2.4em;position:relative;overflow:hidden}
+.site .hv svg{position:absolute;inset:0;width:100%;height:100%}
+.site .hv b{position:relative;display:block;font-size:3.4em;line-height:1.25;letter-spacing:-.03em;font-weight:700}
+.site .se{position:relative;display:grid;grid-template-columns:1.2fr 1.2fr .8fr 1fr;background:#fff;color:#0D1512;border-radius:.8em;margin-top:1.8em;overflow:hidden}
+.site .se span{padding:1em 1.3em;font-size:1.25em;border-right:.08em solid #E6EBE8}.site .se span:last-child{background:#0D1512;color:#fff;font-weight:600;display:grid;place-items:center;border:0}
+.site .se small{display:block;font-size:.85em;color:#56635D}
+.pk{display:grid;grid-template-columns:repeat(3,1fr);gap:1.6em;padding:2em 2.4em}
+.pk div{border-top:.5em solid #0A6B49;padding-top:1em}.pk div:nth-child(2){border-color:#28506E}.pk div:nth-child(3){border-color:#C98A1B}
+.pk b{display:block;font-size:1.5em}.pk span{display:block;font-size:1.2em;color:#56635D}.pk strong{display:block;font-size:1.7em;margin-top:.3em}
+.tl{position:relative;padding-left:1.8em;margin-top:1em}
+.tl::before{content:"";position:absolute;left:.45em;top:.6em;bottom:.6em;width:.14em;background:#CFE3D6}
+.tl li{position:relative;padding:.55em 0;font-size:1.3em}.tl li::before{content:"";position:absolute;left:-1.35em;top:1em;width:.75em;height:.75em;border-radius:50%;background:#fff;border:.2em solid #0A6B49}
+.tl li.now::before{background:#0A6B49}.tl em{font-style:normal;color:#56635D;display:block;font-size:.88em}
+.s5 .ph,.s5 .fl{background:#14253D;color:#EAF1FB;border-color:#2A3E5C}.s5 .ph .t,.s5 .fl .t,.s5 .row em{color:#93A7C4}.s5 .row{border-color:#243650}
+.s5 .gr{color:#7CE0B4}.s5 .r{color:#FFB27A}.s5 .btn{background:#7CE0B4;color:#06251A}
+.map{position:absolute;left:0;top:0;width:100%;height:100%}
+.map text{font:600 1.5px var(--sans);fill:#93A7C4}
+
+/* default wide positions */
+.ph.a{left:71em;top:4.5em}.bd{left:4em;top:4.5em}.bar{left:4em;bottom:4.5em;width:63em}
+.s0 .bd{height:37em}.s0 .cal{height:32em;grid-template-rows:4em repeat(3,1fr)}.s0 .bar{height:14.5em}.s2 .bd{height:53em}.s2 .cal{height:48em}
+.s1 .ph.a{left:36em}.s1 .ph.b{left:71em;top:4.5em}
+.s5 .ph.a{left:37.5em}
+/* compact positions: emitted for narrow screens and for cards by build.py */
+@media (max-width:760px){.step .sc{aspect-ratio:40/50}.step .st{font-size:2.5cqw}.step .bd{left:2em;top:2em;zoom:.57}.step .ph.a{left:13em;top:13em}.step .s0 .bd{top:2em}.step .s1 .ph.a{left:9.7em;top:1.6em;zoom:.9}.step .s5 .ph.a{left:9.7em;top:1.6em;zoom:.9}.step .bar{left:2em!important;top:auto!important;bottom:2em!important;width:36em!important;z-index:4}.step .f2{left:2em!important;top:auto!important;bottom:2em!important;width:36em!important;z-index:4}.step .s0 .bar{display:none}.step .s1 .ph.b{display:none}.step .f1{display:none}.step .f1b{display:none}.step .f5a{display:none}.step .f5b{display:none}.step .f5c{display:none}.step .f5d{display:none}.step .pin{display:none}.step .fl p{font-size:1.4em}.pvw .sc{aspect-ratio:40/50}.pvw .st{font-size:2.5cqw}.pvw .bd{left:2em;top:2em;zoom:.57}.pvw .ph.a{left:13em;top:13em}.pvw .s0 .bd{top:2em}.pvw .s1 .ph.a{left:9.7em;top:1.6em;zoom:.9}.pvw .s5 .ph.a{left:9.7em;top:1.6em;zoom:.9}.pvw .bar{left:2em!important;top:auto!important;bottom:2em!important;width:36em!important;z-index:4}.pvw .f2{left:2em!important;top:auto!important;bottom:2em!important;width:36em!important;z-index:4}.pvw .s0 .bar{display:none}.pvw .s1 .ph.b{display:none}.pvw .f1{display:none}.pvw .f1b{display:none}.pvw .f5a{display:none}.pvw .f5b{display:none}.pvw .f5c{display:none}.pvw .f5d{display:none}.pvw .pin{display:none}.pvw .fl p{font-size:1.4em}}
+
+
+@media (prefers-reduced-motion:no-preference){
+  .mv{transition:transform .9s var(--ease)}
+  .sc:not(.on) .mv.up{transform:translateY(2em)}.sc:not(.on) .mv.lf{transform:translateX(2em)}
+  .on .shake{animation:sh 5s 1s infinite}.on .pulse{animation:pu 2.4s infinite}
+  @keyframes sh{0%,86%,100%{transform:none}89%{transform:translateX(.35em)}92%{transform:translateX(-.35em)}95%{transform:translateX(.2em)}}
+  @keyframes pu{50%{opacity:.45}}
+}
+@media (max-width:760px){
+  .w{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+  .top .w{grid-template-columns:1fr;height:52px}.brand{display:none}
+  .rail{justify-content:space-between}.rail a{padding:0 4px;height:52px}
+  .hero{padding-block:36px 0;min-height:0;padding-bottom:58vw}.hero::before{inset:auto 0 0;aspect-ratio:1/1;background:url(photo/fair.jpg) 62% 100%/cover;-webkit-mask-image:linear-gradient(transparent,#000 38%);mask-image:linear-gradient(transparent,#000 38%)}
+  .mom{min-height:100vw;margin-bottom:24px}.mom .w{padding-block:24px;flex-direction:column;align-items:flex-start;gap:16px}.mom .per{text-align:left;justify-self:start}
+  .ladder{display:flex;overflow-x:auto;gap:12px;padding-bottom:56px;margin-inline:-16px;padding-inline:16px;scrollbar-width:none}
+  .ladder a{flex:none;width:148px}
+  .step{padding-block:0 56px}.end{padding-block:56px}
+  .g{grid-template-columns:1fr;gap:20px}
+  .cusg{grid-template-columns:1fr;gap:28px}.cusimg{min-height:80vw;margin-bottom:28px}.pv .bd{zoom:.57;left:2em;top:2em}
+  .price b{font-size:26px}.cm .k i{display:none}
+  .sh{display:grid;grid-template-columns:1fr auto;margin-bottom:20px;gap:16px}.sh .h{grid-column:1/-1;grid-row:2}.per{grid-row:1;grid-column:2}
+}
+</style>
+<header class="top"><div class="w"><span class="brand">bigC company</span><nav class="rail" aria-label="비용 단계"><a href="#t0">15만</a><a href="#t1">30만</a><a href="#t2">75만</a><a href="#t3">120만~</a><a href="#t4">고객 앱</a><a href="#t5">확장</a><i></i></nav></div></header>
+<main><section class="hero"><div class="w"><h1><span>예약은 늘었는데,</span> <span>남는 돈은 그대로입니까?</span></h1><p class="sub">골프 여행사의 견적, 입금, 배차, 정산을 대표님 회사의 업무 방식 그대로 하나로 연결합니다. 필요한 단계부터 시작하실 수 있습니다.</p>
+<div class="pain"><span>먼저 해결하고 싶은 업무를 선택해 주십시오.</span><button type="button" data-go="t1" aria-pressed="false">견적 누락</button><button type="button" data-go="t2" aria-pressed="false">입금과 배차</button><button type="button" data-go="t3" aria-pressed="false">정산과 직원 관리</button><button type="button" data-go="t4" aria-pressed="false">고객 유입</button></div></div></section>
+<div class="w"><nav class="ladder" aria-label="여섯 장면"><a href="#t0" aria-label="업무 정비, 15만 원"><div class="sc s0 on" aria-hidden="true"><canvas></canvas><div class="st"><div class="bd mv up"><header><b>12월 예약 달력</b><span>직원 4명 공유</span></header>
+<div class="cal"><div class="d"></div><div class="d"><b>금 11</b></div><div class="d"><b>토 12</b></div><div class="d"><b>일 13</b></div><div class="d"><b>월 14</b></div>
+<div class="l"><b>티업</b></div><div></div><div><div class="ev"><b>블루힐 07:30</b><span>박 대표님 4명</span></div></div><div><div class="ev"><b>선밸리 08:10</b><span>박 대표님 4명</span></div></div><div></div>
+<div class="l"><b>차량</b></div><div><div class="ev sv"><b>공항 13:20</b><span>밴 A</span></div></div><div><div class="ev sv"><b>출발 05:40</b><span>밴 A</span></div></div><div><div class="ev sv"><b>출발 06:20</b><span>밴 A</span></div></div><div><div class="ev sv"><b>공항 10:00</b><span>밴 B</span></div></div>
+<div class="l"><b>숙소</b></div><div><div class="ev sn"><b>베이 호텔</b><span>3실 체크인</span></div></div><div></div><div></div><div><div class="ev sn"><b>체크아웃</b><span>09:00</span></div></div>
+</div></div>
+<div class="ph a mv lf"><div><p class="t">우리 여행사 채널</p><p class="h" style="margin:.1em 0 .8em">빠른 답장</p>
+<p class="bub me">12월 골프 4명 견적 부탁드립니다</p><p class="bub yo">안녕하십니까. 아래 세 가지를 알려 주시면 견적을 준비해 드립니다.<br>① 날짜 ② 인원 ③ 항공편</p>
+<p class="chips"><i>견적 받기</i><i>티업 확인</i><i>차량 문의</i></p>
+<p class="bub me" style="margin-top:1em">11일 도착, 14일 출발입니다</p><p class="bub yo">확인했습니다. 담당자가 이어서 안내해 드립니다.</p></div></div>
+<i class="pin" data-n="1" style="left:69.7em;top:23em"></i><i class="pin" data-n="2" style="left:2.7em;top:3.2em"></i><div class="fl mv up bar"><p class="t">골프장 요금표 한 장</p><div class="row"><span>블루힐 <em>주말 18홀</em></span><span>₱5,200 <em>카트 · 캐디 · 캐디팁 따로</em></span></div><div class="row" style="border:0"><span>선밸리 <em>주말 18홀</em></span><span>₱6,800 <em>카트 · 캐디 포함</em></span></div></div><i class="pin" data-n="3" style="left:2.7em;top:41.7em"></i></div></div><b class="n">15만 원</b><small>업무 정비</small></a><a href="#t1" aria-label="견적, 30만 원"><div class="sc s1 on" aria-hidden="true"><canvas></canvas><div class="st"><div class="ph a mv up"><div><p class="t">박 대표님 일행 · 3박 4일</p><p class="big">₩4,146,000</p><p class="t r pulse" style="margin:.2em 0 .6em"><b>확인이 필요한 항목 1건</b></p>
+<div class="row"><span>그린피 <em>4명</em></span><span>₱20,800</span></div><div class="row"><span>카트 <em>2대</em></span><span>₱2,600</span></div><div class="row"><span>캐디 <em>4명</em></span><span>₱2,400</span></div>
+<div class="row r" style="background:#FDF0EE;margin:0 -1.15em;padding:.75em 1.15em"><span><b>캐디팁 4명</b></span><span><b>값 없음</b></span></div>
+<div class="row"><span>밴 <em>05:40 ~ 20:15</em></span><span>₱8,500</span></div><div class="row"><span>초과 3시간</span><span>₱2,040</span></div>
+<div class="row"><span>한식당 저녁 <em>5명</em></span><span>₱6,000</span></div><div class="row"><span>호텔 3실 <em>3박</em></span><span>₱40,500</span></div><div class="row"><span>가이드 <em>하루</em></span><span>₱3,000</span></div>
+<span class="btn off" style="margin-top:.9em">누락 항목 입력 후 발송 가능</span></div></div>
+<div class="ph b mv lf"><div><p class="t">고객 견적서</p><p class="h" style="margin:.1em 0 .4em">마닐라 골프 3박 4일</p><p class="t">12월 11일 금 ~ 14일 월 · 5명</p>
+<ul class="tl"><li class="now">1일차 공항 도착<em>호텔 체크인 · 한식 저녁</em></li><li>2일차 블루힐 CC 07:30<em>18홀 · 카트 · 캐디 포함</em></li><li>3일차 선밸리 CC 08:10<em>18홀 · 카트 · 캐디 포함</em></li><li>4일차 공항 출발<em>호텔 10:00 출발</em></li></ul>
+<div class="row" style="margin-top:.8em"><span>골프 1인 <em>× 4</em></span><span><b>₩935,000</b></span></div><div class="row"><span>동반 1인 <em>× 1</em></span><span><b>₩454,000</b></span></div>
+<div class="row"><span><b>합계</b></span><span><b>₩4,194,000</b></span></div><p class="t" style="margin-top:1em">2판 · 12월 5일까지 유효</p><span class="btn" style="margin-top:.6em">한글 · English</span></div></div>
+<div class="fl mv up f1b" style="left:4em;top:17em;width:28em"><p class="t">자동 입력</p><div class="row"><span>날짜</span><span>12월 11일 ~ 14일</span></div><div class="row"><span>인원</span><span>골프 4 · 동반 1</span></div><div class="row"><span>골프</span><span>2라운드</span></div><div class="row r" style="border:0"><span><b>확인 필요</b></span><span><b>캐디팁 조건</b></span></div></div><div class="fl mv up f1" style="left:4em;top:4.5em;width:28em"><p class="t">카카오톡 문의</p><p style="margin-top:.3em">“11일 도착, 골프 4명 두 번입니다. 한 명은 관광하고 14일 낮에 출발합니다.”</p></div><i class="pin" data-n="1" style="left:2.7em;top:3.2em"></i><i class="pin" data-n="2" style="left:34.7em;top:26.4em"></i><i class="pin" data-n="3" style="left:69.7em;top:8em"></i></div></div><b class="n">30만 원</b><small>견적</small></a><a href="#t2" aria-label="예약과 배차, 75만 원"><div class="sc s2 on" aria-hidden="true"><canvas></canvas><div class="st"><div class="bd mv up"><header><b>배정</b><span>12월 11일 ~ 14일</span></header>
+<div class="cal"><div class="d"></div><div class="d"><b>금 11</b></div><div class="d"><b>토 12</b></div><div class="d"><b>일 13</b></div><div class="d"><b>월 14</b></div>
+<div class="l"><b>티업</b></div><div></div><div><div class="ev"><b>블루힐 07:30</b><span>박 대표님 4명</span></div></div><div><div class="ev"><b>선밸리 08:10</b><span>박 대표님 4명</span></div></div><div></div>
+<div class="l"><b>밴 A</b></div><div><div class="ev sv"><b>13:20 ~ 18:00</b><span>박 대표님</span></div></div><div><div class="ev sv"><b>05:40 ~ 20:15</b><span>박 대표님</span></div><div class="ev x shake"><b>11:00 겹침</b></div></div><div><div class="ev sv"><b>06:20 ~ 19:00</b><span>박 대표님</span></div></div><div></div>
+<div class="l"><b>밴 B</b></div><div></div><div></div><div><div class="ev sv"><b>09:00 ~ 15:00</b><span>최 대표님</span></div></div><div><div class="ev sv"><b>10:00 ~ 12:30</b><span>박 대표님</span></div></div>
+<div class="l"><b>가이드</b></div><div></div><div><div class="ev sn"><b>미나</b><span>동반 1명 관광</span></div></div><div></div><div></div></div></div>
+<div class="fl mv up f2" style="left:40.5em;top:49.4em;width:25.5em"><p class="t">배차 중복</p><p><b class="gr">토요일 밴 B 이용 가능</b></p></div>
+<div class="ph a mv lf"><div><p class="t">박 대표님 일행</p><p class="h" style="margin:.1em 0 .6em">입금 확인</p>
+<div class="row"><span>받을 돈</span><span><b>₩4,194,000</b></span></div><div class="row"><span>들어온 돈</span><span>₩4,000,000</span></div><div class="row r"><span><b>모자란 돈</b></span><span><b>₩194,000</b></span></div>
+<span class="btn off" style="margin:.9em 0 1.4em">전액 입금 후 확정</span>
+<p class="t">기사 전달</p><p class="h" style="font-size:1.5em;margin:.1em 0 .5em">밴 A · 로델</p><p class="bub yo" style="max-width:100%">12/12 05:40 베이 호텔 로비<br>골프 4명 · 백 4개<br>블루힐 CC 07:30 티업</p><p class="gr" style="font-size:1.25em"><b>14:02 기사 확인 완료</b></p><p class="h" style="font-size:1.5em;margin:.7em 0 .4em">가이드 · 미나</p><p class="bub yo" style="max-width:100%">12/12 10:00 동반 1명 관광</p><p class="r" style="font-size:1.25em"><b>확인 대기</b></p></div></div><i class="pin" data-n="1" style="left:69.7em;top:18em"></i><i class="pin" data-n="2" style="left:39.2em;top:48.1em"></i><i class="pin" data-n="3" style="left:69.7em;top:31em"></i></div></div><b class="n">75만 원</b><small>예약과 배차</small></a><a href="#t3" aria-label="통합 운영, 120만~250만 원"><div class="sc s3 on" aria-hidden="true"><canvas></canvas><div class="st"><div class="bd mv up"><header><b>대표 화면</b><span>12월 12일 토 08:10</span></header>
+<div class="kp"><div><small>받은 돈</small><b>₩12,480,000</b></div><div><small>줄 돈</small><b>₩9,960,000</b></div><div><small>남을 돈</small><b class="gr">₩2,520,000</b></div></div>
+<div class="two"><div><h4>자동 확인</h4><div class="row"><span>미수금</span><span>0건</span></div><div class="row"><span>겹친 배정</span><span>0건</span></div><div class="row"><span>기사 미확인</span><span class="r"><b>1건</b></span></div></div>
+<div><h4>대표님 결정</h4><div class="row"><span>선밸리 상품 <em>남는 돈 3%</em></span><span>요금 조정</span></div><div class="row"><span>그린 투어 <em>취소 4번</em></span><span>선금 적용</span></div><div class="row"><span>화요일 <em>밴 2대 비어 있음</em></span><span>할인 검토</span></div></div></div>
+<div class="bars"><i data-d="월" style="height:62%"></i><i data-d="화" class="hi" style="height:24%"></i><i data-d="수" style="height:48%"></i><i data-d="목" style="height:56%"></i><i data-d="금" style="height:88%"></i><i data-d="토" style="height:100%"></i><i data-d="일" style="height:94%"></i></div></div>
+<div class="ph a mv lf"><div><p class="t">기사 화면 · 로델</p><p class="h" style="margin:.1em 0 .2em">오늘 3곳</p>
+<ul class="tl"><li class="now">05:40 베이 호텔 로비<em>4명 · 골프백 4개 · 도착 완료</em></li><li>07:30 블루힐 CC<em>대기 주차 B구역</em></li><li>18:30 한식당<em>5명 · 예약 확인됨</em></li></ul>
+<span class="btn" style="margin-top:.9em">블루힐 CC 도착</span>
+<p class="t" style="margin-top:1.4em">현장에서 나온 돈</p><div class="row"><span>톨비</span><span>₱420</span></div><div class="row"><span>주차</span><span>₱100</span></div><div class="row"><span><b>오늘 합계</b></span><span><b>₱520</b></span></div><span class="btn" style="margin-top:.9em;background:#F0F3F1;color:#0D1512">영수증 찍기</span></div></div>
+<div class="fl mv up bar"><p class="t">변경 기록</p><p><b>김 실장</b> 10:12 · 티업 07:30 → 07:48</p></div><i class="pin" data-n="1" style="left:60.5em;top:10.5em"></i><i class="pin" data-n="2" style="left:69.7em;top:12em"></i><i class="pin" data-n="3" style="left:2.7em;top:50.4em"></i></div></div><b class="n">120만 원부터</b><small>통합 운영</small></a><a href="#t4" aria-label="고객 앱, 별도 견적"><div class="sc s4 on" aria-hidden="true"><canvas></canvas><div class="st"><div class="bd site mv up"><div class="hv"><svg viewBox="0 0 630 220" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><path d="M360 240C400 150 470 190 500 120S560 40 640 20V240Z" fill="#8CC39A" opacity=".55"/><path d="M430 240C450 170 510 180 530 130S590 70 640 60V240Z" fill="#B5DDBD" opacity=".55"/><ellipse cx="556" cy="98" rx="34" ry="13" fill="#DDF2E0"/><path d="M556 98V40l22 9-22 9" fill="#fff" stroke="#fff" stroke-width="2"/></svg><b>마닐라 골프,<br>하루 안에 견적을 드립니다.</b><div class="se"><span><small>골프장</small>블루힐 · 선밸리</span><span><small>날짜</small>12.11 ~ 12.14</span><span><small>인원</small>4명</span><span>견적 요청</span></div></div>
+<div class="pk"><div><b>3박 4일 2라운드</b><span>전용 밴 · 한식 저녁 2회</span><strong>1인 ₩935,000</strong></div><div><b>2박 3일 2라운드</b><span>전용 밴 · 공항 이동</span><strong>1인 ₩720,000</strong></div><div><b>동반 관광 하루</b><span>가이드 · 점심 포함</span><strong>1인 ₩120,000</strong></div></div>
+<div style="padding:0 2.4em"><div class="row"><span>포함 <em>그린피 · 카트 · 캐디 · 차량 · 톨비</em></span><span class="gr"><b>총액으로 표시</b></span></div><div class="row"><span>한국어 · English · 검색과 AI가 읽기 쉬운 구조</span><span>마닐라 · 클락 · 세부</span></div></div></div>
+<div class="fl mv up bar"><p class="t">협력 골프장 화면</p><p><b>블루힐 CC</b> 토요일 빈 티업 <b class="gr">3팀</b> 올림</p></div>
+<div class="ph a mv lf"><div><p class="t">고객 앱</p><p class="h" style="margin:.1em 0 .2em">내 여행 2일차</p>
+<ul class="tl"><li class="now">05:40 호텔 로비<em>로델 기사 · 흰색 밴 · 4821</em></li><li>07:30 블루힐 CC 티업<em>카트 2대 · 캐디 4명 준비됨</em></li><li>13:00 클럽하우스 점심</li><li>18:30 한식당<em>5명 · 안쪽 방</em></li></ul>
+<span class="btn" style="margin-top:.9em">기사에게 연락</span><span class="btn" style="margin-top:.5em;background:#F0F3F1;color:#0D1512">한 라운드 더 넣기</span><div class="row" style="margin-top:.8em"><span>여행 서류</span><span>3개</span></div><div class="row"><span>긴급 연락</span><span>김 실장</span></div></div></div><i class="pin" data-n="1" style="left:2.7em;top:3.2em"></i><i class="pin" data-n="2" style="left:69.7em;top:8em"></i><i class="pin" data-n="3" style="left:2.7em;top:50.4em"></i></div></div><b class="n">별도 견적</b><small>고객 앱</small></a><a href="#t5" aria-label="확장 구상, 검토 후 제안"><div class="sc s5 on" aria-hidden="true"><canvas></canvas><div class="st"><svg class="map" viewBox="0 0 100 62" aria-hidden="true"><path id="arc" d="M3 16C14 4 28 5 36 12C56 22 76 34 80 50" fill="none" stroke="#5C7BA8" stroke-width=".18" stroke-dasharray=".8 .8"/><circle cx="80" cy="50" r=".9" fill="#7CE0B4"/><circle cx="80" cy="50" r="2.4" fill="none" stroke="#7CE0B4" stroke-width=".15" opacity=".6"/><path d="M0-1.3 .5 0 2 .6 .5 .7 0 2-.5 .7-2 .6-.5 0Z" fill="#fff"><animateMotion dur="14s" repeatCount="indefinite" rotate="auto"><mpath href="#arc"/></animateMotion></path></svg>
+<div class="ph a mv up"><div><p class="t">03:12 · 대표님 휴대폰</p><p class="h r" style="margin:.1em 0 .2em">항공편 40분 지연</p><p class="t">박 대표님 일행 · 13:20 → 14:00 도착</p>
+<div style="margin-top:1.1em"><div class="row"><span>공항 픽업</span><span><em>13:50 →</em> <b class="gr">14:30</b></span></div><div class="row"><span>밴 A 대기료</span><span><b class="gr">₱0</b></span></div><div class="row"><span>호텔 체크인</span><span><em>15:00 →</em> <b class="gr">15:40</b></span></div><div class="row"><span>한식당 저녁</span><span>18:30 그대로</span></div><div class="row"><span>다음 팀 밴 A</span><span><b class="gr">밴 B로 바꿈</b></span></div></div>
+<p class="t" style="margin:1.2em 0 .5em">발송 대기 안내문 3건</p><span class="btn">승인하고 보내기</span><p class="t" style="text-align:center;margin-top:.8em">직접 고치기</p></div></div>
+<div class="fl mv lf f5a" style="left:68em;top:4.5em;width:28em"><p class="t">고객 · 한국어</p><p>14:30에 3번 출구에서 모시겠습니다. 석식 예약은 변동 없습니다.</p></div>
+<div class="fl mv lf f5b" style="left:68em;top:15em;width:28em"><p class="t">기사 · English</p><p>Pickup moved to 14:30, Gate 3. Four golf bags.</p></div>
+<div class="fl mv lf f5c" style="left:68em;top:23.5em;width:28em"><p class="t">호텔 · English</p><p>Park party of 5, check-in 15:40.</p></div>
+<div class="fl mv up f5d" style="left:4em;bottom:4.5em;width:29em"><p class="t">운영 제안</p><p>이 항공편은 이번 달 4회 중 3회 지연되었습니다. 다음 견적부터 픽업을 30분 늦추시겠습니까?</p></div><i class="pin" data-n="1" style="left:36.2em;top:8em"></i><i class="pin" data-n="2" style="left:36.2em;top:19em"></i><i class="pin" data-n="3" style="left:66.7em;top:3.2em"></i></div></div><b class="n">검토 후 제안</b><small>확장 구상</small></a></nav></div>
+<section class="step" id="t0"><div class="mom" style="background-image:url(photo/desk.jpg);background-position:50% 60%"><div class="w"><div><p class="pr"><span>업무 정비</span><b class="n">15만 원</b></p><h2><span>매일 반복되는 답변과 일정부터</span> <span>정리해 드립니다.</span></h2></div><a class="per" href="#ask" data-ask="0"><small>제작 일정</small>담당자 문의</a></div></div><div class="w">
+<div class="sc s0 " aria-hidden="true"><canvas></canvas><div class="st"><div class="bd mv up"><header><b>12월 예약 달력</b><span>직원 4명 공유</span></header>
+<div class="cal"><div class="d"></div><div class="d"><b>금 11</b></div><div class="d"><b>토 12</b></div><div class="d"><b>일 13</b></div><div class="d"><b>월 14</b></div>
+<div class="l"><b>티업</b></div><div></div><div><div class="ev"><b>블루힐 07:30</b><span>박 대표님 4명</span></div></div><div><div class="ev"><b>선밸리 08:10</b><span>박 대표님 4명</span></div></div><div></div>
+<div class="l"><b>차량</b></div><div><div class="ev sv"><b>공항 13:20</b><span>밴 A</span></div></div><div><div class="ev sv"><b>출발 05:40</b><span>밴 A</span></div></div><div><div class="ev sv"><b>출발 06:20</b><span>밴 A</span></div></div><div><div class="ev sv"><b>공항 10:00</b><span>밴 B</span></div></div>
+<div class="l"><b>숙소</b></div><div><div class="ev sn"><b>베이 호텔</b><span>3실 체크인</span></div></div><div></div><div></div><div><div class="ev sn"><b>체크아웃</b><span>09:00</span></div></div>
+</div></div>
+<div class="ph a mv lf"><div><p class="t">우리 여행사 채널</p><p class="h" style="margin:.1em 0 .8em">빠른 답장</p>
+<p class="bub me">12월 골프 4명 견적 부탁드립니다</p><p class="bub yo">안녕하십니까. 아래 세 가지를 알려 주시면 견적을 준비해 드립니다.<br>① 날짜 ② 인원 ③ 항공편</p>
+<p class="chips"><i>견적 받기</i><i>티업 확인</i><i>차량 문의</i></p>
+<p class="bub me" style="margin-top:1em">11일 도착, 14일 출발입니다</p><p class="bub yo">확인했습니다. 담당자가 이어서 안내해 드립니다.</p></div></div>
+<i class="pin" data-n="1" style="left:69.7em;top:23em"></i><i class="pin" data-n="2" style="left:2.7em;top:3.2em"></i><div class="fl mv up bar"><p class="t">골프장 요금표 한 장</p><div class="row"><span>블루힐 <em>주말 18홀</em></span><span>₱5,200 <em>카트 · 캐디 · 캐디팁 따로</em></span></div><div class="row" style="border:0"><span>선밸리 <em>주말 18홀</em></span><span>₱6,800 <em>카트 · 캐디 포함</em></span></div></div><i class="pin" data-n="3" style="left:2.7em;top:41.7em"></i></div></div><ol class="g cm"><li class="ok"><p class="k"><i>1</i><u>즉시 적용 가능</u></p><h3>문의 응대 정리</h3><p>날짜, 인원, 항공편을 먼저 확인한 뒤 담당자에게 전달합니다.</p></li><li class="ok"><p class="k"><i>2</i><u>즉시 적용 가능</u></p><h3>함께 보는 예약 달력</h3><p>담당자가 자리를 비워도 업무가 이어집니다.</p></li><li class="ok"><p class="k"><i>3</i><u>즉시 적용 가능</u></p><h3>골프장 요금표 통합</h3><p>카트와 캐디, 캐디팁의 포함 여부를 한 장에서 확인합니다.</p></li><li><p class="k">준비해 주실 자료</p><h3>사용 중인 메신저 계정, 최근 견적 5건</h3></li></ol></div></section>
+<section class="step" id="t1"><div class="mom" style="background-image:url(photo/caddie.jpg);background-position:60% 45%"><div class="w"><div><p class="pr"><span>견적</span><b class="n">30만 원</b></p><h2><span>빠진 항목이 있는 견적은</span> <span>발송되지 않습니다.</span></h2></div><a class="per" href="#ask" data-ask="1"><small>제작 일정</small>담당자 문의</a></div></div><div class="w">
+<div class="sc s1 " aria-hidden="true"><canvas></canvas><div class="st"><div class="ph a mv up"><div><p class="t">박 대표님 일행 · 3박 4일</p><p class="big">₩4,146,000</p><p class="t r pulse" style="margin:.2em 0 .6em"><b>확인이 필요한 항목 1건</b></p>
+<div class="row"><span>그린피 <em>4명</em></span><span>₱20,800</span></div><div class="row"><span>카트 <em>2대</em></span><span>₱2,600</span></div><div class="row"><span>캐디 <em>4명</em></span><span>₱2,400</span></div>
+<div class="row r" style="background:#FDF0EE;margin:0 -1.15em;padding:.75em 1.15em"><span><b>캐디팁 4명</b></span><span><b>값 없음</b></span></div>
+<div class="row"><span>밴 <em>05:40 ~ 20:15</em></span><span>₱8,500</span></div><div class="row"><span>초과 3시간</span><span>₱2,040</span></div>
+<div class="row"><span>한식당 저녁 <em>5명</em></span><span>₱6,000</span></div><div class="row"><span>호텔 3실 <em>3박</em></span><span>₱40,500</span></div><div class="row"><span>가이드 <em>하루</em></span><span>₱3,000</span></div>
+<span class="btn off" style="margin-top:.9em">누락 항목 입력 후 발송 가능</span></div></div>
+<div class="ph b mv lf"><div><p class="t">고객 견적서</p><p class="h" style="margin:.1em 0 .4em">마닐라 골프 3박 4일</p><p class="t">12월 11일 금 ~ 14일 월 · 5명</p>
+<ul class="tl"><li class="now">1일차 공항 도착<em>호텔 체크인 · 한식 저녁</em></li><li>2일차 블루힐 CC 07:30<em>18홀 · 카트 · 캐디 포함</em></li><li>3일차 선밸리 CC 08:10<em>18홀 · 카트 · 캐디 포함</em></li><li>4일차 공항 출발<em>호텔 10:00 출발</em></li></ul>
+<div class="row" style="margin-top:.8em"><span>골프 1인 <em>× 4</em></span><span><b>₩935,000</b></span></div><div class="row"><span>동반 1인 <em>× 1</em></span><span><b>₩454,000</b></span></div>
+<div class="row"><span><b>합계</b></span><span><b>₩4,194,000</b></span></div><p class="t" style="margin-top:1em">2판 · 12월 5일까지 유효</p><span class="btn" style="margin-top:.6em">한글 · English</span></div></div>
+<div class="fl mv up f1b" style="left:4em;top:17em;width:28em"><p class="t">자동 입력</p><div class="row"><span>날짜</span><span>12월 11일 ~ 14일</span></div><div class="row"><span>인원</span><span>골프 4 · 동반 1</span></div><div class="row"><span>골프</span><span>2라운드</span></div><div class="row r" style="border:0"><span><b>확인 필요</b></span><span><b>캐디팁 조건</b></span></div></div><div class="fl mv up f1" style="left:4em;top:4.5em;width:28em"><p class="t">카카오톡 문의</p><p style="margin-top:.3em">“11일 도착, 골프 4명 두 번입니다. 한 명은 관광하고 14일 낮에 출발합니다.”</p></div><i class="pin" data-n="1" style="left:2.7em;top:3.2em"></i><i class="pin" data-n="2" style="left:34.7em;top:26.4em"></i><i class="pin" data-n="3" style="left:69.7em;top:8em"></i></div></div><ol class="g cm"><li class="if"><p class="k"><i>1</i><u>협의 후 적용</u></p><h3>카카오톡 문의를 견적으로</h3><p>문의 글을 붙여 넣으면 날짜와 인원이 입력됩니다. 확인이 필요한 항목은 비워 두고 알려 드립니다.</p></li><li class="ok"><p class="k"><i>2</i><u>즉시 적용 가능</u></p><h3>발송 전 누락 점검</h3><p>입금 후에 추가 비용을 다시 안내하는 일이 줄어듭니다.</p></li><li class="ok"><p class="k"><i>3</i><u>즉시 적용 가능</u></p><h3>한글, 영문 견적서</h3><p>상호와 유효 기한이 담긴 견적서를 이미지로 전달합니다.</p></li><li><p class="k">준비해 주실 자료</p><h3>골프장별 요금표, 차량 요금</h3></li></ol></div></section>
+<section class="step" id="t2"><div class="mom" style="background-image:url(photo/office.jpg);background-position:50% 40%"><div class="w"><div><p class="pr"><span>예약과 배차</span><b class="n">75만 원</b></p><h2><span>입금과 배차가 확인된 예약만</span> <span>확정됩니다.</span></h2></div><a class="per" href="#ask" data-ask="2"><small>제작 일정</small>담당자 문의</a></div></div><div class="w">
+<div class="sc s2 " aria-hidden="true"><canvas></canvas><div class="st"><div class="bd mv up"><header><b>배정</b><span>12월 11일 ~ 14일</span></header>
+<div class="cal"><div class="d"></div><div class="d"><b>금 11</b></div><div class="d"><b>토 12</b></div><div class="d"><b>일 13</b></div><div class="d"><b>월 14</b></div>
+<div class="l"><b>티업</b></div><div></div><div><div class="ev"><b>블루힐 07:30</b><span>박 대표님 4명</span></div></div><div><div class="ev"><b>선밸리 08:10</b><span>박 대표님 4명</span></div></div><div></div>
+<div class="l"><b>밴 A</b></div><div><div class="ev sv"><b>13:20 ~ 18:00</b><span>박 대표님</span></div></div><div><div class="ev sv"><b>05:40 ~ 20:15</b><span>박 대표님</span></div><div class="ev x shake"><b>11:00 겹침</b></div></div><div><div class="ev sv"><b>06:20 ~ 19:00</b><span>박 대표님</span></div></div><div></div>
+<div class="l"><b>밴 B</b></div><div></div><div></div><div><div class="ev sv"><b>09:00 ~ 15:00</b><span>최 대표님</span></div></div><div><div class="ev sv"><b>10:00 ~ 12:30</b><span>박 대표님</span></div></div>
+<div class="l"><b>가이드</b></div><div></div><div><div class="ev sn"><b>미나</b><span>동반 1명 관광</span></div></div><div></div><div></div></div></div>
+<div class="fl mv up f2" style="left:40.5em;top:49.4em;width:25.5em"><p class="t">배차 중복</p><p><b class="gr">토요일 밴 B 이용 가능</b></p></div>
+<div class="ph a mv lf"><div><p class="t">박 대표님 일행</p><p class="h" style="margin:.1em 0 .6em">입금 확인</p>
+<div class="row"><span>받을 돈</span><span><b>₩4,194,000</b></span></div><div class="row"><span>들어온 돈</span><span>₩4,000,000</span></div><div class="row r"><span><b>모자란 돈</b></span><span><b>₩194,000</b></span></div>
+<span class="btn off" style="margin:.9em 0 1.4em">전액 입금 후 확정</span>
+<p class="t">기사 전달</p><p class="h" style="font-size:1.5em;margin:.1em 0 .5em">밴 A · 로델</p><p class="bub yo" style="max-width:100%">12/12 05:40 베이 호텔 로비<br>골프 4명 · 백 4개<br>블루힐 CC 07:30 티업</p><p class="gr" style="font-size:1.25em"><b>14:02 기사 확인 완료</b></p><p class="h" style="font-size:1.5em;margin:.7em 0 .4em">가이드 · 미나</p><p class="bub yo" style="max-width:100%">12/12 10:00 동반 1명 관광</p><p class="r" style="font-size:1.25em"><b>확인 대기</b></p></div></div><i class="pin" data-n="1" style="left:69.7em;top:18em"></i><i class="pin" data-n="2" style="left:39.2em;top:48.1em"></i><i class="pin" data-n="3" style="left:69.7em;top:31em"></i></div></div><ol class="g cm"><li class="ok"><p class="k"><i>1</i><u>즉시 적용 가능</u></p><h3>입금 대조</h3><p>받을 금액과 입금액을 비교해 차액을 바로 표시합니다.</p></li><li class="ok"><p class="k"><i>2</i><u>즉시 적용 가능</u></p><h3>배차 중복 차단</h3><p>같은 시간에 두 팀이 배정되면 막고, 이용 가능한 차량을 보여 드립니다.</p></li><li class="ok"><p class="k"><i>3</i><u>즉시 적용 가능</u></p><h3>기사 전달과 확인</h3><p>전달한 시각과 기사가 확인한 시각이 함께 남습니다.</p></li><li><p class="k">준비해 주실 자료</p><h3>차량과 기사 명단, 업체별 지급 시점</h3></li></ol></div></section>
+<section class="step" id="t3"><div class="mom" style="background-image:url(photo/terrace.jpg);background-position:50% 45%"><div class="w"><div><p class="pr"><span>통합 운영</span><b class="n">120만~250만 원</b></p><h2><span>오늘 통장에 있는 돈과</span> <span>실제로 남는 돈을 나누어 보여 드립니다.</span></h2></div><a class="per" href="#ask" data-ask="3"><small>제작 일정</small>담당자 문의</a></div></div><div class="w">
+<div class="sc s3 " aria-hidden="true"><canvas></canvas><div class="st"><div class="bd mv up"><header><b>대표 화면</b><span>12월 12일 토 08:10</span></header>
+<div class="kp"><div><small>받은 돈</small><b>₩12,480,000</b></div><div><small>줄 돈</small><b>₩9,960,000</b></div><div><small>남을 돈</small><b class="gr">₩2,520,000</b></div></div>
+<div class="two"><div><h4>자동 확인</h4><div class="row"><span>미수금</span><span>0건</span></div><div class="row"><span>겹친 배정</span><span>0건</span></div><div class="row"><span>기사 미확인</span><span class="r"><b>1건</b></span></div></div>
+<div><h4>대표님 결정</h4><div class="row"><span>선밸리 상품 <em>남는 돈 3%</em></span><span>요금 조정</span></div><div class="row"><span>그린 투어 <em>취소 4번</em></span><span>선금 적용</span></div><div class="row"><span>화요일 <em>밴 2대 비어 있음</em></span><span>할인 검토</span></div></div></div>
+<div class="bars"><i data-d="월" style="height:62%"></i><i data-d="화" class="hi" style="height:24%"></i><i data-d="수" style="height:48%"></i><i data-d="목" style="height:56%"></i><i data-d="금" style="height:88%"></i><i data-d="토" style="height:100%"></i><i data-d="일" style="height:94%"></i></div></div>
+<div class="ph a mv lf"><div><p class="t">기사 화면 · 로델</p><p class="h" style="margin:.1em 0 .2em">오늘 3곳</p>
+<ul class="tl"><li class="now">05:40 베이 호텔 로비<em>4명 · 골프백 4개 · 도착 완료</em></li><li>07:30 블루힐 CC<em>대기 주차 B구역</em></li><li>18:30 한식당<em>5명 · 예약 확인됨</em></li></ul>
+<span class="btn" style="margin-top:.9em">블루힐 CC 도착</span>
+<p class="t" style="margin-top:1.4em">현장에서 나온 돈</p><div class="row"><span>톨비</span><span>₱420</span></div><div class="row"><span>주차</span><span>₱100</span></div><div class="row"><span><b>오늘 합계</b></span><span><b>₱520</b></span></div><span class="btn" style="margin-top:.9em;background:#F0F3F1;color:#0D1512">영수증 찍기</span></div></div>
+<div class="fl mv up bar"><p class="t">변경 기록</p><p><b>김 실장</b> 10:12 · 티업 07:30 → 07:48</p></div><i class="pin" data-n="1" style="left:60.5em;top:10.5em"></i><i class="pin" data-n="2" style="left:69.7em;top:12em"></i><i class="pin" data-n="3" style="left:2.7em;top:50.4em"></i></div></div><ol class="g cm"><li class="ok"><p class="k"><i>1</i><u>즉시 적용 가능</u></p><h3>예약별 손익</h3><p>받은 금액에서 지급할 금액을 제외하고 표시합니다. 화면의 금액은 예시입니다.</p></li><li class="ok"><p class="k"><i>2</i><u>즉시 적용 가능</u></p><h3>기사 전용 화면</h3><p>당일 일정과 인원, 현장 지출을 휴대폰에서 처리합니다.</p></li><li class="ok"><p class="k"><i>3</i><u>즉시 적용 가능</u></p><h3>변경 이력</h3><p>누가 언제 무엇을 바꾸었는지 확인하실 수 있습니다.</p></li><li><p class="k">준비해 주실 자료</p><h3>직원별 담당 업무, 최근 3개월 예약 자료</h3></li></ol></div></section>
+<section class="step" id="t4"><div class="mom" style="background-image:url(photo/driver.jpg);background-position:50% 55%"><div class="w"><div><p class="pr"><span>고객 앱</span><b class="n">별도 견적</b></p><h2><span>고객이 공항에 도착하기 전부터</span> <span>일정 안내가 시작됩니다.</span></h2></div><a class="per" href="#ask" data-ask="4"><small>제작 일정</small>담당자 문의</a></div></div><div class="w">
+<div class="sc s4 " aria-hidden="true"><canvas></canvas><div class="st"><div class="bd site mv up"><div class="hv"><svg viewBox="0 0 630 220" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><path d="M360 240C400 150 470 190 500 120S560 40 640 20V240Z" fill="#8CC39A" opacity=".55"/><path d="M430 240C450 170 510 180 530 130S590 70 640 60V240Z" fill="#B5DDBD" opacity=".55"/><ellipse cx="556" cy="98" rx="34" ry="13" fill="#DDF2E0"/><path d="M556 98V40l22 9-22 9" fill="#fff" stroke="#fff" stroke-width="2"/></svg><b>마닐라 골프,<br>하루 안에 견적을 드립니다.</b><div class="se"><span><small>골프장</small>블루힐 · 선밸리</span><span><small>날짜</small>12.11 ~ 12.14</span><span><small>인원</small>4명</span><span>견적 요청</span></div></div>
+<div class="pk"><div><b>3박 4일 2라운드</b><span>전용 밴 · 한식 저녁 2회</span><strong>1인 ₩935,000</strong></div><div><b>2박 3일 2라운드</b><span>전용 밴 · 공항 이동</span><strong>1인 ₩720,000</strong></div><div><b>동반 관광 하루</b><span>가이드 · 점심 포함</span><strong>1인 ₩120,000</strong></div></div>
+<div style="padding:0 2.4em"><div class="row"><span>포함 <em>그린피 · 카트 · 캐디 · 차량 · 톨비</em></span><span class="gr"><b>총액으로 표시</b></span></div><div class="row"><span>한국어 · English · 검색과 AI가 읽기 쉬운 구조</span><span>마닐라 · 클락 · 세부</span></div></div></div>
+<div class="fl mv up bar"><p class="t">협력 골프장 화면</p><p><b>블루힐 CC</b> 토요일 빈 티업 <b class="gr">3팀</b> 올림</p></div>
+<div class="ph a mv lf"><div><p class="t">고객 앱</p><p class="h" style="margin:.1em 0 .2em">내 여행 2일차</p>
+<ul class="tl"><li class="now">05:40 호텔 로비<em>로델 기사 · 흰색 밴 · 4821</em></li><li>07:30 블루힐 CC 티업<em>카트 2대 · 캐디 4명 준비됨</em></li><li>13:00 클럽하우스 점심</li><li>18:30 한식당<em>5명 · 안쪽 방</em></li></ul>
+<span class="btn" style="margin-top:.9em">기사에게 연락</span><span class="btn" style="margin-top:.5em;background:#F0F3F1;color:#0D1512">한 라운드 더 넣기</span><div class="row" style="margin-top:.8em"><span>여행 서류</span><span>3개</span></div><div class="row"><span>긴급 연락</span><span>김 실장</span></div></div></div><i class="pin" data-n="1" style="left:2.7em;top:3.2em"></i><i class="pin" data-n="2" style="left:69.7em;top:8em"></i><i class="pin" data-n="3" style="left:2.7em;top:50.4em"></i></div></div><ol class="g cm"><li class="ok"><p class="k"><i>1</i><u>즉시 적용 가능</u></p><h3>총액이 보이는 예약 홈페이지</h3><p>포함 항목을 모두 밝힌 금액으로 안내합니다. 검색 순위는 약속드리지 않습니다.</p></li><li class="ok"><p class="k"><i>2</i><u>즉시 적용 가능</u></p><h3>고객 전용 일정</h3><p>기사 성함과 차량 번호, 시간별 일정을 고객 휴대폰에서 확인합니다.</p></li><li class="if"><p class="k"><i>3</i><u>협의 후 적용</u></p><h3>협력 골프장 연동</h3><p>빈 티업을 골프장이 직접 등록합니다. 골프장의 참여 동의가 필요합니다.</p></li><li><p class="k">준비해 주실 자료</p><h3>상품 사진, 협력 골프장 1곳</h3></li></ol></div></section>
+<section class="step" id="t5"><div class="mom" style="background-image:url(photo/plane.jpg);background-position:60% 60%"><div class="w"><div><p class="pr"><span>확장 구상</span><b class="n">검토 후 제안</b></p><h2><span>항공편이 지연되면,</span> <span>바뀐 일정이 먼저 준비됩니다.</span></h2></div><a class="per" href="#ask" data-ask="5"><small>제작 일정</small>담당자 문의</a></div></div><div class="w">
+<div class="sc s5 " aria-hidden="true"><canvas></canvas><div class="st"><svg class="map" viewBox="0 0 100 62" aria-hidden="true"><path id="arc" d="M3 16C14 4 28 5 36 12C56 22 76 34 80 50" fill="none" stroke="#5C7BA8" stroke-width=".18" stroke-dasharray=".8 .8"/><circle cx="80" cy="50" r=".9" fill="#7CE0B4"/><circle cx="80" cy="50" r="2.4" fill="none" stroke="#7CE0B4" stroke-width=".15" opacity=".6"/><path d="M0-1.3 .5 0 2 .6 .5 .7 0 2-.5 .7-2 .6-.5 0Z" fill="#fff"><animateMotion dur="14s" repeatCount="indefinite" rotate="auto"><mpath href="#arc"/></animateMotion></path></svg>
+<div class="ph a mv up"><div><p class="t">03:12 · 대표님 휴대폰</p><p class="h r" style="margin:.1em 0 .2em">항공편 40분 지연</p><p class="t">박 대표님 일행 · 13:20 → 14:00 도착</p>
+<div style="margin-top:1.1em"><div class="row"><span>공항 픽업</span><span><em>13:50 →</em> <b class="gr">14:30</b></span></div><div class="row"><span>밴 A 대기료</span><span><b class="gr">₱0</b></span></div><div class="row"><span>호텔 체크인</span><span><em>15:00 →</em> <b class="gr">15:40</b></span></div><div class="row"><span>한식당 저녁</span><span>18:30 그대로</span></div><div class="row"><span>다음 팀 밴 A</span><span><b class="gr">밴 B로 바꿈</b></span></div></div>
+<p class="t" style="margin:1.2em 0 .5em">발송 대기 안내문 3건</p><span class="btn">승인하고 보내기</span><p class="t" style="text-align:center;margin-top:.8em">직접 고치기</p></div></div>
+<div class="fl mv lf f5a" style="left:68em;top:4.5em;width:28em"><p class="t">고객 · 한국어</p><p>14:30에 3번 출구에서 모시겠습니다. 석식 예약은 변동 없습니다.</p></div>
+<div class="fl mv lf f5b" style="left:68em;top:15em;width:28em"><p class="t">기사 · English</p><p>Pickup moved to 14:30, Gate 3. Four golf bags.</p></div>
+<div class="fl mv lf f5c" style="left:68em;top:23.5em;width:28em"><p class="t">호텔 · English</p><p>Park party of 5, check-in 15:40.</p></div>
+<div class="fl mv up f5d" style="left:4em;bottom:4.5em;width:29em"><p class="t">운영 제안</p><p>이 항공편은 이번 달 4회 중 3회 지연되었습니다. 다음 견적부터 픽업을 30분 늦추시겠습니까?</p></div><i class="pin" data-n="1" style="left:36.2em;top:8em"></i><i class="pin" data-n="2" style="left:36.2em;top:19em"></i><i class="pin" data-n="3" style="left:66.7em;top:3.2em"></i></div></div><ol class="g cm"><li class="ask"><p class="k"><i>1</i><u>사전 검토 필요</u></p><h3>지연 사전 감지</h3><p>유료 항공 정보 연동이 필요합니다. 비용 대비 효과를 먼저 검토해 드립니다.</p></li><li class="if"><p class="k"><i>2</i><u>협의 후 적용</u></p><h3>일정 재계산</h3><p>픽업과 체크인, 식사 시간을 다시 맞춥니다. 예약 자료가 쌓인 뒤에 적용합니다.</p></li><li class="if"><p class="k"><i>3</i><u>협의 후 적용</u></p><h3>승인 후 발송</h3><p>고객과 기사, 호텔에 보낼 안내문을 준비합니다. 대표님이 승인하신 것만 발송합니다.</p></li><li><p class="k">준비해 주실 자료</p><h3>통합 운영 단계의 예약 기록</h3></li></ol></div></section>
+
+<section class="end"><div class="w"><h2>진행 방식</h2><ol class="g way"><li><b>업무 진단</b><p>현재 사용하시는 카카오톡, 엑셀, 장부를 그대로 검토합니다. 필요하면 현장 상담도 가능합니다. 담당자에게 문의해 주십시오(비용이 발생할 수 있습니다).</p></li><li><b>맞춤 시안</b><p>대표님 회사의 상호와 요금, 색상을 적용한 화면을 먼저 보여 드립니다.</p></li><li><b>계약과 제작</b><p>시안을 확정하신 뒤 선금 50%로 제작을 시작합니다.</p></li><li><b>납품과 보완</b><p>납품 후 2주까지 문구와 배치 수정은 횟수를 제한하지 않습니다. 모든 자료는 대표님 회사의 소유입니다.</p></li></ol></div></section>
+<section class="cus" id="ask"><div class="cusimg"><div class="w"><h2><span>대표님의 취향과 운영 방식을 담아</span> <span>먼저 보여 드립니다.</span></h2></div></div>
+<div class="w cusg"><form class="opt" autocomplete="off" onsubmit="return false">
+<label class="fld"><span>회사명</span><input id="co" type="text" maxlength="14" placeholder="회사명을 입력해 주십시오"></label>
+<fieldset><legend>대표 색상</legend><div class="sw"><button type="button" data-c="#0A6B49" data-n="짙은 녹색" style="--c:#0A6B49" aria-label="짙은 녹색" aria-pressed="true"></button><button type="button" data-c="#1E3A6E" data-n="남색" style="--c:#1E3A6E" aria-label="남색" aria-pressed="false"></button><button type="button" data-c="#7A1F35" data-n="와인" style="--c:#7A1F35" aria-label="와인" aria-pressed="false"></button><button type="button" data-c="#23282B" data-n="먹색" style="--c:#23282B" aria-label="먹색" aria-pressed="false"></button><button type="button" data-c="#86652A" data-n="황동" style="--c:#86652A" aria-label="황동" aria-pressed="false"></button><button type="button" data-c="#0C6B78" data-n="청록" style="--c:#0C6B78" aria-label="청록" aria-pressed="false"></button></div></fieldset>
+<fieldset><legend>분위기</legend><div class="seg" data-k="mood"><button type="button" data-v="0" aria-pressed="true">단정하게</button><button type="button" data-v="1" aria-pressed="false">품격 있게</button><button type="button" data-v="2" aria-pressed="false">친근하게</button></div></fieldset>
+<fieldset><legend>화면</legend><div class="seg" data-k="dark"><button type="button" data-v="0" aria-pressed="true">밝은 화면</button><button type="button" data-v="1" aria-pressed="false">어두운 화면</button></div></fieldset>
+<fieldset><legend>고객 안내 언어</legend><div class="seg" data-k="lang"><button type="button" data-v="0" aria-pressed="true">한국어</button><button type="button" data-v="1" aria-pressed="false">영어 추가</button><button type="button" data-v="2" aria-pressed="false">따갈로그어까지</button></div></fieldset>
+<fieldset><legend>관심 단계</legend><div class="seg pick"><button type="button" data-k="0" aria-pressed="false">업무 정비</button><button type="button" data-k="1" aria-pressed="false">견적</button><button type="button" data-k="2" aria-pressed="false">예약과 배차</button><button type="button" data-k="3" aria-pressed="false">통합 운영</button><button type="button" data-k="4" aria-pressed="false">고객 앱</button><button type="button" data-k="5" aria-pressed="false">확장 구상</button></div></fieldset>
+</form><div class="pvw"><div class="sc pv on" id="pv" aria-hidden="true"><div class="st"><div class="bd site"><div class="ph2"><header><b data-co>대표님 회사</b><span>골프장</span><span>일정</span><span>예약</span><em data-lang>한국어</em></header><h4>마닐라 골프,<br>하루 안에 견적을 드립니다.</h4><div class="se"><span><small>골프장</small>블루힐 · 선밸리</span><span><small>날짜</small>12.11 ~ 12.14</span><span><small>인원</small>4명</span><span>견적 요청</span></div></div>
+<div class="pk"><div><b>3박 4일 2라운드</b><span>전용 차량 · 석식 2회</span><strong>1인 ₩935,000</strong></div><div><b>2박 3일 2라운드</b><span>전용 차량 · 공항 이동</span><strong>1인 ₩720,000</strong></div><div><b>동반 관광 1일</b><span>가이드 · 중식 포함</span><strong>1인 ₩120,000</strong></div></div></div>
+<div class="ph a"><div><p class="t" data-co>대표님 회사</p><p class="h" style="margin:.1em 0 .6em">견적서</p><p class="t">박 대표님 일행 · 3박 4일</p><p class="big">₩4,194,000</p><div class="row" style="margin-top:.6em"><span>골프 1인 <em>× 4</em></span><span>₩935,000</span></div><div class="row"><span>동반 1인 <em>× 1</em></span><span>₩454,000</span></div><div class="row"><span>포함</span><span>카트 · 캐디 · 캐디팁</span></div><div class="row"><span>차량</span><span>전용 밴 4일</span></div><div class="row"><span>유효 기한</span><span>12월 5일</span></div><span class="btn" style="margin-top:1em">견적 확정하기</span><span class="btn b2" style="margin-top:.6em">담당자 문의</span></div></div></div></div><p class="note">선택하신 내용이 바로 반영되는 예시 화면입니다.</p></div></div>
+<div class="w msgw"><label for="msg">문의 내용</label><textarea id="msg"></textarea><button type="button" class="cta" id="copy">맞춤 시안 문의하기</button><p class="note">문의 내용이 복사됩니다. 이 주소를 받으신 카카오톡 대화방에 붙여 넣어 보내 주십시오.</p></div></section>
+<section class="end"><div class="w"><h2>내부 검토용 이미지</h2><div class="cards" tabindex="0" aria-label="카톡 이미지 묶음"><img src="cards/0.jpg" width="1080" height="1440" alt="카톡 이미지 1: 표지"><img src="cards/1.jpg" width="1080" height="1440" alt="카톡 이미지 2: 업무 정비"><img src="cards/2.jpg" width="1080" height="1440" alt="카톡 이미지 3: 견적"><img src="cards/3.jpg" width="1080" height="1440" alt="카톡 이미지 4: 예약과 배차"><img src="cards/4.jpg" width="1080" height="1440" alt="카톡 이미지 5: 통합 운영"><img src="cards/5.jpg" width="1080" height="1440" alt="카톡 이미지 6: 고객 앱"><img src="cards/6.jpg" width="1080" height="1440" alt="카톡 이미지 7: 확장 구상"></div><p class="note">이미지를 길게 누르면 저장하실 수 있습니다.</p></div></section></main>
+<footer><div class="w">화면의 상호, 골프장, 요금, 금액과 사진은 모두 예시입니다. 표시된 금액은 제작비이며 서버, 도메인, 외부 서비스 비용은 계약 전에 별도로 안내해 드립니다.</div></footer>
+<script>
+(() => {
+  const TIERS = [["업무 정비","15만 원"],["견적","30만 원"],["예약과 배차","75만 원"],["통합 운영","120만~250만 원"],["고객 앱","별도 견적"],["확장 구상","검토 후 제안"]];
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+
+  // contour lines behind every scene, like a yardage-book green map
+  const noise = (x, y, k) => Math.sin(x * 1.7 + k) * Math.cos(y * 1.3 - k * 1.7) + 0.6 * Math.sin(x * 0.8 - y * 1.9 + k * 2.3) + 0.35 * Math.cos(x * 2.9 + y * 2.1 + k);
+  function contour(sc) {
+    const cv = sc.querySelector('canvas'); if (!cv) return; const w = sc.clientWidth, h = sc.clientHeight;
+    if (!w || !h) return;
+    const d = Math.min(devicePixelRatio || 1, 2), k = +(sc.className.match(/s(\d)/) || [0, 0])[1];
+    cv.width = w * d; cv.height = h * d;
+    const c = cv.getContext('2d'), N = 110, M = Math.round(N * h / w), sx = cv.width / N, sy = cv.height / M, sc2 = 5.2 / N;
+    c.strokeStyle = getComputedStyle(sc).getPropertyValue('--ct'); c.lineWidth = Math.max(1, w / 900) * d;
+    const f = []; for (let j = 0; j <= M; j++) { f[j] = []; for (let i = 0; i <= N; i++) f[j][i] = noise(i * sc2, j * sc2, k * 0.35); }
+    c.beginPath();
+    for (let L = -1.8; L < 1.9; L += 0.18) for (let j = 0; j < M; j++) for (let i = 0; i < N; i++) {
+      const a = f[j][i], b = f[j][i + 1], e = f[j + 1][i + 1], g = f[j + 1][i], p = [];
+      const cut = (u, v, x0, y0, x1, y1) => { if ((u < L) !== (v < L)) { const t = (L - u) / (v - u); p.push([(x0 + (x1 - x0) * t) * sx, (y0 + (y1 - y0) * t) * sy]); } };
+      cut(a, b, i, j, i + 1, j); cut(b, e, i + 1, j, i + 1, j + 1); cut(e, g, i + 1, j + 1, i, j + 1); cut(g, a, i, j + 1, i, j);
+      for (let q = 0; q + 1 < p.length; q += 2) { c.moveTo(p[q][0], p[q][1]); c.lineTo(p[q + 1][0], p[q + 1][1]); }
+    }
+    c.stroke();
+  }
+  const all = $$('.sc'); all.forEach(contour);
+  let rt; addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(() => all.forEach(contour), 200); });
+
+  const steps = $$('.step'); if (!steps.length) return;
+  const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) e.target.classList.add('on'); }), { rootMargin: '0px 0px -15% 0px' });
+  $$('.step .sc').forEach((s) => io.observe(s));
+
+  // price rail
+  const links = $$('.rail a'), bar = document.querySelector('.rail i');
+  let cur = -1;
+  function mark() {
+    let k = -1; steps.forEach((s, i) => { if (s.getBoundingClientRect().top < innerHeight * 0.45) k = i; });
+    const end = document.querySelector('.end').getBoundingClientRect().top < 120; if (end) k = -1;
+    if (k === cur) return; cur = k;
+    links.forEach((a, i) => (i === k ? a.setAttribute('aria-current', 'true') : a.removeAttribute('aria-current')));
+    if (k < 0) { bar.style.width = '0'; return; }
+    bar.style.width = links[k].offsetWidth + 'px'; bar.style.transform = `translateX(${links[k].offsetLeft}px)`;
+  }
+  addEventListener('scroll', mark, { passive: true }); mark();
+
+  // pick a pain -> jump to the scene that stops it, and pre-fill the message
+  const pains = $$('.pain button'), picks = $$('.pick button'), msg = document.getElementById('msg'), pv = document.getElementById('pv'), co = document.getElementById('co');
+  const MOOD = ['단정하게', '품격 있게', '친근하게'], DARK = ['밝은 화면', '어두운 화면'], LANG = ['한국어', '한국어, 영어', '한국어, 영어, 따갈로그어'];
+  const FONT = ['var(--sans)', '"Nanum Myeongjo",serif', '"Gowun Dodum",sans-serif'], RAD = ['.9em', '.15em', '2em'];
+  const S = { tier: 1, why: '', color: '짙은 녹색', hex: '#0A6B49', mood: 0, dark: 0, lang: 0, touched: false };
+  function paint() {
+    picks.forEach((b) => b.setAttribute('aria-pressed', String(+b.dataset.k === S.tier)));
+    pv.style.setProperty('--ac', S.hex); pv.style.setProperty('--pf', FONT[S.mood]); pv.style.setProperty('--pr', RAD[S.mood]);
+    pv.classList.toggle('dk', !!S.dark);
+    $$('[data-co]', pv).forEach((e) => { e.textContent = co.value.trim() || '대표님 회사'; });
+    $$('[data-lang]', pv).forEach((e) => { e.textContent = ['한국어', '한국어 · EN', '한국어 · EN · TL'][S.lang]; });
+    msg.value = `안녕하십니까. 업무 제안을 보고 문의드립니다.\n\n회사명: ${co.value.trim()}\n관심 단계: ${TIERS[S.tier][0]} (${TIERS[S.tier][1]})\n먼저 해결할 업무: ${S.why}\n희망 색상: ${S.color}\n희망 분위기: ${MOOD[S.mood]}, ${DARK[S.dark]}\n안내 언어: ${LANG[S.lang]}\n하루 평균 예약:\n희망 일정:\n연락 가능한 시간:`;
+  }
+  pains.forEach((b) => b.addEventListener('click', () => {
+    pains.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+    steps.forEach((s) => s.classList.toggle('hit', s.id === b.dataset.go));
+    S.tier = +b.dataset.go.slice(1); S.why = b.textContent; paint();
+    document.getElementById(b.dataset.go).scrollIntoView();
+  }));
+  picks.forEach((b) => b.addEventListener('click', () => { S.tier = +b.dataset.k; paint(); }));
+  $$('[data-ask]').forEach((x) => x.addEventListener('click', () => { S.tier = +x.dataset.ask; paint(); }));
+  $$('.sw button').forEach((b) => b.addEventListener('click', () => { $$('.sw button').forEach((x) => x.setAttribute('aria-pressed', String(x === b))); S.color = b.dataset.n; S.hex = b.dataset.c; paint(); }));
+  $$('.seg[data-k]').forEach((g) => $$('button', g).forEach((b) => b.addEventListener('click', () => { $$('button', g).forEach((x) => x.setAttribute('aria-pressed', String(x === b))); S[g.dataset.k] = +b.dataset.v; paint(); })));
+  co.addEventListener('input', paint);
+  paint();
+  const btn = document.getElementById('copy');
+  btn.addEventListener('click', async () => {
+    let ok = false;
+    try { await navigator.clipboard.writeText(msg.value); ok = true; } catch { msg.focus(); msg.select(); try { ok = document.execCommand('copy'); } catch {} }
+    btn.textContent = ok ? '복사되었습니다' : '문의 내용을 길게 눌러 복사해 주십시오';
+    setTimeout(() => { btn.textContent = '맞춤 시안 문의하기'; }, 2600);
+  });
+})();
+</script>
+</body></html>

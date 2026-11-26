@@ -1,0 +1,410 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="카톡 주문부터 피킹, 배달, 재고, 앱 정산까지 한 줄로. 매장 조건별 예시 견적.">
+<meta property="og:type" content="website"><meta property="og:site_name" content="bigC company"><meta property="og:url" content="https://keunpan.com/mart-b/"><link rel="canonical" href="https://keunpan.com/mart-b/"><meta property="og:image" content="https://keunpan.com/mart/og.jpg?v=1"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="600"><meta name="twitter:card" content="summary_large_image"><meta property="og:title" content="앱마다 주문은 쌓이는데, 재고와 입금액은 맞습니까?">
+<meta property="og:description" content="카톡 주문부터 피킹, 배달, 재고, 앱 정산까지 한 줄로. 매장 조건별 예시 견적.">
+
+<style>:root{color-scheme:light}body{margin:0;font:14px system-ui}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<title>한인 마트 주문·재고·정산 제안</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans+KR:wght@400;500;700&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+/* layout: an order board whose columns flow left to right; prices come out as a till receipt */
+:root{--bg:#F3F5F1;--card:#FFFFFF;--ink:#14201A;--mute:#5C6A62;--line:#D9E0DA;--soft:#E8EDE8;--acc:#0E7C4A;--on:#fff;--tag:#FFD84D;--tagink:#2A2200;
+--red:#C8372A;--redbg:#FCEBE8;--amb:#A86A12;--ambbg:#FDF2DC;--blue:#1F6FD1;--vio:#7246C9;--grn:#1F8A55;--grnbg:#E3F3EA;--paper:#FFFEF8;
+--fd:'Black Han Sans','Noto Sans KR',sans-serif;--f:'Noto Sans KR',system-ui,'Malgun Gothic',sans-serif;--fm:'IBM Plex Mono',ui-monospace,Consolas,monospace}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#111714;--card:#19211D;--ink:#E7EEE9;--mute:#9AA9A0;--line:#2D3833;--soft:#222C27;--acc:#46C489;--on:#0C120F;--tag:#E9C23A;--tagink:#1E1800;
+--red:#F08578;--redbg:#3A1F1B;--amb:#E6B45A;--ambbg:#352A16;--blue:#6EA8F2;--vio:#A88BEB;--grn:#5CCB92;--grnbg:#1B3328;--paper:#1E2622}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#111714;--card:#19211D;--ink:#E7EEE9;--mute:#9AA9A0;--line:#2D3833;--soft:#222C27;--acc:#46C489;--on:#0C120F;--tag:#E9C23A;--tagink:#1E1800;
+--red:#F08578;--redbg:#3A1F1B;--amb:#E6B45A;--ambbg:#352A16;--blue:#6EA8F2;--vio:#A88BEB;--grn:#5CCB92;--grnbg:#1B3328;--paper:#1E2622}
+*{box-sizing:border-box}
+body::before{content:'';position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--card)}
+body{background:var(--bg);color:var(--ink);font:15px/1.65 var(--f);-webkit-font-smoothing:antialiased;word-break:keep-all}
+.w{max-width:1240px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2{font-family:var(--fd);font-weight:400;letter-spacing:-.005em;margin:0;text-wrap:balance}
+h3,h4{margin:0}
+a{color:inherit}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.r{color:var(--red)}.g{color:var(--grn)}
+.note{color:var(--mute);font-size:.86em;margin:.8em 0 0}
+.chip{display:inline-block;font-size:.74em;font-weight:500;padding:1px 8px;border-radius:999px;white-space:nowrap;background:var(--soft);color:var(--mute)}
+.chip.ok{background:var(--grnbg);color:var(--grn)}.chip.bad{background:var(--redbg);color:var(--red)}.chip.warn{background:var(--ambbg);color:var(--amb)}
+
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--card);border-bottom:1px solid var(--line)}
+.top .w{display:flex;align-items:center;justify-content:space-between;gap:12px;height:54px}
+.brand{font-weight:700}.top nav{display:flex;gap:18px;font-size:.9em}.top nav a{text-decoration:none;color:var(--mute)}
+
+/* hero */
+.hero{padding-block:44px 40px}
+.hl{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:8px 40px;align-items:end}
+.kick{grid-column:1/-1;margin:0;font-size:.82em;color:var(--mute);letter-spacing:.04em}
+.hl h1{font-size:clamp(32px,4vw,54px);line-height:1.2}.hl h1 span{display:inline-block}
+.hl .sub{margin:0;font-size:1.02em;max-width:34em}
+.hint{grid-column:1/-1;margin:10px 0 0;font-size:.86em;font-weight:700;color:var(--acc)}
+.board{margin-top:22px;background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;box-shadow:0 20px 40px -32px rgba(0,40,20,.45)}
+.board .bh{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;padding:12px 16px;border-bottom:1px solid var(--line);border-top:4px solid var(--acc)}
+.board .bh div{display:flex;flex-direction:column}.board .bh span{font-size:.8em;color:var(--mute)}
+.store{font-size:.8em;font-weight:700;color:var(--grn)!important;background:var(--grnbg);padding:4px 12px;border-radius:999px}
+.bgrid{display:grid;grid-template-columns:minmax(0,1fr) 340px}
+.cols{display:grid;grid-template-columns:repeat(5,minmax(150px,1fr));gap:10px;padding:12px;background:var(--soft);min-width:0}
+.col{display:flex;flex-direction:column;gap:8px;min-width:0}
+.col .ch{margin:0 0 2px;font-size:.8em;font-weight:700;color:var(--mute);display:flex;justify-content:space-between}.col .ch span{font-family:var(--fm)}
+.oc{position:relative;display:flex;flex-direction:column;gap:1px;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:9px 10px;font-size:.8em;line-height:1.4}
+button.oc{cursor:pointer}button.oc:hover{border-color:var(--acc)}
+.oc[aria-pressed="true"]{border-color:var(--acc);box-shadow:0 0 0 2px var(--acc)}
+.oc .oid{font-family:var(--fm);font-weight:600;font-size:1.05em}
+.oc .who{font-size:1.02em}.oc .where{color:var(--mute);font-size:.92em}
+.oc .ml{font-family:var(--fm);font-weight:600;margin:3px 0}
+.oc .chip{align-self:flex-start}
+.oc .dot{position:absolute;top:9px;right:9px;width:9px;height:9px;border-radius:50%;background:var(--amb)}
+.oc.miss{border:1.5px solid var(--red);background:var(--redbg)}.oc.miss .dot{background:var(--red)}.oc.miss .ml{color:var(--red)}
+.oc.late .ml{color:var(--amb)}
+@media (prefers-reduced-motion:no-preference){.oc.miss .dot{animation:pl 1.6s ease-in-out infinite}@keyframes pl{50%{transform:scale(1.6);opacity:.4}}}
+.dpanel{border-left:1px solid var(--line);padding:14px 16px;font-size:.86em;min-width:0}
+.det .dh{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;margin:0 0 8px}.det .dh b{font-family:var(--fm)}
+.sum{margin:0 0 8px;padding:7px 10px;background:var(--soft);border-radius:7px}
+.pl{display:grid;grid-template-columns:auto 1fr auto;gap:2px 8px;align-items:center;padding:6px 0;border-bottom:1px solid var(--line)}
+.pl small{grid-column:2/4;color:var(--mute);font-size:.86em}
+.pk{font-size:.74em;font-weight:700;padding:1px 7px;border-radius:999px;background:var(--grnbg);color:var(--grn);white-space:nowrap}
+.pl.r .pk{background:var(--ambbg);color:var(--amb)}.pl.w .pk,.pl.c .pk{background:var(--ambbg);color:var(--amb)}.pl.m .pk{background:var(--redbg);color:var(--red)}.pl.n .pk{background:var(--soft);color:var(--ink)}
+.pl .q{font-family:var(--fm)}
+.addr{margin:10px 0 0;padding:9px 11px;border-radius:7px;border:1px dashed var(--acc);display:flex;flex-direction:column}.addr span{color:var(--mute);font-size:.9em}
+.paym{margin:8px 0 0;font-size:.92em}
+.kakao{background:#FEE500;color:#191600;border-radius:4px 14px 14px 14px;padding:10px 12px;max-width:92%}.kakao small{display:block;opacity:.7}.kakao p{margin:2px 0 0}
+.conv{margin:12px 0 4px;border:0;background:var(--acc);color:var(--on);font-weight:700;border-radius:8px;padding:9px 16px}
+.conv[disabled]{opacity:.5;cursor:default}
+
+/* facts as shelf price tags */
+.facts{padding-block:48px;border-top:1px solid var(--line)}
+.facts h2,.steps h2,.way h2,.ask h2,.cards-s h2{font-size:clamp(26px,2.6vw,36px)}
+.facts ol{list-style:none;padding:0;margin:26px 0 0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.facts li{position:relative;background:var(--tag);color:var(--tagink);border-radius:6px 22px 6px 6px;padding:22px 22px 18px;display:flex;flex-direction:column}
+.facts .hole{position:absolute;top:14px;right:16px;width:14px;height:14px;border-radius:50%;background:var(--bg)}
+.facts .n{font-family:var(--fd);font-weight:400;font-size:clamp(40px,4vw,58px);line-height:1}
+.facts h3{font-size:1.02em;margin:12px 0 6px}.facts p{margin:0 0 12px;font-size:.88em;flex:1;opacity:.85}.facts a{font-size:.78em;opacity:.8}
+
+/* steps: filters, shelf, viewer, receipt */
+.steps{padding-block:48px;border-top:1px solid var(--line)}
+.sub2{color:var(--mute);margin:10px 0 0;max-width:48em}
+.filters{margin-top:22px;display:flex;flex-wrap:wrap;gap:12px 22px;padding:14px 16px;background:var(--card);border:1px solid var(--line);border-radius:10px}
+.fg{display:flex;flex-direction:column;gap:5px}.fg>span{font-size:.78em;color:var(--mute)}
+.seg{display:inline-flex;flex-wrap:wrap;border:1px solid var(--line);border-radius:999px;overflow:hidden;background:var(--soft)}
+.seg button{border:0;background:transparent;padding:6px 12px;font-size:.82em;color:var(--mute)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--card);font-weight:700}
+.add-ons{flex-basis:100%}.chks{display:flex;flex-wrap:wrap;gap:6px 18px}
+.chk{display:flex;gap:7px;align-items:center;font-size:.86em}.chk input{accent-color:var(--acc);width:16px;height:16px}
+.sg>div,.vw .shot,.vw>*{min-width:0}
+.sg{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:24px;margin-top:22px;align-items:start}
+.shelf{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.item{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:6px}
+.item.in{border-color:var(--acc);box-shadow:inset 0 0 0 1px var(--acc)}
+.item .no{margin:0;font-family:var(--fm);font-size:.76em;color:var(--mute)}
+.item h3{font-size:1.06em}.item .loss{margin:0;font-size:.84em;color:var(--mute);flex:1}
+.tag{margin:4px 0 0;display:flex;flex-direction:column;align-self:flex-start;background:var(--tag);color:var(--tagink);padding:4px 12px 5px;border-radius:4px 12px 4px 4px}
+.tag b{font-family:var(--fd);font-weight:400;font-size:1.3em;line-height:1.2}.tag small{font-size:.72em;opacity:.8}
+.ib{display:flex;gap:6px;margin-top:4px}
+.add,.see{border:1px solid var(--line);background:var(--card);border-radius:7px;padding:6px 12px;font-size:.82em}
+.add{font-weight:700}.add[aria-pressed="true"]{background:var(--acc);border-color:var(--acc);color:var(--on)}
+.see[aria-pressed="true"]{background:var(--soft)}
+.viewer{margin-top:14px}
+.vw{display:grid;grid-template-columns:minmax(0,1fr) 250px;gap:16px;padding:16px;background:var(--card);border:1px solid var(--line);border-radius:10px}
+.lead{font-family:var(--fd);font-size:1.3em;margin:0 0 12px}
+.cm{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:9px}
+.cm li{border:1px solid var(--line);border-radius:8px;padding:9px 11px}
+.cm u{text-decoration:none;font-size:.72em;font-weight:700;padding:1px 7px;border-radius:999px}
+.cm .ok u{background:var(--grnbg);color:var(--grn)}.cm .if u{background:var(--ambbg);color:var(--amb)}.cm .ask u{background:var(--redbg);color:var(--red)}.cm .prep u{color:var(--mute);padding:0}
+.cm h4{margin:5px 0 2px;font-size:.92em}.cm p{margin:0;font-size:.82em;color:var(--mute)}
+.rc{position:sticky;top:calc(env(safe-area-inset-top,0px) + 66px)}
+.receipt{background:var(--paper);font-family:var(--fm);font-size:.84em;padding:20px 18px 26px;border:1px solid var(--line);box-shadow:0 14px 30px -24px rgba(0,0,0,.5);
+ -webkit-mask:linear-gradient(#000 0 0) top/100% calc(100% - 10px) no-repeat,radial-gradient(circle 6px at 50% 100%,transparent 98%,#000) bottom/14px 12px repeat-x;
+ mask:linear-gradient(#000 0 0) top/100% calc(100% - 10px) no-repeat,radial-gradient(circle 6px at 50% 100%,transparent 98%,#000) bottom/14px 12px repeat-x}
+.receipt .rh{text-align:center;font-weight:600;margin:0}.receipt .rs{text-align:center;color:var(--mute);margin:0 0 10px;font-size:.92em}
+.receipt hr{border:0;border-top:1px dashed var(--mute);margin:8px 0}
+.receipt p{display:flex;justify-content:space-between;gap:10px;margin:3px 0}.receipt p b{white-space:nowrap;font-weight:600}
+.receipt .sub{color:var(--mute);padding-left:10px;font-size:.94em}
+.receipt .tot{font-size:1.18em;font-weight:600}
+.receipt .first{color:var(--grn)}.receipt .hint{color:var(--acc);font-weight:600;display:block}.receipt .ask{color:var(--red);display:block}
+.receipt .empty{color:var(--mute);display:block;text-align:center;padding:14px 0}
+
+/* screens */
+.scr{background:var(--card);border:1px solid var(--line);border-radius:9px;overflow:hidden;font-size:.84em}
+.scr-h{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:10px 12px;border-bottom:1px solid var(--line)}.scr-h span{color:var(--mute);font-size:.9em}
+.tw{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{border-collapse:collapse;width:100%}
+.scr table{min-width:520px}
+.scr th,.scr td{padding:7px 10px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+.scr th{font-weight:500;color:var(--mute);font-size:.9em;background:var(--soft)}
+.scr th:first-child,.scr td:first-child{text-align:left}
+.scr tfoot td{border-bottom:0;font-weight:700;background:var(--soft)}
+.th{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:5px;background:var(--c);color:#fff;font-style:normal;font-size:.78em;font-weight:700;margin-right:8px;vertical-align:middle}
+.filt{display:flex;gap:6px;flex-wrap:wrap;padding:9px 12px;border-bottom:1px solid var(--line)}
+.filt span{font-size:.86em;padding:2px 10px;border-radius:999px;border:1px solid var(--line);color:var(--mute)}.filt .on{background:var(--ink);color:var(--card);border-color:var(--ink)}
+.strip{display:flex;flex-wrap:wrap;gap:6px 14px;padding:9px 12px;font-size:.88em;background:var(--soft)}.strip span{color:var(--mute)}
+.tix{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;padding:10px 12px}
+.tix div{border:1px dashed var(--line);border-radius:6px;padding:8px 10px;display:flex;flex-direction:column}.tix b{font-family:var(--fm)}.tix span{color:var(--mute);font-size:.88em}.tix .q{background:var(--soft);border-style:solid}
+.adj{padding:10px 12px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:6px}
+.seg3{display:flex;gap:4px}.seg3 span{padding:3px 12px;border-radius:999px;border:1px solid var(--line);font-size:.88em}.seg3 .on{background:var(--acc);color:var(--on);border-color:var(--acc)}
+.adj p{display:flex;gap:16px;margin:0;font-family:var(--fm)}.adj small{color:var(--mute)}
+.disp{display:grid;grid-template-columns:220px minmax(0,1fr);border-bottom:1px solid var(--line)}
+.dl{padding:8px 10px;border-right:1px solid var(--line)}
+.gh{margin:6px 0 4px;font-size:.84em;color:var(--mute);font-weight:700}
+.tk{display:grid;grid-template-columns:auto auto 1fr;gap:6px;align-items:center;padding:5px 0;font-size:.92em}.tk b{font-family:var(--fm)}.tk span{color:var(--mute);text-align:right}
+.sd{width:10px;height:10px;border-radius:50%;display:inline-block}.sd.v0{background:var(--mute)}.sd.v{background:var(--vio)}.sd.b{background:var(--blue)}.sd.a{background:var(--amb)}
+.map{display:block;width:100%;height:100%;min-height:200px}
+.map .mbg{fill:var(--soft)}.map .tw2{fill:var(--card);stroke:var(--line);stroke-width:.4}.map .road{stroke:var(--line);stroke-width:2.4;fill:none}
+.map text{font:600 3px var(--fm);fill:var(--ink)}
+.dot.b circle{fill:var(--blue)}.dot.v circle{fill:var(--vio)}.dot.gr circle{fill:var(--mute)}.dot.a circle{fill:var(--amb)}
+.money{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0}
+.scr .money p{margin:0;padding:9px 12px;border-right:1px solid var(--line);display:flex;flex-direction:column}.scr .money p:last-child{border:0}
+.scr .money span{color:var(--mute);font-size:.86em}.scr .money b{font-family:var(--fm)}.scr .money small{color:var(--red);font-size:.8em}
+.phone{width:240px;margin:0 auto;border:9px solid var(--ink);border-radius:30px;background:var(--card);overflow:hidden}
+.ph-in{padding:16px 14px 18px;font-size:.84em;display:flex;flex-direction:column;gap:2px}
+.ph-in .t{margin:0;color:var(--acc);font-size:.82em;font-weight:700}.ph-in .nm{margin:2px 0 8px;font-family:var(--fd);font-size:1.3em}
+.li{display:flex;justify-content:space-between;gap:8px;padding:6px 0;border-bottom:1px solid var(--line);align-items:center}.li b{font-family:var(--fm)}
+.li.tot{border:0;font-weight:700}
+.btn{display:block;text-align:center;background:var(--acc);color:var(--on);border-radius:9px;padding:9px 0;font-weight:700;margin-top:4px}
+.t2{text-align:center;color:var(--mute);font-size:.8em;margin:6px 0 0}
+
+.way{padding-block:48px;border-top:1px solid var(--line)}
+.way ol{list-style:none;counter-reset:w;padding:0;margin:24px 0 0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
+.way li{counter-increment:w;border-top:3px solid var(--acc);padding-top:12px}.way li b::before{content:counter(w) '. ';color:var(--mute)}
+.way p{font-size:.9em;color:var(--mute);margin:6px 0 0}
+.ask{padding-block:48px;border-top:1px solid var(--line);background:var(--card)}
+.ag{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:32px}
+.opt{margin-top:20px}.fld{display:flex;flex-direction:column;gap:5px;font-size:.86em;color:var(--mute)}
+.fld input{font:inherit;font-size:1.1em;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px 12px}
+.opt fieldset{border:0;padding:0;margin:16px 0 0}.opt legend{font-size:.86em;color:var(--mute);margin-bottom:6px;padding:0}
+.sw{display:flex;gap:10px}.sw button{width:34px;height:34px;border-radius:50%;border:3px solid var(--card);background:var(--c);box-shadow:0 0 0 1px var(--line)}.sw button[aria-pressed="true"]{box-shadow:0 0 0 2px var(--ink)}
+.msgw{display:flex;flex-direction:column;gap:8px;font-size:.9em}
+.msgw textarea{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px 12px;resize:vertical}
+.cta{align-self:flex-start;border:0;background:var(--acc);color:var(--on);font-weight:700;padding:12px 22px;border-radius:9px}
+.cards-s{padding-block:48px;border-top:1px solid var(--line)}
+.cards{display:flex;gap:12px;overflow-x:auto;margin-top:18px;padding-bottom:8px;scroll-snap-type:x mandatory}
+.cards img{width:240px;height:auto;flex:none;border-radius:8px;border:1px solid var(--line);scroll-snap-align:start}
+footer{padding-block:28px 40px;font-size:.8em;color:var(--mute);border-top:1px solid var(--line)}
+
+@media (max-width:1080px){
+ .bgrid{grid-template-columns:1fr}.dpanel{border-left:0;border-top:1px solid var(--line)}
+ .sg{grid-template-columns:1fr}.rc{position:static}
+ .vw{grid-template-columns:1fr}
+ .shelf{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .facts ol{grid-template-columns:1fr}
+ .way ol{grid-template-columns:1fr 1fr}
+ .ag{grid-template-columns:1fr}
+}
+@media (max-width:640px){
+ .hero{padding-block:28px}
+ .hl{grid-template-columns:1fr}
+ .top nav{display:none}
+ .cols{grid-template-columns:repeat(5,168px)}
+ .shelf{grid-template-columns:1fr}
+ .way ol{grid-template-columns:1fr}
+ .tix{grid-template-columns:1fr}
+ .disp{grid-template-columns:1fr}.dl{border-right:0;border-bottom:1px solid var(--line)}
+ .scr .money{grid-template-columns:1fr 1fr}.scr .money p:nth-child(2){border-right:0}.scr .money p:nth-child(-n+2){border-bottom:1px solid var(--line)}
+}
+
+/* card mode */
+.cardmode{margin:0;background:#bbb}
+.card{position:relative;width:1080px;height:1440px;overflow:hidden;background:var(--bg);color:var(--ink);padding:60px 60px 0;display:flex;flex-direction:column;margin-bottom:20px;font-size:22px}
+.card .ch{display:flex;justify-content:space-between;align-items:center;border-top:8px solid var(--acc);padding-top:22px;font-size:1.1em;font-weight:700}
+.card .ch b{font-family:var(--fd);font-weight:400;font-size:1.4em;background:var(--tag);color:var(--tagink);padding:4px 18px;border-radius:6px 18px 6px 6px}
+.card h2{font-size:2.3em;line-height:1.3;margin:24px 0 28px}
+.card .cz .scr{font-size:.86em}.card .cz .scr table{min-width:0}.card .cz .tw{overflow:visible}
+.card .cz .phone{width:330px;font-size:1.1em}
+.card .cz .disp{grid-template-columns:300px 1fr}
+.card>ol.cl{list-style:none;padding:0;margin:28px 0 0;display:flex;flex-direction:column;gap:10px;font-size:1.18em;font-weight:700}
+.card>ol.cl i{font-style:normal;color:var(--acc);margin-right:14px;font-family:var(--fm)}
+.card .foot{margin:auto -60px 0;padding:26px 60px 34px;background:var(--ink);color:var(--bg);display:flex;justify-content:space-between;gap:20px;font-size:.9em}.card .foot span{opacity:.85}
+.card.cv h1{font-size:3.3em;line-height:1.22;margin:12px 0 26px}.card.cv .kick{font-size:1em}
+.card.cv .board{margin-top:0}.card.cv .bgrid{grid-template-columns:1fr}.card.cv .dpanel{display:none}
+.card.cv .cols{grid-template-columns:repeat(5,minmax(0,1fr));overflow:visible}.card.cv .oc{font-size:.7em}
+</style>
+<header class="top"><div class="w"><span class="brand">bigC company</span><nav><a href="#facts">숫자로 본 손해</a><a href="#steps">단계와 값</a><a href="#ask">문의</a></nav></div></header>
+<main>
+<section class="hero"><div class="w"><div class="hl"><p class="kick">한인 마트 · 카톡 주문 · 배달 · 재고 · 정산</p>
+<h1><span>앱마다 주문은 쌓이는데,</span> <span>재고와 입금액은 맞습니까?</span></h1>
+<p class="sub">카톡 글로 들어온 주문은 누군가 옮겨 적기 전까지 어디에도 없습니다. 주문판에 올리는 순간부터 피킹, 배달, 돈까지 한 줄로 따라갑니다.</p>
+<p class="hint">주문판에서 빨간 카드(카톡 14:02)와 피킹 중인 카드를 눌러 보십시오.</p></div>
+<div class="board"><div class="bh"><div><b data-co>대표님 마트</b><span>주문판 · 11월 26일 목 14:20</span></div><span class="store">영업 중 · 바쁨 아님</span></div>
+<div class="bgrid"><div class="cols tw"><div class="col"><p class="ch">접수<span>2</span></p><button type="button" class="oc miss" data-o="K-2221" aria-pressed="false"><span class="oid">K-2221</span><b class="who">카톡 14:02</b><span class="where">「신라면 5, 두부 2, 지난번 그 김치」</span>
+<span class="ml">18분째 안 옮김</span><span class="chip bad">주문판에 없음</span><i class="dot"></i></button><div class="oc "><span class="oid">G-4610</span><b class="who">조이 님</b><span class="where">에어벨 레지던스 1타워 2207</span>
+<span class="ml">35분</span><span class="chip mute">그랩 결제</span></div></div><div class="col"><p class="ch">피킹<span>2</span></p><button type="button" class="oc sel" data-o="K-2219" aria-pressed="true"><span class="oid">K-2219</span><b class="who">박 대표님</b><span class="where">세렌 파크 2타워 1804</span>
+<span class="ml">28분</span><span class="chip mute">현금 · ₱1,000권</span></button><div class="oc "><span class="oid">B-0917</span><b class="who">엘라 님</b><span class="where">리버뷰 타워 B 3110</span>
+<span class="ml">31분</span><span class="chip mute">배달K 결제</span></div></div><div class="col"><p class="ch">포장<span>1</span></p><div class="oc "><span class="oid">G-4602</span><b class="who">마크 님</b><span class="where">그린 코트 905</span>
+<span class="ml">19분</span><span class="chip mute">그랩 결제</span></div></div><div class="col"><p class="ch">출발<span>2</span></p><div class="oc "><span class="oid">K-2217</span><b class="who">최 사장님</b><span class="where">그랜드 하이츠 4512</span>
+<span class="ml">6분</span><span class="chip mute">GCash</span></div><div class="oc late"><span class="oid">K-2214</span><b class="who">김 원장님</b><span class="where">메트로 스카이 3807</span>
+<span class="ml">12분 늦음</span><span class="chip mute">한국 계좌</span><i class="dot"></i></div></div><div class="col"><p class="ch">도착 · 수금<span>2</span></p><div class="oc "><span class="oid">B-0912</span><b class="who">지노 님</b><span class="where">맥킨 플레이스 1102</span>
+<span class="ml">도착 · 사진 확인</span><span class="chip ok">배달K 결제</span></div><div class="oc "><span class="oid">K-2210</span><b class="who">한 사장님</b><span class="where">어반 힐 1타워 1501</span>
+<span class="ml">수금 · 거스름 ₱50</span><span class="chip ok">현금 반납 대기</span></div></div></div><aside class="dpanel" aria-live="polite"><div class="det" id="o-K-2219"><p class="dh"><b>K-2219 · 피킹</b><span>박 대표님 · 28분 남음</span></p>
+<p class="sum">7개 중 <b>5 찾음</b> · <b>1 대체</b> · <b class="r">1 빠짐</b></p>
+<div class="pl f"><span class="pk">찾음</span><b>신라면 멀티 5입</b><span class="q">× 2</span></div><div class="pl f"><span class="pk">찾음</span><b>종가 포기김치 1kg</b><span class="q">× 1</span></div><div class="pl f"><span class="pk">찾음</span><b>서울우유 1L</b><span class="q">× 2</span></div><div class="pl w"><span class="pk">대체 · 답 대기</span><b>풀무원 두부 300g</b><span class="q">× 2</span><small>카톡으로 「CJ 두부로 바꿀까요?」 보냄 · 4분</small></div><div class="pl m"><span class="pk">빠짐</span><b>오뚜기 참기름 320ml</b><span class="q">× 1</span><small>환불 ₱390 · 합계 다시 계산</small></div><div class="pl f"><span class="pk">찾음</span><b>비비고 만두 1kg</b><span class="q">× 1</span></div><div class="pl f"><span class="pk">찾음</span><b>햇반 210g</b><span class="q">× 6</span></div>
+<div class="addr"><b>세렌 파크 2타워 1804</b><span>경비실에 신분증 · 서비스 엘리베이터 · 21시 배달 마감</span></div>
+<p class="paym"><span class="chip mute">현금</span> ₱1,000권으로 내심 · 거스름 ₱180을 기사에게 챙겨 보냄</p></div><div class="det" id="o-K-2221" hidden><p class="dh"><b>K-2221 · 카톡 14:02</b><span class="r">18분째 주문판에 없음</span></p>
+<div class="kakao"><small>최 사모님</small><p>신라면 5, 두부 2, 지난번 그 김치 보내 주세요~ 2타워요</p></div>
+<button type="button" class="conv" id="conv">주문으로 옮기기</button>
+<div class="convd" id="convd" hidden><div class="pl c"><span class="pk">확인 필요</span><b>신라면</b><span class="q">5</span><small>멀티 5입 1봉인지 낱개 5개인지 물어볼 글 준비됨</small></div><div class="pl w"><span class="pk">대체 · 답 대기</span><b>풀무원 두부 300g</b><span class="q">× 2</span><small>품절 · 대체 후보 CJ 두부</small></div><div class="pl n"><span class="pk">담음</span><b>종가 포기김치 1kg</b><span class="q">× 1</span><small>지난 주문(11월 12일)에서 찾음</small></div>
+<div class="addr"><b>세렌 파크 2타워 2310</b><span>지난 주문 주소 · 호수 확인 필요</span></div></div></div></aside></div></div></div></section>
+<section class="facts" id="facts"><div class="w"><h2>숫자로 본 마트의 손해</h2><ol><li><span class="hole"></span><b class="n">39%</b><h3>주소가 빠지면 배달은 실패합니다.</h3><p>주소가 틀리거나 빠진 배송 가운데 아예 실패한 비율입니다. 41%는 늦게 도착했습니다. 해외 택배 이용자 3,000명과 소매 임원 300명을 조사한 자료입니다.</p><a href="https://info.loqate.com/hubfs/Loqate%202021/Fixing%20Failed%20Deliveries/Fixing%20Failed%20Deliveries%20-%20Final.pdf" target="_blank" rel="noopener">Loqate, 2021년 조사 보고서 · 원문 확인</a></li><li><span class="hole"></span><b class="n">65%</b><h3>장부 재고와 선반 재고는 다릅니다.</h3><p>해외 소매 체인 37개 매장의 재고 기록 약 24만 건을 실제 선반과 맞춰 보니, 65% 넘게 달랐습니다. 이 차이로 이익이 10% 넘게 줄었습니다.</p><a href="https://www.chicagobooth.edu/review/first-measure-then-manage" target="_blank" rel="noopener">Chicago Booth Review · 원문 확인</a></li><li><span class="hole"></span><b class="n">품절</b><h3>앱 품절 표시가 늦으면 주문이 취소됩니다.</h3><p>그랩은 가맹점이 막을 수 있는 주문 취소 원인 세 가지 가운데 하나로 품목 품절을 꼽고, 가맹점 앱에서 판매 수량을 미리 제한하라고 안내합니다.</p><a href="https://hodor-assets.grab.com/attachments/merchant/en-ph/articles/22150/rc-upload-1714107664018-2-GrabMerchant%20Handbook.pdf" target="_blank" rel="noopener">GrabMerchant 필리핀 안내서 · 원문 확인</a></li></ol>
+<p class="note">마닐라 한인 마트만 따로 집계한 숫자는 찾지 못했습니다. 위 숫자는 해외 조사와 그랩 안내서에서 그대로 옮겼습니다.</p></div></section>
+<section class="steps" id="steps"><div class="w"><h2>필요한 것만 담으십시오</h2>
+<p class="sub2">기본 값은 1지점, 300품목, 주문 채널 2개 기준입니다. 매장 조건을 고르시면 값표가 바로 바뀌고, 담으신 단계는 오른쪽 영수증에 찍힙니다.</p>
+<div class="filters"><div class="fg"><span>지점</span><div class="seg" data-c="branch"><button type="button" data-v="0" aria-pressed="true">1곳</button><button type="button" data-v="1" aria-pressed="false">2곳</button><button type="button" data-v="2" aria-pressed="false">3곳 이상</button></div></div><div class="fg"><span>품목 수</span><div class="seg" data-c="sku"><button type="button" data-v="0" aria-pressed="true">300개까지</button><button type="button" data-v="1" aria-pressed="false">301~1,500개</button><button type="button" data-v="2" aria-pressed="false">1,500개 넘음</button></div></div><div class="fg"><span>주문 채널</span><div class="seg" data-c="chan"><button type="button" data-v="0" aria-pressed="true">2개까지</button><button type="button" data-v="1" aria-pressed="false">3~4개</button><button type="button" data-v="2" aria-pressed="false">5개 이상</button></div></div><div class="fg"><span>직원 기사</span><div class="seg" data-c="rider"><button type="button" data-v="0" aria-pressed="true">1명 이하</button><button type="button" data-v="1" aria-pressed="false">2명 이상</button></div></div><div class="fg add-ons"><span>추가</span><div class="chks"><label class="chk"><input type="checkbox" id="a-ord" data-a="ord"><span>주문 모으기 (카톡·앱 주문 한 화면)</span></label><label class="chk"><input type="checkbox" id="a-credit" data-a="credit"><span>외상 거래처 관리</span></label><label class="chk"><input type="checkbox" id="a-lot" data-a="lot"><span>유통기한 로트 추적</span></label><label class="chk"><input type="checkbox" id="a-lala" data-a="lala"><span>랄라무브 연동 (협의 후)</span></label></div></div></div>
+<div class="sg"><div><ol class="shelf"><li class="item" id="i-items"><p class="no">1</p><h3>품목 정비</h3><p class="loss">앱마다 값이 달라 그랩에서 밑지고 파는 품목</p>
+<p class="tag"><b data-tag="items">30만 원</b><small>기본 30만</small></p>
+<div class="ib"><button type="button" class="add" data-add="items" aria-pressed="false">담기</button><button type="button" class="see" data-see="items" aria-pressed="false">화면</button></div></li><li class="item" id="i-settle"><p class="no">2</p><h3>정산 대조</h3><p class="loss">수수료·환불 뒤 덜 들어온 앱 입금</p>
+<p class="tag"><b data-tag="settle">100만 원</b><small>기본 100만 · 월 관리 15만</small></p>
+<div class="ib"><button type="button" class="add" data-add="settle" aria-pressed="false">담기</button><button type="button" class="see" data-see="settle" aria-pressed="false">화면</button></div></li><li class="item" id="i-stock"><p class="no">3</p><h3>재고 관리</h3><p class="loss">앱에는 있는데 선반에는 없는 품목</p>
+<p class="tag"><b data-tag="stock">180만 원</b><small>기본 180만</small></p>
+<div class="ib"><button type="button" class="add" data-add="stock" aria-pressed="false">담기</button><button type="button" class="see" data-see="stock" aria-pressed="false">화면</button></div></li><li class="item" id="i-total"><p class="no">4</p><h3>통합 운영</h3><p class="loss">카톡 주문 누락, 콘도 오배송, 섞여 들어오는 돈</p>
+<p class="tag"><b data-tag="total">380만 원</b><small>기본 380만 · 월 관리 15만</small></p>
+<div class="ib"><button type="button" class="add" data-add="total" aria-pressed="false">담기</button><button type="button" class="see" data-see="total" aria-pressed="true">화면</button></div></li><li class="item" id="i-app"><p class="no">5</p><h3>고객 앱</h3><p class="loss">단골이 매번 카톡으로 다시 적는 주소와 품목</p>
+<p class="tag"><b data-tag="app">별도 견적</b></p>
+<div class="ib"><button type="button" class="see" data-see="app" aria-pressed="false">화면</button></div></li><li class="item" id="i-ext"><p class="no">6</p><h3>확장 구상</h3><p class="loss">품절이 난 뒤에야 하는 발주</p>
+<p class="tag"><b data-tag="ext">검토 후 제안</b></p>
+<div class="ib"><button type="button" class="see" data-see="ext" aria-pressed="false">화면</button></div></li></ol><div class="viewer"><div class="vw" id="v-items" hidden><div class="shot"><p class="lead">앱마다 다른 품목과 가격을 한 장에 맞춥니다.</p><div class="scr "><div class="scr-h"><b>통합 품목표</b><span>300품목 · 11월 26일</span></div><div class="filt"><span class=on>전체 300</span><span>가격 다름 12</span><span>앱에 없음 5</span><span>마진 낮음 9</span></div><div class="tw"><table class="it"><thead><tr><th>품목</th><th>포스</th><th>배달K</th><th>그랩</th><th>그랩 마진</th><th>상태</th></tr></thead><tbody><tr><td><i class="th" style="--c:#C0392B">辛</i><b>신라면 멀티 5입</b></td><td>₱265</td><td>₱265</td><td>₱289</td><td>₱13</td><td><span class="chip ok">맞음</span></td></tr><tr><td><i class="th" style="--c:#2E7D32">두</i><b>풀무원 두부 300g</b></td><td>₱145</td><td>₱150</td><td>₱159</td><td><b class="r">₱−4</b></td><td><span class="chip bad">가격 다름</span></td></tr><tr><td><i class="th" style="--c:#B7791F">김</i><b>종가 포기김치 1kg</b></td><td>₱420</td><td>₱420</td><td>—</td><td>—</td><td><span class="chip warn">그랩에 없음</span></td></tr><tr><td><i class="th" style="--c:#1565C0">우</i><b>서울우유 1L</b></td><td>₱235</td><td>₱235</td><td>₱255</td><td>₱9</td><td><span class="chip ok">맞음</span></td></tr><tr><td><i class="th" style="--c:#6D4C41">참</i><b>참기름 320ml</b></td><td>₱390</td><td>₱410</td><td>₱429</td><td>₱−1</td><td><span class="chip bad">가격 다름</span></td></tr></tbody></table></div><div class="strip"><b>그랩 수수료 20% 예시로 계산</b><span>마진이 0 아래인 품목 2개</span><span>앱 가격 고칠 목록을 준비했습니다</span></div></div></div><ol class="cm"><li class="ok"><u>즉시 적용 가능</u><h4>통합 품목표</h4><p>포스, 배달K, 그랩의 품목과 가격을 한 줄에 놓습니다. 기본은 300품목까지입니다.</p></li><li class="ok"><u>즉시 적용 가능</u><h4>경로별 마진</h4><p>수수료를 뺀 금액을 품목마다 비교합니다.</p></li><li class="ok"><u>즉시 적용 가능</u><h4>재고 실사표</h4><p>선반 순서대로 세고 차이를 바로 확인합니다.</p></li><li class="prep"><u>준비해 주실 자료</u><h4>포스 품목 파일, 앱 품목 목록, 수수료율</h4></li></ol></div><div class="vw" id="v-settle" hidden><div class="shot"><p class="lead">주문 합계와 통장 입금액을 주문 한 건까지 맞춥니다.</p><div class="scr "><div class="scr-h"><b>정산 대조</b><span>11월 16일 ~ 22일</span></div><div class="tw"><table class="led"><thead><tr><th></th><th>배달K</th><th>그랩</th></tr></thead><tbody><tr><td><b>주문 합계</b></td><td>₱84,200</td><td>₱112,600</td></tr><tr><td>수수료</td><td>−₱8,420</td><td>−₱22,520</td></tr><tr><td>할인 · 환불</td><td>−₱1,240</td><td>−₱3,180</td></tr><tr><td><b>받을 돈</b></td><td><b>₱74,540</b></td><td><b>₱86,900</b></td></tr><tr><td>통장 입금</td><td>₱74,540</td><td>₱84,620</td></tr></tbody><tfoot><tr><td><b>차액</b></td><td><b class="g">0</b></td><td><b class="r">−₱2,280</b></td></tr></tfoot></table></div><div class="tix"><div><b>G-4471</b><span>품절 환불 두 번</span><b class="r">₱1,480</b></div><div><b>G-4502</b><span>할인 부담 주체</span><b class="r">₱800</b></div><div class="q"><b>문의 글 2건</b><span>그랩에 보낼 글이 준비됐습니다</span></div></div></div></div><ol class="cm"><li class="if"><u>협의 후 적용</u><h4>앱 내역 올리기</h4><p>그랩 판매 자료와 배달K 내역을 올립니다. 받을 수 있는 항목을 먼저 확인합니다.</p></li><li class="ok"><u>즉시 적용 가능</u><h4>받을 돈 계산</h4><p>수수료, 할인, 환불을 나누어 입금액과 대조합니다.</p></li><li class="ok"><u>즉시 적용 가능</u><h4>차액 주문 찾기</h4><p>어긋난 주문과 앱에 보낼 문의 글을 준비합니다.</p></li><li class="prep"><u>준비해 주실 자료</u><h4>최근 한 달 앱 내역, 통장 입금 내역</h4></li></ol></div><div class="vw" id="v-stock" hidden><div class="shot"><p class="lead">어느 앱에서 팔려도 재고는 한 곳에서 줄어듭니다.</p><div class="scr "><div class="scr-h"><b>재고</b><span>네 경로 판매를 한 재고에서 뺍니다</span></div><div class="filt"><span class=on>전체 300</span><span>재고 적음 6</span><span>품절 2</span><span>유통기한 임박 3</span></div><div class="tw"><table class="st"><thead><tr><th>품목</th><th>재고</th><th>기준</th><th>배달K</th><th>그랩</th><th>상태</th></tr></thead><tbody><tr><td><i class="th" style="--c:#2E7D32">두</i><b>풀무원 두부 300g</b></td><td><b class="r">0</b></td><td>12</td><td><b class="r">판매 중</b></td><td>꺼짐</td><td><span class="chip bad">앱 품절 표시 필요</span></td></tr><tr><td><i class="th" style="--c:#C0392B">辛</i><b>신라면 멀티 5입</b></td><td>24</td><td>30</td><td>판매 중</td><td>판매 중</td><td><span class="chip warn">재고 적음</span></td></tr><tr><td><i class="th" style="--c:#1565C0">우</i><b>서울우유 1L</b></td><td>18</td><td>10</td><td>판매 중</td><td>판매 중</td><td><span class="chip warn">2일 남음 6개</span></td></tr><tr><td><i class="th" style="--c:#B7791F">김</i><b>종가 포기김치 1kg</b></td><td>31</td><td>15</td><td>판매 중</td><td>—</td><td><span class="chip ok">정상</span></td></tr></tbody></table></div><div class="adj"><b>재고 고치기 · 신라면 멀티</b><div class="seg3"><span>입고</span><span class="on">실사</span><span>손실</span></div><p><span>장부 24</span><span>센 수량 <b>21</b></span><span>차이 <b class="r">−3</b></span></p><small>사유를 고르지 않으면 저장되지 않습니다 · 마크 11:42</small></div></div></div><ol class="cm"><li class="ok"><u>즉시 적용 가능</u><h4>공통 재고</h4><p>네 경로의 판매를 같은 재고에서 뺍니다.</p></li><li class="ok"><u>즉시 적용 가능</u><h4>품절과 유통기한 알림</h4><p>기준보다 적어지면 앱 품절 표시를 먼저 알려 드립니다.</p></li><li class="ok"><u>즉시 적용 가능</u><h4>사유가 남는 재고 수정</h4><p>입고, 실사, 손실 가운데 하나를 골라야 숫자가 바뀝니다.</p></li><li class="prep"><u>준비해 주실 자료</u><h4>재고 기준 수량, 포스 판매 파일</h4></li></ol></div><div class="vw" id="v-total"><div class="shot"><p class="lead">주문, 배달, 돈을 한 화면에서 마감합니다.</p><div class="scr "><div class="scr-h"><b>배차와 마감</b><span>11월 26일 목 · 18:20</span></div><div class="disp"><div class="dl"><p class="gh">미배정 1</p><div class="tk"><i class="sd v0"></i><b>K-2219</b><span>세렌 파크 2타워 1804</span></div><p class="gh">라몬 · 오토바이 2건</p><div class="tk"><i class="sd b"></i><b>K-2217</b><span>이동 중 · 6분</span></div><div class="tk"><i class="sd a"></i><b>K-2214</b><span><b class="r">12분 늦음</b></span></div><p class="gh">랄라무브 1건</p><div class="tk"><i class="sd v"></i><b>B-0915</b><span>배정 · 기사 도착 대기</span></div></div><svg class="map" viewBox="0 0 100 80" aria-hidden="true"><rect width="100" height="80" class="mbg"/><rect x="8" y="8" width="18" height="14" rx="1.5" class="tw2"/><rect x="36" y="6" width="16" height="22" rx="1.5" class="tw2"/><rect x="62" y="10" width="14" height="26" rx="1.5" class="tw2"/><rect x="78" y="6" width="14" height="18" rx="1.5" class="tw2"/><rect x="14" y="52" width="22" height="18" rx="1.5" class="tw2"/><rect x="60" y="56" width="26" height="16" rx="1.5" class="tw2"/><path d="M0 40H100M50 0V80" class="road"/><g class="dot b"><circle cx="18" cy="30" r="2.6"/><text x="21.6" y="31.2">K-2217</text></g><g class="dot v"><circle cx="46" cy="22" r="2.6"/><text x="49.6" y="23.2">B-0915</text></g><g class="dot gr"><circle cx="30" cy="64" r="2.6"/><text x="33.6" y="65.2">K-2219</text></g><g class="dot a"><circle cx="82" cy="18" r="2.6"/><text x="85.6" y="19.2">K-2214</text></g></svg></div><div class="money"><p><span>현금</span><b>₱18,400</b><small>기사 반납 대기 ₱3,200</small></p><p><span>GCash</span><b>₱26,750</b></p><p><span>한국 계좌</span><b>₩2,940,000 · ₱31,200</b></p><p><span>외상</span><b>₱9,800</b><small>거래처 2곳</small></p></div></div></div><ol class="cm"><li class="ok"><u>즉시 적용 가능</u><h4>주문판과 배차</h4><p>카톡 글을 주문으로 옮기고, 기사별로 나눠 보냅니다. 콘도 타워·호수·출입 절차를 주문마다 남깁니다.</p></li><li class="ok"><u>즉시 적용 가능</u><h4>돈 출처별 마감</h4><p>현금, GCash, 한국 계좌, 외상을 나누고 기사 현금 반납까지 확인합니다.</p></li><li class="ask"><u>사전 검토 필요</u><h4>그랩 자동 연동</h4><p>그랩의 제휴 승인 뒤 별도 100만 원부터입니다. 배달K는 연동 가능 여부를 먼저 문의합니다.</p></li><li class="prep"><u>준비해 주실 자료</u><h4>직원별 담당 업무, 최근 3개월 판매 자료</h4></li></ol></div><div class="vw" id="v-app" hidden><div class="shot"><p class="lead">단골 고객은 매장으로 바로 주문합니다.</p><div class="phone"><div class="ph-in"><p class="t">대표님 마트 · 주문</p><p class="nm">지난 주문 다시 담기</p>
+<div class="li"><span>신라면 멀티 5입 × 2</span><b>₱530</b></div><div class="li"><span>풀무원 두부 × 2</span><span class="chip bad">품절 · 대체 후보</span></div><div class="li"><span>종가 포기김치 1kg</span><b>₱420</b></div>
+<div class="addr"><b>세렌 파크 2타워 1804</b><span>경비실에 신분증 · 서비스 엘리베이터 · 21시 마감</span></div>
+<div class="li tot"><span>합계</span><b>₱950</b></div><span class="btn">GCash로 주문</span><p class="t2">포장 사진과 도착 시각을 보내 드립니다</p></div></div></div><ol class="cm"><li class="ok"><u>즉시 적용 가능</u><h4>주문 홈페이지</h4><p>재고와 총액을 바로 보여 드립니다. 검색 순위는 약속드리지 않습니다.</p></li><li class="ok"><u>즉시 적용 가능</u><h4>지난 주문 다시 담기</h4><p>품목과 콘도 주소를 다시 묻지 않습니다.</p></li><li class="if"><u>협의 후 적용</u><h4>배달 현황</h4><p>포장 사진과 도착 시각을 보여 드립니다. 기사의 위치 공유 동의가 필요합니다.</p></li><li class="prep"><u>준비해 주실 자료</u><h4>상품 사진, 배달 지역과 요금</h4></li></ol></div><div class="vw" id="v-ext" hidden><div class="shot"><p class="lead">품절되기 전에 발주서가 먼저 준비됩니다.</p><div class="scr "><div class="scr-h"><b>발주 제안</b><span>최근 7일 판매 기준</span></div><div class="tw"><table class="ex"><thead><tr><th>품목</th><th>7일 판매</th><th>남은 날</th><th>제안 수량</th><th></th></tr></thead><tbody><tr><td><b>신라면 멀티 5입</b></td><td>42</td><td><b class="r">4일</b></td><td><b>60</b></td><td><span class="chip ok">승인</span></td></tr><tr><td><b>풀무원 두부 300g</b></td><td>35</td><td><b class="r">0일</b></td><td><b>48</b></td><td><span class="chip ok">승인</span></td></tr><tr><td><b>서울우유 1L</b></td><td>20</td><td>6일</td><td><b>12</b></td><td><span class="chip warn">유통기한 확인</span></td></tr><tr><td><b>참기름 320ml</b></td><td>3</td><td>30일 넘음</td><td>0</td><td><span class="chip mute">보류</span></td></tr></tbody></table></div><div class="strip"><b>거래처 2곳</b><span>대표님 승인 뒤 발주서를 보냅니다</span></div></div></div><ol class="cm"><li class="ask"><u>사전 검토 필요</u><h4>부족 수량 예측</h4><p>쌓인 판매 기록으로 먼저 시험한 뒤 적용합니다.</p></li><li class="if"><u>협의 후 적용</u><h4>발주서 준비</h4><p>대표님이 승인하신 발주서만 발송합니다.</p></li><li class="if"><u>협의 후 적용</u><h4>단골 고객 안내</h4><p>수신에 동의한 고객에게만 안내합니다.</p></li><li class="prep"><u>준비해 주실 자료</u><h4>통합 운영 단계의 판매 기록</h4></li></ol></div></div></div>
+<aside class="rc"><div class="receipt" id="receipt" aria-live="polite"></div></aside></div></div></section>
+<section class="way"><div class="w"><h2>진행 방식</h2><ol><li><b>업무 진단</b><p>현재 사용하시는 배달 앱, 포스, 장부를 그대로 검토합니다. 필요하면 현장 상담도 가능합니다. 담당자에게 문의해 주십시오(비용이 발생할 수 있습니다).</p></li><li><b>맞춤 시안</b><p>매장 상호와 품목, 색상을 적용한 화면을 먼저 보여 드립니다.</p></li><li><b>계약과 제작</b><p>시안을 확정하신 뒤 선금 50%로 제작을 시작합니다. 제작 일정은 담당자에게 문의해 주십시오.</p></li><li><b>납품과 보완</b><p>납품 후 2주까지 문구와 배치 수정은 횟수를 제한하지 않습니다. 모든 자료는 대표님의 소유입니다.</p></li></ol></div></section>
+<section class="ask" id="ask"><div class="w ag"><div><h2>대표님 마트 이름으로 먼저 보여 드립니다.</h2><p class="sub2">상호와 색을 넣으시면 위 주문판과 영수증에 바로 반영됩니다. 담으신 단계와 조건은 문의 글에 함께 담깁니다.</p>
+<form class="opt" autocomplete="off" onsubmit="return false"><label class="fld"><span>상호</span><input id="co" type="text" maxlength="14" placeholder="상호를 입력해 주십시오"></label>
+<fieldset><legend>대표 색상</legend><div class="sw"><button type="button" data-col="#0E7C4A" data-n="초록" style="--c:#0E7C4A" aria-label="초록" aria-pressed="true"></button><button type="button" data-col="#1F3A68" data-n="남색" style="--c:#1F3A68" aria-label="남색" aria-pressed="false"></button><button type="button" data-col="#A3321F" data-n="고추장빛" style="--c:#A3321F" aria-label="고추장빛" aria-pressed="false"></button><button type="button" data-col="#2B2B2B" data-n="먹색" style="--c:#2B2B2B" aria-label="먹색" aria-pressed="false"></button></div></fieldset></form></div>
+<div class="msgw"><label for="msg">문의 내용</label><textarea id="msg" rows="9"></textarea><button type="button" class="cta" id="copy">문의 내용 복사</button><p class="note" id="copied">문의 내용이 복사됩니다. 이 주소를 받으신 카카오톡 대화방에 붙여 넣어 보내 주십시오.</p></div></div></section>
+<section class="cards-s"><div class="w"><h2>카카오톡용 이미지</h2><div class="cards" tabindex="0" aria-label="카톡 이미지 묶음"><img src="cards/0.jpg" width="1080" height="1440" alt="카톡 이미지 1: 표지"><img src="cards/1.jpg" width="1080" height="1440" alt="카톡 이미지 2: 품목 정비"><img src="cards/2.jpg" width="1080" height="1440" alt="카톡 이미지 3: 정산 대조"><img src="cards/3.jpg" width="1080" height="1440" alt="카톡 이미지 4: 재고 관리"><img src="cards/4.jpg" width="1080" height="1440" alt="카톡 이미지 5: 통합 운영"><img src="cards/5.jpg" width="1080" height="1440" alt="카톡 이미지 6: 고객 앱"><img src="cards/6.jpg" width="1080" height="1440" alt="카톡 이미지 7: 확장 구상"></div><p class="note">이미지를 길게 누르면 저장하실 수 있습니다.</p></div></section>
+</main>
+<footer><div class="w">화면의 상호, 콘도, 품목, 금액, 수수료는 모두 예시입니다. 배달K, 그랩, 랄라무브는 각 회사의 서비스이며 당사와 제휴 관계가 아닙니다. 표시된 금액은 제작비이며 서버, 도메인, 외부 서비스와 AI 이용 비용은 계약 전에 별도로 안내해 드립니다. 처음 세 곳은 견적에서 10%를 빼 드리고, 사용 후기와 사례 공개(상호 익명 가능)를 부탁드립니다.</div></footer>
+<script>
+(() => {
+  const D = {"steps": [{"k": "items", "name": "품목 정비", "base": 30, "mo": 0}, {"k": "settle", "name": "정산 대조", "base": 100, "mo": 15}, {"k": "stock", "name": "재고 관리", "base": 180, "mo": 0}, {"k": "total", "name": "통합 운영", "base": 380, "mo": 15}, {"k": "app", "name": "고객 앱", "base": null, "mo": 0}, {"k": "ext", "name": "확장 구상", "base": null, "mo": 0}], "cond": [{"k": "branch", "label": "지점", "opts": ["1곳", "2곳", "3곳 이상"], "mul": [1, 1.3, null]}, {"k": "sku", "label": "품목 수", "opts": ["300개까지", "301~1,500개", "1,500개 넘음"], "add": [{}, {"items": 30, "stock": 30, "total": 30}, {"items": 70, "stock": 60, "total": 60}]}, {"k": "chan", "label": "주문 채널", "opts": ["2개까지", "3~4개", "5개 이상"], "add": [{}, {"settle": 30, "ord": 30, "total": 30}, {}], "ask": [0, 0, 1]}, {"k": "rider", "label": "직원 기사", "opts": ["1명 이하", "2명 이상"], "add": [{}, {"total": 30}]}], "addon": [{"k": "ord", "label": "주문 모으기 (카톡·앱 주문 한 화면)", "add": {"stock": 80}, "mo": 15}, {"k": "credit", "label": "외상 거래처 관리", "add": {"settle": 30, "total": 30}}, {"k": "lot", "label": "유통기한 로트 추적", "add": {"stock": 50, "total": 50}}, {"k": "lala", "label": "랄라무브 연동 (협의 후)", "add": {"total": 60}}]};
+  const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  const st = { cart: new Set(['settle']), c: {}, a: {}, co: '', col: '초록' };
+  D.cond.forEach((c) => { st.c[c.k] = 0; });
+  const won = (n) => n.toLocaleString('ko-KR') + '만 원';
+  const r5 = (n) => Math.round(n / 5) * 5;
+  const esc = (t) => t.replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
+  const branch = D.cond.find((c) => c.mul);
+
+  // hero board: card detail + kakao -> order
+  $$('[data-o]').forEach((b) => b.addEventListener('click', () => {
+    $$('[data-o]').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+    $$('.det').forEach((d) => { d.hidden = d.id !== 'o-' + b.dataset.o; });
+  }));
+  const conv = $('#conv');
+  conv.addEventListener('click', () => {
+    $('#convd').hidden = false; conv.disabled = true; conv.textContent = '주문판에 올렸습니다 · 확인할 것 2건';
+    const card = $('[data-o="K-2221"]'); card.classList.remove('miss');
+    card.querySelector('.ml').textContent = '방금 접수 · 확인 2건'; const ch = card.querySelector('.chip'); ch.className = 'chip warn'; ch.textContent = '카톡 답 대기';
+    const d = card.querySelector('.dot'); if (d) d.remove();
+  });
+
+  // one step under current conditions -> {total, lines, ask, mo}
+  function price(k) {
+    const s = D.steps.find((x) => x.k === k); if (!s || s.base == null) return null;
+    const lines = []; let sum = s.base, ask = false, mo = s.mo || 0;
+    D.cond.forEach((c) => {
+      const v = st.c[c.k];
+      if (c.ask && c.ask[v]) ask = true;
+      if (!c.add) return;
+      const m = c.add[v] || {};
+      let a = m[k] || 0;
+      if (k === 'stock' && st.a.ord && m.ord) a += m.ord;
+      if (a) { lines.push([`${c.label} ${c.opts[v]}`, a]); sum += a; }
+    });
+    D.addon.forEach((a) => {
+      if (st.a[a.k] && a.add[k]) { lines.push([a.label.replace(/ \(.*\)/, ''), a.add[k]]); sum += a.add[k]; if (a.mo) mo = Math.max(mo, a.mo); }
+    });
+    const m = branch.mul[st.c[branch.k]];
+    if (m == null) ask = true;
+    else if (m !== 1) { const t = r5(sum * m); lines.push([`${branch.label} ${branch.opts[st.c[branch.k]]} ×${m}`, t - sum]); sum = t; mo = Math.round(mo * m); }
+    return { total: sum, lines, ask, mo, base: s.base, name: s.name };
+  }
+
+  function render() {
+    D.steps.forEach((s) => {
+      const el = $(`[data-tag="${s.k}"]`), p = price(s.k); if (!el || !p) return;
+      el.textContent = p.ask ? '상담 견적' : won(p.total);
+    });
+    const hasTotal = st.cart.has('total');
+    $$('[data-add]').forEach((b) => {
+      const k = b.dataset.add, on = st.cart.has(k), inc = hasTotal && k !== 'total';
+      b.setAttribute('aria-pressed', String(on || inc)); b.textContent = inc ? '통합에 포함' : on ? '담음' : '담기';
+      b.closest('.item').classList.toggle('in', on || inc);
+    });
+    const items = hasTotal ? ['total'] : D.steps.filter((s) => st.cart.has(s.k)).map((s) => s.k);
+    let h = `<p class="rh">${esc(st.co || '대표님 마트')}</p><p class="rs">bigC company · 예시 견적</p><hr>`;
+    let sum = 0, mo = 0, ask = false;
+    if (!items.length) h += '<span class="empty">위에서 단계를 담아 주십시오.</span>';
+    items.forEach((k) => {
+      const p = price(k); if (p.ask) ask = true;
+      h += `<p><span>${p.name}</span><b>${won(p.base)}</b></p>` + p.lines.map(([l, v]) => `<p class="sub"><span>${l}</span><b>+${won(v)}</b></p>`).join('');
+      sum += p.total; mo = Math.max(mo, p.mo);
+    });
+    if (items.length) {
+      h += '<hr>';
+      if (ask) h += '<span class="ask">지점 3곳 이상이나 주문 채널 5개 이상은 상담 뒤 견적을 드립니다.</span>';
+      else {
+        h += `<p class="tot"><span>합계</span><b>${won(sum)}</b></p>`;
+        if (mo) h += `<p><span>월 관리</span><b>${won(mo)}</b></p>`;
+        h += `<p class="first"><span>처음 세 곳 10%</span><b>${won(Math.round(sum * 0.9))}</b></p>`;
+        const t = price('total');
+        if (!hasTotal && !t.ask && sum > t.total) h += `<hr><span class="hint">통합 운영을 고르시면 ${won(t.total)}입니다.</span>`;
+      }
+      if (hasTotal || st.cart.has('stock')) h += '<hr><p class="sub"><span>그랩 자동 연동</span><b>승인 뒤 +100만~</b></p>';
+    }
+    h += '<hr><p class="sub"><span>실제 값은 업무 진단 뒤 견적서로</span></p>';
+    $('#receipt').innerHTML = h;
+    $$('[data-co]').forEach((e) => { e.textContent = st.co || '대표님 마트'; });
+    msg(items, sum, ask);
+  }
+
+  let typed = false;
+  function msg(items, sum, ask) {
+    if (typed) return;
+    const names = items.map((k) => D.steps.find((s) => s.k === k).name).join(', ') || '(아직 고르지 않음)';
+    const cond = D.cond.map((c) => `${c.label} ${c.opts[st.c[c.k]]}`).join(', ');
+    const add = D.addon.filter((a) => st.a[a.k]).map((a) => a.label).join(', ');
+    $('#msg').value = ['[한인 마트 · 맞춤 시안 문의]', `상호: ${st.co || '(입력 전)'}`, `담은 단계: ${names}`, `매장 조건: ${cond}`, `추가: ${add || '없음'}`,
+      `예시 견적: ${ask ? '상담 견적' : items.length ? won(sum) : '-'}`, `대표 색상: ${st.col}`, '', '가장 먼저 해결하고 싶은 일:'].join('\n');
+  }
+  $('#msg').addEventListener('input', () => { typed = true; });
+
+  $$('.filters .seg').forEach((g) => $$('button', g).forEach((b) => b.addEventListener('click', () => {
+    $$('button', g).forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+    st.c[g.dataset.c] = +b.dataset.v; render();
+  })));
+  $$('[data-a]').forEach((i) => i.addEventListener('change', () => { st.a[i.dataset.a] = i.checked; render(); }));
+  $$('[data-add]').forEach((b) => b.addEventListener('click', () => {
+    const k = b.dataset.add;
+    if (st.cart.has('total') && k !== 'total') return;
+    if (st.cart.has(k)) st.cart.delete(k); else st.cart.add(k);
+    render();
+  }));
+  $$('[data-see]').forEach((b) => b.addEventListener('click', () => {
+    $$('[data-see]').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+    $$('.vw').forEach((v) => { v.hidden = v.id !== 'v-' + b.dataset.see; });
+    if (innerWidth <= 1080) $('#v-' + b.dataset.see).scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }));
+  $('#co').addEventListener('input', (e) => { st.co = e.target.value.trim(); render(); });
+  $$('[data-col]').forEach((b) => b.addEventListener('click', () => {
+    $$('[data-col]').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+    st.col = b.dataset.n; document.documentElement.style.setProperty('--acc', b.dataset.col); render();
+  }));
+  $('#copy').addEventListener('click', async () => {
+    const t = $('#msg'); let ok = false;
+    try { await navigator.clipboard.writeText(t.value); ok = true; } catch (e) { try { t.select(); ok = document.execCommand('copy'); } catch (e2) {} }
+    $('#copied').textContent = ok ? '복사되었습니다. 이 주소를 받으신 카카오톡 대화방에 붙여 넣어 보내 주십시오.' : '복사가 막혀 있습니다. 문의 내용을 길게 눌러 직접 복사해 주십시오.';
+  });
+  render();
+})();
+</script>
+
+</body>
+</html>

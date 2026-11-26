@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="골프 여행사의 견적, 입금, 배차, 정산을 하루 시간순으로. 회사 조건별 예시 견적.">
+<meta property="og:type" content="website"><meta property="og:site_name" content="bigC company"><meta property="og:url" content="https://keunpan.com/golf-b/"><link rel="canonical" href="https://keunpan.com/golf-b/"><meta property="og:image" content="https://keunpan.com/golf/og.jpg?v=1"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="600"><meta name="twitter:card" content="summary_large_image"><meta property="og:title" content="예약은 늘었는데, 남는 돈은 그대로입니까?">
+<meta property="og:description" content="골프 여행사의 견적, 입금, 배차, 정산을 하루 시간순으로. 회사 조건별 예시 견적.">
+
+<style>:root{color-scheme:light}body{margin:0;font:14px system-ui}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<title>골프 여행사 운영 제안</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@400;500;700;800&family=Roboto+Mono:wght@500;700&display=swap">
+<style>
+/* layout: the day as a vertical time list (one row per team or run); scope chosen as stops on a route; price as a travel quotation */
+:root{--bg:#F2F5F9;--card:#FFFFFF;--ink:#0F1B2D;--mute:#5B6878;--line:#D7DEE8;--soft:#E7ECF3;--acc:#0B5FA5;--on:#fff;--turf:#2F7D3A;
+--red:#C2362B;--redbg:#FBEAE8;--amb:#A86B00;--ambbg:#FDF1D8;--grn:#23794A;--grnbg:#E2F2E8;--board:#12243F;--boardink:#F3F1EA;--boardnum:#F6C453;
+--f:'Gothic A1','Malgun Gothic',system-ui,sans-serif;--fm:'Roboto Mono',ui-monospace,Consolas,monospace}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#0E141C;--card:#16202B;--ink:#E6ECF3;--mute:#98A6B6;--line:#2A3645;--soft:#1E2935;--acc:#6FB0EE;--on:#08111B;--turf:#6CC07A;
+--red:#F08A80;--redbg:#3A201E;--amb:#E8B755;--ambbg:#33290F;--grn:#62C58F;--grnbg:#16301F;--board:#0A1626;--boardink:#E9E6DD;--boardnum:#F6C453}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#0E141C;--card:#16202B;--ink:#E6ECF3;--mute:#98A6B6;--line:#2A3645;--soft:#1E2935;--acc:#6FB0EE;--on:#08111B;--turf:#6CC07A;
+--red:#F08A80;--redbg:#3A201E;--amb:#E8B755;--ambbg:#33290F;--grn:#62C58F;--grnbg:#16301F;--board:#0A1626;--boardink:#E9E6DD;--boardnum:#F6C453}
+*{box-sizing:border-box}
+body::before{content:'';position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--bg)}
+body{background:var(--bg);color:var(--ink);font:15px/1.65 var(--f);-webkit-font-smoothing:antialiased;word-break:keep-all}
+.w{max-width:1220px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2{font-weight:800;letter-spacing:-.02em;margin:0;text-wrap:balance}h3,h4{margin:0}
+a{color:inherit}button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.r{color:var(--red)}.g{color:var(--grn)}
+.note{color:var(--mute);font-size:.86em;margin:.8em 0 0}
+.fl{display:inline-block;font-size:.74em;font-weight:700;padding:1px 8px;border-radius:4px;white-space:nowrap;background:var(--soft);color:var(--mute)}
+.fl.ok{background:var(--grnbg);color:var(--grn)}.fl.bad{background:var(--redbg);color:var(--red)}.fl.warn{background:var(--ambbg);color:var(--amb)}
+
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.top .w{display:flex;align-items:center;justify-content:space-between;gap:12px;height:54px}
+.brand{font-weight:800}.top nav{display:flex;gap:18px;font-size:.9em}.top nav a{text-decoration:none;color:var(--mute)}
+
+/* hero */
+.hero{padding-block:48px 44px}
+.hg{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:40px;align-items:start}
+.kick{margin:0 0 14px;font-size:.82em;color:var(--mute);letter-spacing:.04em}
+.hl h1{font-size:clamp(32px,3.8vw,52px);line-height:1.22}.hl h1 span{display:inline-block}
+.hl .sub{margin:20px 0 0;font-size:1.02em;max-width:34em}
+.hint{margin:20px 0 0;font-size:.86em;font-weight:700;color:var(--acc)}
+.today{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;box-shadow:0 22px 44px -34px rgba(10,30,60,.55)}
+.today .th{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;padding:12px 14px;border-bottom:1px solid var(--line);border-top:4px solid var(--acc)}
+.dt{display:flex;align-items:center;gap:8px}.dt b{font-size:1.02em}.ar{color:var(--mute);font-size:1.2em;padding:0 2px}
+.pill{font-size:.78em;padding:2px 10px;border-radius:999px;border:1px solid var(--line);color:var(--mute)}.pill.on{background:var(--ink);color:var(--card);border-color:var(--ink)}
+.seg{display:inline-flex;flex-wrap:wrap;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--soft)}
+.seg button{border:0;background:transparent;padding:6px 12px;font-size:.82em;color:var(--mute)}
+.seg button[aria-pressed="true"]{background:var(--acc);color:var(--on);font-weight:700}
+.three{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-bottom:1px solid var(--line)}
+.three p{margin:0;padding:10px 14px;border-right:1px solid var(--line);display:flex;flex-direction:column}.three p:last-child{border:0}
+.three small{font-size:.74em;color:var(--mute)}.three b{font-family:var(--fm);font-size:1.12em}
+.list{list-style:none;margin:0;padding:0 0 6px;font-size:.86em}
+.hh{padding:6px 14px 4px;font-family:var(--fm);font-weight:700;font-size:.82em;color:var(--mute);background:var(--soft);border-bottom:1px solid var(--line)}
+.run{display:grid;grid-template-columns:52px 44px minmax(0,1fr) auto;gap:2px 10px;align-items:center;padding:8px 14px 8px 12px;border-bottom:1px solid var(--line);border-left:4px solid var(--grn)}
+.run.bad{border-left-color:var(--red)}.run.warn{border-left-color:var(--amb)}.run.empty{border-left:4px dashed var(--line);color:var(--mute)}
+.run .tm{font-family:var(--fm);font-weight:700}.run .wt{font-size:.82em;color:var(--mute)}
+.run .who{display:flex;flex-direction:column;min-width:0}.run .who small{color:var(--mute);font-size:.88em}
+.run .fls{grid-column:3/4;display:flex;flex-wrap:wrap;gap:4px}.run .drv{grid-row:1;grid-column:4;font-size:.8em;color:var(--mute);white-space:nowrap}
+.list.sm .run{grid-template-columns:52px minmax(0,1fr) auto}.list.sm .run .fls{grid-column:auto}
+.dg{display:grid;grid-template-columns:minmax(0,1fr) 250px;gap:14px;padding:12px;align-items:start}
+.dg .list{border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.phone{width:240px;margin:0 auto;border:9px solid var(--ink);border-radius:30px;background:var(--card);overflow:hidden}
+.pbar{padding:9px 14px;font-weight:700;font-size:.82em;background:var(--soft);color:var(--mute);transition:background .3s,color .3s}
+.pbar.go{background:var(--acc);color:var(--on)}.pbar.at{background:var(--amb);color:var(--on)}.pbar.ok{background:var(--grn);color:var(--on)}
+.ph-in{padding:14px;font-size:.86em}
+.pt{margin:0;font-family:var(--fm);font-size:.86em;font-weight:700}.pn{margin:4px 0 2px;font-size:1.3em;font-weight:800}.pd{margin:0 0 12px;color:var(--mute);font-size:.88em}
+.big{width:100%;border:0;border-radius:12px;padding:16px 0;font-size:1.15em;font-weight:800;background:var(--acc);color:var(--on)}
+.big[disabled]{background:var(--grn);cursor:default}
+.log{list-style:none;padding:0;margin:10px 0 0;font-family:var(--fm);font-size:.8em;color:var(--mute)}
+.it{display:grid;grid-template-columns:48px 1fr;gap:8px;padding:6px 0;border-bottom:1px solid var(--line)}.it b{font-family:var(--fm)}
+
+/* facts: one departures-style board */
+.facts{padding-block:48px;border-top:1px solid var(--line)}
+.facts h2,.steps h2,.way h2,.ask h2,.cards-s h2{font-size:clamp(26px,2.6vw,36px)}
+.facts ol{list-style:none;padding:0;margin:26px 0 0;background:var(--board);color:var(--boardink);border-radius:12px;overflow:hidden}
+.facts li{display:grid;grid-template-columns:260px minmax(0,1fr);gap:24px;padding:24px 28px;border-bottom:1px solid rgba(255,255,255,.1);align-items:start}
+.facts li:last-child{border:0}
+.facts .n{font-family:var(--fm);font-weight:700;font-size:clamp(30px,3.2vw,44px);line-height:1.1;color:var(--boardnum);letter-spacing:-.02em}
+.facts h3{font-size:1.06em;margin:2px 0 6px}.facts p{margin:0 0 8px;font-size:.9em;opacity:.82;max-width:60em}.facts a{font-size:.78em;opacity:.75}
+
+/* route + viewer + quote */
+.steps{padding-block:48px;border-top:1px solid var(--line)}
+.sub2{color:var(--mute);margin:10px 0 0;max-width:50em}
+.route{list-style:none;padding:0;margin:28px 0 0;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));position:relative}
+.route::before{content:'';position:absolute;left:8%;right:8%;top:15px;border-top:3px dashed var(--line)}
+.stop{position:relative;width:100%;background:none;border:0;display:flex;flex-direction:column;align-items:center;text-align:center;gap:3px;padding:0 6px}
+.stop i{width:30px;height:30px;border-radius:50%;background:var(--card);border:3px solid var(--line);margin-bottom:6px;position:relative;z-index:1}
+.stop b{font-size:.96em}.stop .sp{font-family:var(--fm);font-weight:700;color:var(--acc);font-size:.92em}.stop small{font-size:.76em;color:var(--mute);line-height:1.45}
+.stop[aria-pressed="true"] i{background:var(--acc);border-color:var(--acc);box-shadow:0 0 0 5px color-mix(in srgb,var(--acc) 22%,transparent)}
+.stop:hover i{border-color:var(--acc)}
+.sg{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:24px;margin-top:28px;align-items:start}
+.sg>*,.vw>*{min-width:0}
+.vw{display:grid;grid-template-columns:minmax(0,1fr) 230px;gap:16px}
+.lead{font-size:1.24em;font-weight:800;margin:0 0 12px}
+.cm{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:9px}
+.cm li{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:9px 11px}
+.cm u{text-decoration:none;font-size:.72em;font-weight:700;padding:1px 7px;border-radius:4px}
+.cm .ok u{background:var(--grnbg);color:var(--grn)}.cm .if u{background:var(--ambbg);color:var(--amb)}.cm .ask u{background:var(--redbg);color:var(--red)}.cm .prep u{color:var(--mute);padding:0}
+.cm h4{margin:5px 0 2px;font-size:.92em}.cm p{margin:0;font-size:.82em;color:var(--mute)}
+.qd{position:sticky;top:calc(env(safe-area-inset-top,0px) + 66px);display:flex;flex-direction:column;gap:12px}
+.conds{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:10px}
+.fg{display:flex;flex-direction:column;gap:5px}.fg>span{font-size:.78em;color:var(--mute)}
+.conds .seg{display:flex}.conds .seg button{flex:1;padding:6px 4px;font-size:.8em}
+.chks{display:flex;flex-direction:column;gap:3px}.chk{display:flex;gap:7px;align-items:flex-start;font-size:.84em}.chk input{accent-color:var(--acc);margin-top:4px}
+.quote{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px;font-size:.86em}
+.quote .qh{display:flex;justify-content:space-between;gap:8px;border-bottom:2px solid var(--ink);padding-bottom:8px;margin-bottom:8px}
+.quote .qh b{font-size:1.06em}.quote .qh span{color:var(--mute);font-size:.9em}
+.quote p{display:flex;justify-content:space-between;gap:10px;margin:4px 0}.quote p b{font-family:var(--fm);white-space:nowrap}
+.quote .sub{color:var(--mute)}.quote .tot{border-top:1px solid var(--line);padding-top:8px;margin-top:8px;font-weight:800;font-size:1.1em}
+.quote .first{color:var(--grn)}.quote .ask{color:var(--red);font-weight:700}
+.quote .inc{margin-top:10px;padding-top:8px;border-top:1px dashed var(--line);font-size:.92em;color:var(--mute)}.quote .inc b{color:var(--ink);font-family:var(--f)}
+
+/* screens */
+.scr{background:var(--card);border:1px solid var(--line);border-radius:9px;overflow:hidden;font-size:.84em}
+.scr-h{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:10px 12px;border-bottom:1px solid var(--line)}.scr-h span{color:var(--mute);font-size:.9em}
+.tw{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{border-collapse:collapse;width:100%}
+.scr table{min-width:520px}
+.scr th,.scr td{padding:7px 10px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+.scr th{font-weight:500;color:var(--mute);font-size:.9em;background:var(--soft)}.scr th:first-child,.scr td:first-child{text-align:left}
+.scr tfoot td{border-bottom:0;font-weight:800;background:var(--soft)}
+.strip{display:flex;flex-wrap:wrap;gap:6px 14px;padding:9px 12px;font-size:.88em;background:var(--soft)}.strip span{color:var(--mute)}
+.kk{margin:10px 12px;background:#FEE500;color:#191600;border-radius:4px 14px 14px 14px;padding:8px 12px;max-width:80%}.kk small{display:block;opacity:.7}.kk p{margin:2px 0 0}
+.lock{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;padding:10px 12px;background:var(--redbg);color:var(--red)}.lock span{color:var(--ink);font-size:.92em}
+.btn{display:inline-block;background:var(--acc);color:var(--on);border-radius:7px;padding:6px 14px;font-weight:700}.btn.off{background:var(--line);color:var(--mute)}
+.phone.cust .pbar{color:var(--on)}
+
+.way{padding-block:48px;border-top:1px solid var(--line)}
+.way ol{list-style:none;counter-reset:w;padding:0;margin:24px 0 0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
+.way li{counter-increment:w;border-top:3px solid var(--acc);padding-top:12px}.way li b::before{content:counter(w) '. ';color:var(--mute)}
+.way p{font-size:.9em;color:var(--mute);margin:6px 0 0}
+.ask{padding-block:48px;border-top:1px solid var(--line);background:var(--card)}
+.ag{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:32px}
+.opt{margin-top:20px}.fld{display:flex;flex-direction:column;gap:5px;font-size:.86em;color:var(--mute)}
+.fld input{font:inherit;font-size:1.1em;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px 12px}
+.opt fieldset{border:0;padding:0;margin:16px 0 0}.opt legend{font-size:.86em;color:var(--mute);margin-bottom:6px;padding:0}
+.sw{display:flex;gap:10px}.sw button{width:34px;height:34px;border-radius:50%;border:3px solid var(--card);background:var(--c);box-shadow:0 0 0 1px var(--line)}.sw button[aria-pressed="true"]{box-shadow:0 0 0 2px var(--ink)}
+.msgw{display:flex;flex-direction:column;gap:8px;font-size:.9em}
+.msgw textarea{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px 12px;resize:vertical}
+.cta{align-self:flex-start;border:0;background:var(--acc);color:var(--on);font-weight:800;padding:12px 22px;border-radius:9px}
+.cards-s{padding-block:48px;border-top:1px solid var(--line)}
+.cards{display:flex;gap:12px;overflow-x:auto;margin-top:18px;padding-bottom:8px;scroll-snap-type:x mandatory}
+.cards img{width:240px;height:auto;flex:none;border-radius:8px;border:1px solid var(--line);scroll-snap-align:start}
+footer{padding-block:28px 40px;font-size:.8em;color:var(--mute);border-top:1px solid var(--line)}
+
+@media (max-width:1060px){
+ .hg{grid-template-columns:1fr;gap:28px}
+ .sg{grid-template-columns:1fr}.qd{position:static}
+ .vw{grid-template-columns:1fr}
+ .way ol{grid-template-columns:1fr 1fr}.ag{grid-template-columns:1fr}
+ .route{grid-template-columns:repeat(3,minmax(0,1fr));row-gap:22px}.route::before{display:none}
+}
+@media (max-width:640px){
+ .hero{padding-block:28px}.top nav{display:none}
+ .three{grid-template-columns:1fr 1fr}.three p:nth-child(2){border-right:0}.three p:nth-child(-n+2){border-bottom:1px solid var(--line)}
+ .run{grid-template-columns:46px minmax(0,1fr) auto}.run .wt{display:none}.run .fls{grid-column:2/4}.run .drv{grid-column:3}
+ .dg{grid-template-columns:1fr}
+ .facts li{grid-template-columns:1fr;gap:6px;padding:20px}
+ .route{grid-template-columns:1fr 1fr}
+ .way ol{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){.pbar{transition:none}}
+
+/* card mode */
+.cardmode{margin:0;background:#bbb}
+.card{position:relative;width:1080px;height:1440px;overflow:hidden;background:var(--bg);color:var(--ink);padding:60px 60px 0;display:flex;flex-direction:column;margin-bottom:20px;font-size:22px}
+.card .ch{display:flex;justify-content:space-between;align-items:center;border-top:8px solid var(--acc);padding-top:22px;font-size:1.1em;font-weight:800}
+.card .ch b{font-family:var(--fm);font-size:1.3em;color:var(--acc)}
+.card h2{font-size:2.2em;line-height:1.3;margin:24px 0 28px}
+.card .cz .scr{font-size:.86em}.card .cz .scr table{min-width:0}.card .cz .tw{overflow:visible}
+.card .cz .phone{width:360px;font-size:1.12em}
+.card>ol.cl{list-style:none;padding:0;margin:28px 0 0;display:flex;flex-direction:column;gap:10px;font-size:1.18em;font-weight:800}
+.card>ol.cl i{font-style:normal;color:var(--acc);margin-right:14px;font-family:var(--fm)}
+.card .foot{margin:auto -60px 0;padding:26px 60px 34px;background:var(--board);color:var(--boardink);display:flex;justify-content:space-between;gap:20px;font-size:.9em}.card .foot span{opacity:.85}
+.card.cv h1{font-size:2.9em;line-height:1.22;margin:8px 0 20px}.card.cv .kick{font-size:1em}
+.card.cv .today .seg{display:none}.card.cv .list{font-size:.86em}.card.cv .three b{font-size:1.3em}.card.cv .vdrv{display:none}
+.dt .co{margin-right:8px;padding-right:10px;border-right:1px solid var(--line)}
+</style>
+<header class="top"><div class="w"><span class="brand">bigC company</span><nav><a href="#facts">숫자로 본 손해</a><a href="#steps">단계와 값</a><a href="#ask">문의</a></nav></div></header>
+<main>
+<section class="hero"><div class="w hg"><div class="hl"><p class="kick">골프 여행 · 견적 · 입금 · 배차 · 정산</p>
+<h1><span>예약은 늘었는데,</span> <span>남는 돈은</span> <span>그대로입니까?</span></h1>
+<p class="sub">견적에서 캐디팁 한 줄이 빠지고, 항공편이 40분 늦고, 기사가 전달을 못 받으면 그날 남는 돈이 줄어듭니다. 하루를 시간순으로 펼쳐, 돈과 시간과 전달을 한 줄씩 확인합니다.</p>
+<p class="hint">「오늘」 화면에서 기사 보기로 바꾸고 큰 버튼을 눌러 보십시오.</p></div>
+<div class="hr" data-co-wrap><div class="today" id="today"><div class="th"><div class="dt"><b class="co" data-co>대표님 회사</b><span class="ar">‹</span><b>11월 27일 금</b><span class="ar">›</span><span class="pill on">오늘</span><span class="pill">내일</span></div>
+<div class="seg" role="group" aria-label="보기"><button type="button" data-view="boss" aria-pressed="true">사장님 보기</button><button type="button" data-view="drv" aria-pressed="false">기사 라몬 보기</button></div></div>
+<div class="vboss"><div class="three"><p><small>오늘 남는 돈</small><b>₩1,240,000</b></p><p><small>확정 안 된 항목</small><b class="r">2</b></p><p><small>전달 확인 안 된 기사</small><b class="r">1</b></p><p><small>오늘 손님</small><b>9명</b></p></div>
+<ol class="list"><li class="hh">05시</li><li class="run ok"><span class="tm">05:10</span><span class="wt">픽업</span><span class="who"><b>박 사장님 일행 4명</b><small>클락 리버 호텔 → 미모사 힐스</small></span><span class="fls"><span class="fl ok">기사 확인 04:52</span></span><span class="drv">기사 라몬</span></li><li class="hh">06시</li><li class="run ok"><span class="tm">06:20</span><span class="wt">티업</span><span class="who"><b>박 사장님 일행 · 2조</b><small>미모사 힐스 · 캐디 4</small></span><span class="fls"><span class="fl ok">캐디팁 견적 포함</span></span><span class="drv"></span></li><li class="run bad"><span class="tm">06:40</span><span class="wt">티업</span><span class="who"><b>김 원장님 2명</b><small>썬 밸리 CC</small></span><span class="fls"><span class="fl bad">잔금 ₩380,000 미입금</span></span><span class="drv"></span></li><li class="hh">09시</li><li class="run empty"><span class="tm">09:00</span><span class="wt">빈 차</span><span class="who"><b>밴 3 · 09:00 ~ 13:00</b><small>배정 가능</small></span><span class="fls"></span><span class="drv"></span></li><li class="run warn"><span class="tm">10:05</span><span class="wt">공항</span><span class="who"><b>최 대표님 3명 · 인천 07:25 출발 편</b><small>도착 10:05 → 10:45 · 40분 지연</small></span><span class="fls"><span class="fl warn">픽업 10:55로 다시 계산</span></span><span class="drv">기사 라몬</span></li><li class="hh">13시</li><li class="run ok"><span class="tm">13:20</span><span class="wt">이동</span><span class="who"><b>박 사장님 일행</b><small>미모사 힐스 → 한식당 서울</small></span><span class="fls"><span class="fl bad">밴 2 겹침 막음 · 밴 3 제안</span></span><span class="drv"></span></li><li class="hh">18시</li><li class="run bad"><span class="tm">18:30</span><span class="wt">픽업</span><span class="who"><b>김 원장님 2명</b><small>썬 밸리 CC → 호텔</small></span><span class="fls"><span class="fl bad">기사 전달 확인 안 됨 · 40분</span></span><span class="drv">기사 조엘</span></li></ol></div>
+<div class="vdrv" hidden><div class="dg"><ol class="list"><li class="hh">05시</li><li class="run ok"><span class="tm">05:10</span><span class="wt">픽업</span><span class="who"><b>박 사장님 일행 4명</b><small>클락 리버 호텔 → 미모사 힐스</small></span><span class="fls"><span class="fl ok">기사 확인 04:52</span></span><span class="drv">기사 라몬</span></li><li class="hh">09시</li><li class="run warn"><span class="tm">10:05</span><span class="wt">공항</span><span class="who"><b>최 대표님 3명 · 인천 07:25 출발 편</b><small>도착 10:05 → 10:45 · 40분 지연</small></span><span class="fls"><span class="fl warn">픽업 10:55로 다시 계산</span></span><span class="drv">기사 라몬</span></li></ol>
+<div class="phone"><div class="pbar" id="pbar">다음 일정</div><div class="ph-in"><p class="pt">10:55 픽업 · 클락 공항 도착장 2번 출구</p><p class="pn">최 대표님 3명</p>
+<p class="pd">골프백 3 · 받을 돈 없음 · 항공편 40분 지연 반영</p><button type="button" class="big" id="big">출발</button><ol class="log" id="log"></ol></div></div></div></div></div></div></div></section>
+<section class="facts" id="facts"><div class="w"><h2>숫자로 본 골프 여행의 손해</h2><ol><li><b class="n">₱700~1,100</b><div><h3>캐디팁 한 줄이 빠지면 입금 뒤에 다시 청구합니다.</h3><p>필리핀 골프장은 캐디피가 그린피에 들어 있지 않습니다. 캐디피 ₱500~600에 캐디팁 ₱200~500이 1인 1라운드마다 따로 붙습니다. 4명이 세 번 치면 견적 한 줄이 ₱8,400~13,200입니다.</p><a href="https://iclarkgolf.com/blog-p3.html" target="_blank" rel="noopener">아이클락골프 안내 글 · 원문 확인</a></div></li><li><b class="n">37.1%</b><div><h3>세 편 중 한 편은 픽업 시각이 바뀝니다.</h3><p>2023년부터 2025년 6월까지 인천~세부 노선 항공편의 지연율입니다. 인천~마닐라는 31.9%였습니다. 한국공항공사·인천국제공항공사 자료를 인용한 보도입니다.</p><a href="https://www.etoday.co.kr/news/view/2493847" target="_blank" rel="noopener">이투데이 보도 · 원문 확인</a></div></li><li><b class="n">31분 45초</b><div><h3>이동 시간을 일정마다 따로 잡아야 합니다.</h3><p>2025년 마닐라 도심에서 10km를 가는 데 걸린 평균 시간입니다. 티업과 공항 시각에 맞춘 배차 여유가 일정마다 다릅니다.</p><a href="https://www.topgear.com.ph/news/motoring-news/tomtom-traffic-index-2025-metro-manila-a6888-20260122" target="_blank" rel="noopener">TomTom 교통 지수 2025 · Top Gear Philippines · 원문 확인</a></div></li></ol>
+<p class="note">한인 여행사만 따로 집계한 숫자는 찾지 못했습니다. 위 숫자는 출처의 값을 그대로 옮겼고, 4명 3라운드 계산만 예시로 더했습니다.</p></div></section>
+<section class="steps" id="steps"><div class="w"><h2>어디까지 하시겠습니까?</h2>
+<p class="sub2">기본 값은 월 30팀, 차량 2대, 거래 골프장 5곳, 직원 1~2명 기준입니다. 정류장을 고르시면 그 단계의 화면과 견적서가 바뀝니다.</p>
+<ol class="route"><li><button type="button" class="stop" data-stop="prep" aria-pressed="false"><i></i><b>업무 정비</b>
+<span class="sp" data-sp="prep">15만 원</span><small>골프장마다 다른 카트·캐디·캐디팁 조건</small></button></li><li><button type="button" class="stop" data-stop="quote" aria-pressed="false"><i></i><b>견적</b>
+<span class="sp" data-sp="quote">30만 원</span><small>입금 뒤에 다시 청구하는 빠진 항목</small></button></li><li><button type="button" class="stop" data-stop="book" aria-pressed="true"><i></i><b>예약과 배차</b>
+<span class="sp" data-sp="book">75만 원</span><small>같은 차·같은 시간에 두 팀, 확인 안 된 기사 전달</small></button></li><li><button type="button" class="stop" data-stop="total" aria-pressed="false"><i></i><b>통합 운영</b>
+<span class="sp" data-sp="total">120만 원</span><small>통장에 있는 돈과 실제로 남는 돈을 헷갈리는 일</small></button></li><li><button type="button" class="stop" data-stop="app" aria-pressed="false"><i></i><b>고객 앱</b>
+<span class="sp" data-sp="app">별도 견적</span><small>손님이 일정과 포함 항목을 다시 묻는 일</small></button></li><li><button type="button" class="stop" data-stop="ext" aria-pressed="false"><i></i><b>확장 구상</b>
+<span class="sp" data-sp="ext">검토 후 제안</span><small>항공편 지연 뒤 줄줄이 밀리는 일정</small></button></li></ol>
+<div class="sg"><div class="viewer"><div class="vw" id="v-prep" hidden><div class="shot"><p class="lead">매일 반복되는 답변과 일정부터 정리해 드립니다.</p><div class="scr "><div class="scr-h"><b>골프장 요금표</b><span>거래 골프장 5곳 · 1인 기준</span></div><div class="tw"><table class="rt"><thead><tr><th>골프장</th><th>그린피</th><th>카트</th><th>캐디피</th><th>캐디팁</th><th>견적에</th></tr></thead><tbody><tr><td><b>미모사 힐스</b></td><td>₱4,800</td><td>포함</td><td>₱600</td><td>₱300 권장</td><td><span class="fl ok">모두 넣음</span></td></tr><tr><td><b>썬 밸리 CC</b></td><td>₱3,900</td><td>₱1,500 / 2인</td><td>₱550</td><td>₱300 권장</td><td><span class="fl warn">카트 2인 1대</span></td></tr><tr><td><b>리버사이드 GC</b></td><td>₱5,200</td><td>포함</td><td>포함</td><td>₱500 권장</td><td><span class="fl ok">모두 넣음</span></td></tr><tr><td><b>마운틴 뷰</b></td><td>₱3,600</td><td>₱1,200 / 2인</td><td>₱500</td><td>—</td><td><span class="fl bad">캐디팁 비어 있음</span></td></tr></tbody></table></div><div class="strip"><b>주말 · 공휴일 요금</b><span>골프장마다 날짜를 따로 넣습니다</span><span>바뀐 날이 있으면 표가 먼저 알려 드립니다</span></div></div></div><ol class="cm"><li class="ok"><u>즉시 적용 가능</u><h4>문의 응대 정리</h4><p>날짜, 인원, 항공편을 먼저 확인한 뒤 담당자에게 전달합니다.</p></li><li class="ok"><u>즉시 적용 가능</u><h4>함께 보는 예약 달력</h4><p>담당자가 자리를 비워도 업무가 이어집니다.</p></li><li class="ok"><u>즉시 적용 가능</u><h4>골프장 요금표 통합</h4><p>카트와 캐디, 캐디팁의 포함 여부를 한 장에서 확인합니다.</p></li><li class="prep"><u>준비해 주실 자료</u><h4>사용 중인 메신저 계정, 최근 견적 5건</h4></li></ol></div><div class="vw" id="v-quote" hidden><div class="shot"><p class="lead">빠진 항목이 있는 견적은 발송되지 않습니다.</p><div class="scr "><div class="scr-h"><b>견적 한 장</b><span>박 사장님 일행 · 3박 4일 · 4명</span></div><div class="kk"><small>카톡 문의 붙여 넣기</small><p>12월 4일~7일 4명 골프 3번이요 클락 쪽 호텔 2인 1실</p></div><div class="tw"><table class="qt"><thead><tr><th>항목</th><th>단가</th><th>수량</th><th>금액</th></tr></thead><tbody><tr><td>그린피 · 미모사 힐스</td><td>₱4,800</td><td>4명 × 3</td><td>₱57,600</td></tr><tr><td>카트</td><td>포함</td><td></td><td>—</td></tr><tr><td>캐디피</td><td>₱600</td><td>4명 × 3</td><td>₱7,200</td></tr><tr><td>캐디팁</td><td><b class="r">비어 있음</b></td><td>4명 × 3</td><td><b class="r">?</b></td></tr><tr><td>호텔 · 2인 1실</td><td>₱6,500</td><td>2실 × 3박</td><td>₱39,000</td></tr><tr><td>밴 · 기사 포함</td><td>₱5,500</td><td>4일</td><td>₱22,000</td></tr></tbody></table></div><div class="lock"><b>발송 잠김</b><span>캐디팁을 넣거나 「손님이 현장에서 직접」을 고르셔야 보낼 수 있습니다.</span><span class="btn off">견적 보내기</span></div></div></div><ol class="cm"><li class="if"><u>협의 후 적용</u><h4>카카오톡 문의를 견적으로</h4><p>문의 글을 붙여 넣으면 날짜와 인원이 입력됩니다. 확인이 필요한 항목은 비워 두고 알려 드립니다.</p></li><li class="ok"><u>즉시 적용 가능</u><h4>발송 전 누락 점검</h4><p>입금 후에 추가 비용을 다시 안내하는 일이 줄어듭니다.</p></li><li class="ok"><u>즉시 적용 가능</u><h4>한글, 영문 견적서</h4><p>상호와 유효 기한이 담긴 견적서를 이미지로 전달합니다.</p></li><li class="prep"><u>준비해 주실 자료</u><h4>골프장별 요금표, 차량 요금</h4></li></ol></div><div class="vw" id="v-book"><div class="shot"><p class="lead">입금과 배차가 확인된 예약만 확정됩니다.</p><div class="scr "><div class="scr-h"><b>예약과 배차</b><span>12월 5일 목</span></div><ol class="list sm"><li class="run ok"><span class="tm">05:10</span><span class="who"><b>밴 2 · 라몬</b><small>박 사장님 일행 → 미모사 힐스</small></span><span class="fls"><span class="fl ok">입금 완료 · 기사 확인</span></span></li><li class="run bad"><span class="tm">05:30</span><span class="who"><b>밴 2 · 라몬</b><small>김 원장님 → 썬 밸리</small></span><span class="fls"><span class="fl bad">겹침 · 들어가지 않음</span></span></li><li class="run warn"><span class="tm">05:30</span><span class="who"><b>밴 3 · 조엘</b><small>김 원장님 → 썬 밸리</small></span><span class="fls"><span class="fl warn">제안 · 비어 있음</span></span></li><li class="run bad"><span class="tm">—</span><span class="who"><b>입금 대조</b><small>최 대표님 일행 · 받을 돈 ₩2,940,000</small></span><span class="fls"><span class="fl bad">입금 ₩2,900,000 · 차액 ₩40,000</span></span></li></ol><div class="strip"><b>기사 전달</b><span>라몬 04:52 확인</span><span>조엘 보냄 · 확인 전</span></div></div></div><ol class="cm"><li class="ok"><u>즉시 적용 가능</u><h4>입금 대조</h4><p>받을 금액과 입금액을 비교해 차액을 바로 표시합니다.</p></li><li class="ok"><u>즉시 적용 가능</u><h4>배차 중복 차단</h4><p>같은 시간에 두 팀이 배정되면 막고, 이용 가능한 차량을 보여 드립니다.</p></li><li class="ok"><u>즉시 적용 가능</u><h4>기사 전달과 확인</h4><p>전달한 시각과 기사가 확인한 시각이 함께 남습니다.</p></li><li class="prep"><u>준비해 주실 자료</u><h4>차량과 기사 명단, 업체별 지급 시점</h4></li></ol></div><div class="vw" id="v-total" hidden><div class="shot"><p class="lead">오늘 통장에 있는 돈과 실제로 남는 돈을 나누어 보여 드립니다.</p><div class="scr "><div class="scr-h"><b>예약별 손익</b><span>12월 · 확정 예약 6건</span></div><div class="tw"><table class="pl"><thead><tr><th>예약</th><th>받은 돈</th><th>줄 돈</th><th>남는 돈</th><th>지급 상태</th></tr></thead><tbody><tr><td><b>박 사장님 일행</b></td><td>₩4,860,000</td><td>₩3,912,000</td><td><b class="g">₩948,000</b></td><td>골프장 지급 완료</td></tr><tr><td><b>최 대표님 일행</b></td><td>₩2,900,000</td><td>₩2,371,000</td><td><b class="g">₩529,000</b></td><td><b class="r">차액 ₩40,000</b></td></tr><tr><td><b>김 원장님</b></td><td>₩1,520,000</td><td>₩1,610,000</td><td><b class="r">−₩90,000</b></td><td><b class="r">밴 추가 2일</b></td></tr><tr><td><b>이 사장님 부부</b></td><td>₩1,980,000</td><td>₩1,642,000</td><td><b class="g">₩338,000</b></td><td>호텔 지급 대기</td></tr></tbody><tfoot><tr><td><b>합계</b></td><td>₩11,260,000</td><td>₩9,535,000</td><td><b>₩1,725,000</b></td><td></td></tr></tfoot></table></div><div class="strip"><b>통장 ₩6,420,000 가운데 대표님 돈</b><span>₩1,725,000 · 나머지는 골프장·호텔·기사에게 나갈 돈</span></div></div></div><ol class="cm"><li class="ok"><u>즉시 적용 가능</u><h4>예약별 손익</h4><p>받은 금액에서 지급할 금액을 제외하고 표시합니다. 화면의 금액은 예시입니다.</p></li><li class="ok"><u>즉시 적용 가능</u><h4>기사 전용 화면</h4><p>당일 일정과 인원, 현장 지출을 휴대폰에서 처리합니다.</p></li><li class="ok"><u>즉시 적용 가능</u><h4>변경 이력</h4><p>누가 언제 무엇을 바꾸었는지 확인하실 수 있습니다.</p></li><li class="prep"><u>준비해 주실 자료</u><h4>직원별 담당 업무, 최근 3개월 예약 자료</h4></li></ol></div><div class="vw" id="v-app" hidden><div class="shot"><p class="lead">고객이 공항에 도착하기 전부터 일정 안내가 시작됩니다.</p><div class="phone cust"><div class="pbar ok">일정 · 박 사장님 일행</div><div class="ph-in"><p class="pt">12월 4일 수</p>
+<div class="it"><b>10:45</b><span>클락 공항 도착 · 기사 라몬 · 밴 NBC 1234</span></div><div class="it"><b>12:30</b><span>호텔 체크인 · 클락 리버 호텔</span></div>
+<div class="it"><b>18:00</b><span>저녁 · 한식당 서울</span></div><p class="pt" style="margin-top:10px">12월 5일 목</p><div class="it"><b>05:10</b><span>호텔 로비 픽업</span></div>
+<div class="it"><b>06:20</b><span>미모사 힐스 티업 · 캐디팁 포함</span></div><p class="pd">포함: 그린피 · 카트 · 캐디피 · 캐디팁 · 호텔 · 차량</p></div></div></div><ol class="cm"><li class="ok"><u>즉시 적용 가능</u><h4>총액이 보이는 예약 홈페이지</h4><p>포함 항목을 모두 밝힌 금액으로 안내합니다. 검색 순위는 약속드리지 않습니다.</p></li><li class="ok"><u>즉시 적용 가능</u><h4>고객 전용 일정</h4><p>기사 성함과 차량 번호, 시간별 일정을 고객 휴대폰에서 확인합니다.</p></li><li class="if"><u>협의 후 적용</u><h4>협력 골프장 연동</h4><p>빈 티업을 골프장이 직접 등록합니다. 골프장의 참여 동의가 필요합니다.</p></li><li class="prep"><u>준비해 주실 자료</u><h4>상품 사진, 협력 골프장 1곳</h4></li></ol></div><div class="vw" id="v-ext" hidden><div class="shot"><p class="lead">항공편이 지연되면 바뀐 일정이 먼저 준비됩니다.</p><div class="scr "><div class="scr-h"><b>항공편 지연 · 일정 다시 계산</b><span>최 대표님 3명 · 인천 07:25 출발 편</span></div><div class="tw"><table class="ex"><thead><tr><th>일정</th><th>원래</th><th>바뀐 시각</th><th>알릴 곳</th></tr></thead><tbody><tr><td><b>공항 도착</b></td><td>10:05</td><td><b class="r">10:45</b></td><td>—</td></tr><tr><td><b>픽업</b></td><td>10:15</td><td><b class="r">10:55</b></td><td>기사 라몬</td></tr><tr><td><b>호텔 체크인</b></td><td>11:30</td><td>12:10</td><td>호텔</td></tr><tr><td><b>점심 예약</b></td><td>12:00</td><td><b class="r">12:40 · 식당 확인 필요</b></td><td>한식당 서울</td></tr></tbody></table></div><div class="strip"><b>안내문 3건 준비됨</b><span>대표님 승인 뒤 발송</span></div></div></div><ol class="cm"><li class="ask"><u>사전 검토 필요</u><h4>지연 사전 감지</h4><p>유료 항공 정보 연동이 필요합니다. 비용 대비 효과를 먼저 검토해 드립니다.</p></li><li class="if"><u>협의 후 적용</u><h4>일정 재계산</h4><p>픽업과 체크인, 식사 시간을 다시 맞춥니다. 예약 자료가 쌓인 뒤에 적용합니다.</p></li><li class="if"><u>협의 후 적용</u><h4>승인 후 발송</h4><p>고객과 기사, 호텔에 보낼 안내문을 준비합니다. 대표님이 승인하신 것만 발송합니다.</p></li><li class="prep"><u>준비해 주실 자료</u><h4>통합 운영 단계의 예약 기록</h4></li></ol></div></div>
+<aside class="qd"><div class="conds"><div class="fg"><span>거래 골프장·업체</span><div class="seg" data-c="course"><button type="button" data-v="0" aria-pressed="true">5곳까지</button><button type="button" data-v="1" aria-pressed="false">6~15곳</button><button type="button" data-v="2" aria-pressed="false">16곳 이상</button></div></div><div class="fg"><span>차량</span><div class="seg" data-c="car"><button type="button" data-v="0" aria-pressed="true">2대까지</button><button type="button" data-v="1" aria-pressed="false">3~10대</button><button type="button" data-v="2" aria-pressed="false">11대 이상</button></div></div><div class="fg"><span>직원</span><div class="seg" data-c="staff"><button type="button" data-v="0" aria-pressed="true">1~2명</button><button type="button" data-v="1" aria-pressed="false">3~5명</button><button type="button" data-v="2" aria-pressed="false">6명 이상</button></div></div><div class="fg"><span>지점</span><div class="seg" data-c="branch"><button type="button" data-v="0" aria-pressed="true">1곳</button><button type="button" data-v="1" aria-pressed="false">2곳 이상</button></div></div><div class="fg"><span>추가</span><div class="chks"><label class="chk"><input type="checkbox" id="a-xls" data-a="xls"><span>기존 엑셀 옮기기</span></label><label class="chk"><input type="checkbox" id="a-fx" data-a="fx"><span>원화로 받고 페소로 지급(환차)</span></label><label class="chk"><input type="checkbox" id="a-msg" data-a="msg"><span>알림톡·바이버 자동 발송</span></label><label class="chk"><input type="checkbox" id="a-sheet" data-a="sheet"><span>구글 시트 양방향</span></label><label class="chk"><input type="checkbox" id="a-card" data-a="card"><span>카드 결제 연결</span></label></div></div></div><div class="quote" id="quote" aria-live="polite"></div></aside></div></div></section>
+<section class="way"><div class="w"><h2>진행 방식</h2><ol><li><b>업무 진단</b><p>현재 쓰시는 카톡, 엑셀, 요금표를 그대로 검토합니다. 필요하면 현장 상담도 가능합니다. 담당자에게 문의해 주십시오(비용이 발생할 수 있습니다).</p></li><li><b>맞춤 시안</b><p>회사 상호와 거래 골프장, 색상을 적용한 화면을 먼저 보여 드립니다.</p></li><li><b>계약과 제작</b><p>시안을 확정하신 뒤 선금 50%로 제작을 시작합니다. 제작 일정은 담당자에게 문의해 주십시오.</p></li><li><b>납품과 보완</b><p>납품 후 2주까지 문구와 배치 수정은 횟수를 제한하지 않습니다. 모든 자료는 대표님의 소유입니다.</p></li></ol></div></section>
+<section class="ask" id="ask"><div class="w ag"><div><h2>대표님 회사 이름으로 먼저 보여 드립니다.</h2><p class="sub2">상호와 색을 넣으시면 「오늘」 화면과 견적서에 바로 반영됩니다. 고르신 단계와 조건은 문의 글에 함께 담깁니다.</p>
+<form class="opt" autocomplete="off" onsubmit="return false"><label class="fld"><span>상호</span><input id="co" type="text" maxlength="14" placeholder="상호를 입력해 주십시오"></label>
+<fieldset><legend>대표 색상</legend><div class="sw"><button type="button" data-col="#0B5FA5" data-n="하늘" style="--c:#0B5FA5" aria-label="하늘" aria-pressed="true"></button><button type="button" data-col="#2F7D3A" data-n="잔디" style="--c:#2F7D3A" aria-label="잔디" aria-pressed="false"></button><button type="button" data-col="#22262E" data-n="먹색" style="--c:#22262E" aria-label="먹색" aria-pressed="false"></button><button type="button" data-col="#9A3B1E" data-n="적갈" style="--c:#9A3B1E" aria-label="적갈" aria-pressed="false"></button></div></fieldset></form></div>
+<div class="msgw"><label for="msg">문의 내용</label><textarea id="msg" rows="9"></textarea><button type="button" class="cta" id="copy">문의 내용 복사</button><p class="note" id="copied">문의 내용이 복사됩니다. 이 주소를 받으신 카카오톡 대화방에 붙여 넣어 보내 주십시오.</p></div></div></section>
+<section class="cards-s"><div class="w"><h2>카카오톡용 이미지</h2><div class="cards" tabindex="0" aria-label="카톡 이미지 묶음"><img src="cards/0.jpg" width="1080" height="1440" alt="카톡 이미지 1: 표지"><img src="cards/1.jpg" width="1080" height="1440" alt="카톡 이미지 2: 업무 정비"><img src="cards/2.jpg" width="1080" height="1440" alt="카톡 이미지 3: 견적"><img src="cards/3.jpg" width="1080" height="1440" alt="카톡 이미지 4: 예약과 배차"><img src="cards/4.jpg" width="1080" height="1440" alt="카톡 이미지 5: 통합 운영"><img src="cards/5.jpg" width="1080" height="1440" alt="카톡 이미지 6: 고객 앱"><img src="cards/6.jpg" width="1080" height="1440" alt="카톡 이미지 7: 확장 구상"></div><p class="note">이미지를 길게 누르면 저장하실 수 있습니다.</p></div></section>
+</main>
+<footer><div class="w">화면의 이름, 골프장, 항공편, 요금, 금액은 모두 예시입니다. 골프장 요금과 캐디 조건은 골프장마다 다르며 계약 전에 대표님 요금표로 바꿉니다. 표시된 금액은 제작비이며 서버, 도메인, 알림 발송과 외부 서비스 이용 비용은 계약 전에 별도로 안내해 드립니다. 처음 세 곳은 견적에서 10%를 빼 드리고, 사용 후기와 사례 공개(상호 익명 가능)를 부탁드립니다.</div></footer>
+<script>
+(() => {
+  const D = {"steps": [{"k": "prep", "name": "업무 정비", "base": 15}, {"k": "quote", "name": "견적", "base": 30}, {"k": "book", "name": "예약과 배차", "base": 75}, {"k": "total", "name": "통합 운영", "base": 120}, {"k": "app", "name": "고객 앱", "base": null}, {"k": "ext", "name": "확장 구상", "base": null}], "cond": [{"k": "course", "label": "거래 골프장·업체", "opts": ["5곳까지", "6~15곳", "16곳 이상"], "add": [{}, {"book": 20, "total": 50}, {}], "ask": [0, 0, 1]}, {"k": "car", "label": "차량", "opts": ["2대까지", "3~10대", "11대 이상"], "add": [{}, {"total": 30}, {}], "ask": [0, 0, 1]}, {"k": "staff", "label": "직원", "opts": ["1~2명", "3~5명", "6명 이상"], "add": [{}, {"total": 20}, {}], "ask": [0, 0, 1]}, {"k": "branch", "label": "지점", "opts": ["1곳", "2곳 이상"], "add": [{}, {}], "ask": [0, 1]}], "addon": [{"k": "xls", "label": "기존 엑셀 옮기기", "add": {"book": 20, "total": 20}}, {"k": "fx", "label": "원화로 받고 페소로 지급(환차)", "add": {"total": 30}}, {"k": "msg", "label": "알림톡·바이버 자동 발송", "add": {"total": 40}}, {"k": "sheet", "label": "구글 시트 양방향", "add": {"total": 50}}, {"k": "card", "label": "카드 결제 연결", "add": {"total": 60}}]};
+  const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  const st = { stop: 'book', c: {}, a: {}, co: '', col: '하늘' };
+  D.cond.forEach((c) => { st.c[c.k] = 0; });
+  const won = (n) => n.toLocaleString('ko-KR') + '만 원';
+  const esc = (t) => t.replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
+  const pad = (n) => String(n).padStart(2, '0');
+
+  // today: saved views + driver big button
+  const today = $('#today');
+  $$('[data-view]', today).forEach((b) => b.addEventListener('click', () => {
+    $$('[data-view]', today).forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+    $('.vboss', today).hidden = b.dataset.view !== 'boss'; $('.vdrv', today).hidden = b.dataset.view !== 'drv';
+  }));
+  const FLOW = [['출발', '도착', 'go', '공항으로 가는 중'], ['도착', '탑승', 'at', '도착장 대기 중'], ['탑승', '끝', 'go', '손님 탑승 · 호텔로'], ['끝', null, 'ok', '완료 · 사장님 화면에 반영']];
+  let step = 0, clock = 9 * 60 + 12;
+  $('#big').addEventListener('click', () => {
+    const [now, next, cls, label] = FLOW[step];
+    const li = document.createElement('li'); li.textContent = `${pad(Math.floor(clock / 60))}:${pad(clock % 60)} ${now}`; $('#log').appendChild(li);
+    clock += [38, 14, 22, 0][step];
+    $('#pbar').className = 'pbar ' + cls; $('#pbar').textContent = label;
+    if (next) $('#big').textContent = next; else { $('#big').textContent = '완료'; $('#big').disabled = true; }
+    step = Math.min(step + 1, FLOW.length - 1);
+  });
+
+  function price(k) {
+    const s = D.steps.find((x) => x.k === k); if (!s || s.base == null) return null;
+    const lines = []; let sum = s.base, ask = false;
+    D.cond.forEach((c) => {
+      const v = st.c[c.k]; if (c.ask && c.ask[v]) ask = true;
+      const a = (c.add[v] || {})[k]; if (a) { lines.push([`${c.label} ${c.opts[v]}`, a]); sum += a; }
+    });
+    D.addon.forEach((a) => { if (st.a[a.k] && a.add[k]) { lines.push([a.label, a.add[k]]); sum += a.add[k]; } });
+    return { total: sum, lines, ask, base: s.base, name: s.name };
+  }
+
+  function render() {
+    D.steps.forEach((s) => { const el = $(`[data-sp="${s.k}"]`), p = price(s.k); if (el && p) el.textContent = p.ask ? '상담 견적' : won(p.total); });
+    const s = D.steps.find((x) => x.k === st.stop), p = price(st.stop);
+    let h = `<div class="qh"><b>${esc(st.co || '대표님 회사')}</b><span>제작 견적 · 예시</span></div><p><span>${s.name}</span><b>${p ? won(p.base) : ''}</b></p>`;
+    if (!p) h += `<p class="sub"><span>${s.k === 'app' ? '상품 수와 예약 방식에 따라 따로 견적을 드립니다.' : '통합 운영의 예약 기록이 쌓인 뒤 검토해 제안드립니다.'}</span></p>`;
+    else if (p.ask) h += '<p class="ask"><span>고르신 조건은 상담 뒤 견적을 드립니다.</span></p>';
+    else {
+      h += p.lines.map(([l, v]) => `<p class="sub"><span>${l}</span><b>+${won(v)}</b></p>`).join('');
+      h += `<p class="tot"><span>합계</span><b>${won(p.total)}</b></p><p class="first"><span>처음 세 곳 10%</span><b>${won(Math.round(p.total * 0.9))}</b></p>`;
+    }
+    h += '<div class="inc"><b>포함</b> 화면 제작 · 자료 입력 · 직원 교육 · 납품 후 2주 문구 수정<br><b>불포함</b> 서버 · 도메인 · 알림 발송비 · 외부 서비스 이용료</div>';
+    $('#quote').innerHTML = h;
+    $$('[data-co]').forEach((e) => { e.textContent = st.co || '대표님 회사'; });
+    msg(s, p);
+  }
+
+  let typed = false;
+  function msg(s, p) {
+    if (typed) return;
+    const cond = D.cond.map((c) => `${c.label} ${c.opts[st.c[c.k]]}`).join(', ');
+    const add = D.addon.filter((a) => st.a[a.k]).map((a) => a.label).join(', ');
+    $('#msg').value = ['[골프 여행사 · 맞춤 시안 문의]', `상호: ${st.co || '(입력 전)'}`, `관심 단계: ${s.name}`, `회사 조건: ${cond}`, `추가: ${add || '없음'}`,
+      `예시 견적: ${!p ? '별도 견적' : p.ask ? '상담 견적' : won(p.total)}`, `대표 색상: ${st.col}`, '', '가장 먼저 해결하고 싶은 일:'].join('\n');
+  }
+  $('#msg').addEventListener('input', () => { typed = true; });
+
+  $$('[data-stop]').forEach((b) => b.addEventListener('click', () => {
+    st.stop = b.dataset.stop;
+    $$('[data-stop]').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+    $$('.vw').forEach((v) => { v.hidden = v.id !== 'v-' + st.stop; });
+    render();
+  }));
+  $$('.conds .seg').forEach((g) => $$('button', g).forEach((b) => b.addEventListener('click', () => {
+    $$('button', g).forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+    st.c[g.dataset.c] = +b.dataset.v; render();
+  })));
+  $$('[data-a]').forEach((i) => i.addEventListener('change', () => { st.a[i.dataset.a] = i.checked; render(); }));
+  $('#co').addEventListener('input', (e) => { st.co = e.target.value.trim(); render(); });
+  $$('[data-col]').forEach((b) => b.addEventListener('click', () => {
+    $$('[data-col]').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+    st.col = b.dataset.n; document.documentElement.style.setProperty('--acc', b.dataset.col); render();
+  }));
+  $('#copy').addEventListener('click', async () => {
+    const t = $('#msg'); let ok = false;
+    try { await navigator.clipboard.writeText(t.value); ok = true; } catch (e) { try { t.select(); ok = document.execCommand('copy'); } catch (e2) {} }
+    $('#copied').textContent = ok ? '복사되었습니다. 이 주소를 받으신 카카오톡 대화방에 붙여 넣어 보내 주십시오.' : '복사가 막혀 있습니다. 문의 내용을 길게 눌러 직접 복사해 주십시오.';
+  });
+  render();
+})();
+</script>
+
+</body>
+</html>

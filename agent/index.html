@@ -1,0 +1,348 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="부동산과 비자 안내의 반복 질문, 고객 서류를 한 화면에서 관리합니다."><meta property="og:type" content="website"><meta property="og:site_name" content="bigC company"><meta property="og:url" content="https://keunpan.com/agent/"><link rel="canonical" href="https://keunpan.com/agent/"><meta property="og:image" content="https://keunpan.com/agent/og.jpg?v=1"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="600"><meta name="twitter:card" content="summary_large_image"><meta property="og:title" content="같은 설명을, 오늘은 몇 번 보내셨습니까?"><meta property="og:description" content="반복되는 질문부터 고객 서류까지, 한 화면에서 관리합니다."><style>:root{color-scheme:light}body{margin:0;font:14px system-ui}img{max-width:100%}[hidden]{display:none!important}</style></head><body><title>부동산·비자 사무실 제안</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Nanum+Myeongjo:wght@700&family=Gowun+Dodum&display=swap">
+<style>
+/* Layout: one 1120 column on a 4-column grid. Each price step = heading row, full-width scene, 4 comments on the same columns.
+   Scenes are drawn in em; 1em = 1cqw (wide 100x62) or 2.5cqw (compact 40x46), so one source feeds the page, the thumbnails and the KakaoTalk cards. */
+:root{
+  --bg:#fff;--panel:#F3F5F7;--ink:#10161C;--soft:#57606A;--line:#DFE4E9;--go:#2B3F8C;--go-ink:#fff;--stop:#BF2B1D;--warn:#8A5A00;
+  --sans:"IBM Plex Sans KR","Pretendard","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  --ease:cubic-bezier(.22,.8,.24,1);color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0C1014;--panel:#151B21;--ink:#EEF2F6;--soft:#9DA9B4;--line:#26303A;--go:#A3B4F5;--go-ink:#0A1230;--stop:#FF8577;--warn:#E5B356;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0C1014;--panel:#151B21;--ink:#EEF2F6;--soft:#9DA9B4;--line:#26303A;--go:#A3B4F5;--go-ink:#0A1230;--stop:#FF8577;--warn:#E5B356;color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:80px}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.6 var(--sans);-webkit-font-smoothing:antialiased;word-break:keep-all;overflow-wrap:anywhere}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--bg)}
+h1,h2,h3,p,ul,ol,figure{margin:0;padding:0}ul,ol{list-style:none}
+a{color:inherit;text-decoration:none}
+button,textarea{font:inherit;color:inherit}
+button{background:none;border:0;padding:0;cursor:pointer;text-align:inherit}
+:focus-visible{outline:2px solid var(--go);outline-offset:3px}
+.n{font-variant-numeric:tabular-nums;white-space:nowrap}
+.w{max-width:1168px;margin:0 auto;padding-left:max(24px,env(safe-area-inset-left,0px));padding-right:max(24px,env(safe-area-inset-right,0px))}
+
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);border-bottom:1px solid var(--line)}
+.top .w{display:grid;grid-template-columns:1fr auto;align-items:center;height:64px;gap:24px}
+.brand{font-weight:700;white-space:nowrap}
+.rail{position:relative;display:flex}
+.rail a{padding:0 16px;height:64px;display:flex;align-items:center;font-size:14px;color:var(--soft);white-space:nowrap}
+.rail a:hover{color:var(--ink)}
+.rail a[aria-current]{color:var(--ink);font-weight:600}
+.rail i{position:absolute;left:0;bottom:-1px;height:2px;background:var(--go);transition:transform .35s var(--ease),width .35s var(--ease)}
+
+.hero{background:#D8C7B3;color:#10161C;padding-block:56px 0;position:relative;overflow:hidden;min-height:min(52vw,820px)}
+.hero::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(226,214,200,.9),rgba(226,214,200,.62) 40%,transparent 64%),url(photo/desk.jpg) 50% 78%/cover}
+.hero .w{position:relative;z-index:1}
+.hero h1{font-size:clamp(32px,4.4vw,56px);line-height:1.18;font-weight:700;letter-spacing:-.035em;text-wrap:balance;max-width:14em}.hero h1 span{display:inline-block}
+.hero .sub{text-wrap:balance;margin-top:16px;font-size:18px;color:#27322D;max-width:31em}
+.pain{margin-top:32px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.pain span{font-size:14px;color:#27322D;width:100%;margin-bottom:2px}
+.pain button{min-height:46px;padding:0 18px;border:1px solid #fff;background:#fff;border-radius:8px;font-weight:500;transition:border-color .15s,background .15s}
+.pain button:hover{border-color:#10161C}
+.pain button[aria-pressed="true"]{border-color:#2B3F8C;color:#2B3F8C;font-weight:600}
+
+.ladder{padding-top:40px;display:grid;grid-template-columns:repeat(6,1fr);gap:16px;align-items:end;padding-bottom:88px}
+.ladder a{display:block;transition:transform .35s var(--ease)}
+.ladder a:hover{transform:translateY(-6px)}
+.ladder a>b{display:block;margin-top:12px;font-size:18px;line-height:1.3}
+.ladder a>small{font-size:14px;color:var(--soft)}
+
+.step{padding-block:0 80px}
+.mom{background-size:cover;min-height:min(38vw,560px);display:flex;align-items:flex-end;margin-bottom:40px;position:relative;color:#fff}
+.mom::before{content:"";position:absolute;inset:0;background:linear-gradient(rgba(4,10,14,.1) 20%,rgba(4,10,14,.82))}
+.mom .w{position:relative;width:100%;padding-block:40px;display:flex;justify-content:space-between;align-items:flex-end;gap:24px}
+.mom h2{font-size:clamp(26px,3.2vw,44px);line-height:1.28;letter-spacing:-.03em;font-weight:600}.mom h2 span{display:block}
+.pr{flex-wrap:wrap;row-gap:0;display:flex;gap:14px;align-items:baseline;font-size:18px;margin-bottom:10px}.pr b{font-weight:600}.pr b+span{font-size:16px}.pr span{opacity:.85;white-space:nowrap}
+.hit .mom h2{color:#CBD5FA}
+.mom .per small{color:#fff;opacity:.8}.mom .per:hover{color:#CBD5FA}
+.g{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
+.sh{align-items:end;margin-bottom:32px}
+.sh h2 span,.card h2 span{display:inline-block}
+.price b{display:block;font-size:36px;line-height:1.15;font-weight:700;letter-spacing:-.03em}
+.price small,.per small{display:block;font-size:14px;font-weight:400;color:var(--soft);white-space:nowrap}
+.sh .h{grid-column:2/4}
+.sh h2 span,.card h2 span{display:inline-block}
+.sh h2{font-size:clamp(24px,2.6vw,36px);line-height:1.25;letter-spacing:-.03em;text-wrap:balance}
+.per{text-align:right;font-weight:600;justify-self:end}.per:hover{color:var(--go)}
+.cm{margin-top:32px}
+.cm h3{font-size:16px;line-height:1.45;margin-bottom:4px}
+.cm p{font-size:16px;color:var(--soft)}
+.cm .k{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--soft);margin-bottom:8px}
+.cm .k i{flex:none;width:24px;height:24px;border-radius:50%;background:var(--ink);color:var(--bg);font:600 14px/24px var(--sans);text-align:center}
+.cm .k u{text-decoration:none}
+.cm .ok u{color:var(--go)}.cm .if u{color:var(--warn)}.cm .ask u{color:var(--stop)}
+.hit .sh h2{color:var(--go)}
+.note{margin-top:16px;font-size:14px;color:var(--soft)}
+
+.end{padding-block:80px;border-top:1px solid var(--line)}
+.end h2{font-size:clamp(24px,2.6vw,36px);line-height:1.25;letter-spacing:-.03em;margin-bottom:24px}
+.way li{border-top:2px solid var(--ink);padding-top:12px}
+.way b{display:block}
+.way p{color:var(--soft)}
+.ask .pick{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.ask .pick button{min-height:46px;padding:0 16px;border:1px solid var(--line);border-radius:8px}
+.ask .pick button[aria-pressed="true"]{border-color:var(--go);color:var(--go);font-weight:600}
+.ask textarea{display:block;width:100%;min-height:232px;padding:16px;border:1px solid var(--line);border-radius:8px;background:var(--panel);line-height:1.6;resize:vertical}
+.cta{margin-top:12px;min-height:52px;padding:0 24px;border-radius:8px;background:var(--go);color:var(--go-ink);font-weight:600}
+.cta:active{transform:scale(.97)}
+.cards{display:flex;gap:16px;overflow-x:auto;padding-bottom:12px;scroll-snap-type:x proximity}
+.cards img{flex:none;width:270px;height:auto;border:1px solid var(--line);scroll-snap-align:start}
+footer{padding-block:32px 56px;border-top:1px solid var(--line);font-size:14px;color:var(--soft)}
+
+/* ---------- scenes: fixed picture palette, independent of the page theme ---------- */
+.sc{container-type:inline-size;position:relative;overflow:hidden;aspect-ratio:100/62;background:var(--sb);color:#10161C;border-radius:4px;user-select:none}
+.sc canvas{position:absolute;inset:0;width:100%;height:100%}
+.st{position:absolute;inset:0;font-size:1cqw;line-height:1.4;font-family:var(--sans)}
+.s0{--sb:#E8E4DB;--ct:rgba(60,54,40,.09)}.s1{--sb:#DDE3F1;--ct:rgba(43,63,140,.09)}.s2{--sb:#EADFDD;--ct:rgba(120,50,40,.08)}
+.s3{--sb:#DFE7E1;--ct:rgba(40,80,60,.09)}.s4{--sb:#22306B;--ct:rgba(255,255,255,.07)}.s5{--sb:#0E1A2A;--ct:rgba(140,190,255,0)}
+.st b{font-weight:600}
+.ph,.bd,.fl{position:absolute;background:#fff}
+.ph{width:25em;height:53em;border-radius:3.2em;border:.65em solid #10161C;overflow:hidden;box-shadow:0 2.2em 4em -1.6em rgba(5,20,14,.45)}
+.ph>div{padding:2.2em 1.5em 1.5em;height:100%;position:relative}
+.ph .t{font-size:1.2em;color:#57606A}.ph .t.r{color:#BF2B1D}
+.ph .h{font-size:1.75em;font-weight:700;line-height:1.3;letter-spacing:-.02em}
+.cus{border-top:1px solid var(--line);padding-bottom:80px}
+.cusimg{background:url(photo/swatch.jpg) 50% 50%/cover;min-height:min(30vw,420px);display:flex;align-items:flex-end;color:#fff;position:relative;margin-bottom:40px}
+.cusimg::before{content:"";position:absolute;inset:0;background:linear-gradient(rgba(4,10,14,.1) 20%,rgba(4,10,14,.8))}
+.cusimg .w{position:relative;width:100%;padding-block:40px}.cusimg h2{font-size:clamp(26px,3.2vw,44px);line-height:1.28;letter-spacing:-.03em;font-weight:600}.cusimg h2 span{display:inline-block}
+.cusg{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,8fr);gap:40px;align-items:start}
+.opt{display:grid;gap:20px}.opt fieldset{border:0;margin:0;padding:0;min-width:0}.opt legend,.fld span,.msgw label{display:block;font-size:14px;color:var(--soft);padding:0;margin-bottom:8px}
+.fld input{width:100%;min-height:48px;padding:0 14px;border:1px solid var(--line);border-radius:6px;background:var(--panel);font:inherit;color:inherit}
+.sw{display:flex;gap:10px;flex-wrap:wrap}.sw button{width:44px;height:44px;border-radius:50%;background:var(--c);border:3px solid var(--bg);box-shadow:0 0 0 1px var(--line)}.sw [aria-pressed="true"]{box-shadow:0 0 0 2px var(--ink)}
+.seg{display:flex;flex-wrap:wrap;gap:8px}.seg button{min-height:44px;padding:0 14px;border:1px solid var(--line);border-radius:6px;font-size:16px}.seg [aria-pressed="true"]{border-color:var(--ink);background:var(--ink);color:var(--bg)}
+.msgw{margin-top:40px}.msgw textarea{display:block;width:100%;min-height:330px;padding:16px;border:1px solid var(--line);border-radius:6px;background:var(--panel);line-height:1.6;resize:vertical}
+.pv{--ac:#2B3F8C;--pb:#fff;--pi:#10161C;--ps:#57606A;--pl:#DFE4E9;--pr:.9em;--pf:var(--sans);--sb:#E9ECEB;transition:background .3s}
+.pv .st{font-family:var(--pf)}.pv .bd,.pv .ph{background:var(--pb);color:var(--pi);transition:background .3s,color .3s,border-radius .3s}.pv .bd{border-radius:var(--pr);height:53em}
+.pv .ph2{padding:2em 2.4em 2.6em;color:#fff;background:linear-gradient(color-mix(in srgb,var(--ac) 88%,transparent),color-mix(in srgb,var(--ac) 45%,transparent)),url(photo/desk.jpg) 50% 72%/cover;height:20em;transition:background .3s}
+.pv .ph2 header{display:flex;gap:2em;align-items:center;font-size:1.3em}.pv .ph2 header b{font-size:1.4em;margin-right:auto}.pv .ph2 header em{font-style:normal;opacity:.85}
+.pv .ph2 h4{margin:1.3em 0 0;font-size:3.2em;line-height:1.3;letter-spacing:-.02em}
+.pv .se{position:relative;display:grid;grid-template-columns:1.2fr 1.2fr .8fr 1fr;background:#fff;color:#10161C;border-radius:var(--pr);margin-top:2.2em;overflow:hidden}.pv .se span{padding:1em 1.3em;font-size:1.25em;border-right:.08em solid #E6EAEE}.pv .se span:last-child{background:var(--ac)!important;color:#fff;display:grid;place-items:center;border:0;font-weight:600}.pv .se small{display:block;font-size:.85em;color:#57606A}
+.pv .pk div,.pv .pk div:nth-child(n){border-color:var(--ac)}.pv .pk span,.pv .ph .t,.pv .row em{color:var(--ps)}.pv .row{border-color:var(--pl)}.pv .btn{background:var(--ac);border-radius:var(--pr)}.pv .btn.b2{background:transparent;color:var(--pi);box-shadow:inset 0 0 0 .1em var(--pl)}
+.pv .bd .kp{padding-top:2em}.pv .kp small,.pv .ph .t{color:var(--ps)}.pv .kp .ac{color:var(--ac)}.pv .two h4{border-color:var(--pi)}.pv.dk .kp .ac{color:var(--pi)}
+.pv.dk{--pb:#14191B;--pi:#F0F3F2;--ps:#A3AFAA;--pl:#2C3437;--sb:#2A3033}
+.ph .big{font-size:2.9em;font-weight:700;letter-spacing:-.04em;line-height:1.2}
+.bd{width:63em;height:46em;border-radius:1.1em;overflow:hidden;box-shadow:0 2.2em 4em -1.6em rgba(5,20,14,.38)}
+.bd>header{display:flex;justify-content:space-between;align-items:center;height:5em;padding:0 2em;border-bottom:.1em solid #DFE4E9}
+.bd>header b{font-size:1.6em}.bd>header span{font-size:1.2em;color:#57606A}
+.fl{border-radius:.9em;padding:1.1em 1.4em;box-shadow:0 1.4em 2.6em -1em rgba(5,20,14,.42);font-size:1em}
+.fl p{font-size:1.25em}.fl .t{font-size:1.1em;color:#57606A}
+.row{display:flex;justify-content:space-between;align-items:center;gap:1em;padding:.75em 0;border-bottom:.08em solid #E6EAEE;font-size:1.3em}
+.row em{font-style:normal;color:#57606A}
+.row span:last-child{font-variant-numeric:tabular-nums;white-space:nowrap}
+.r{color:#BF2B1D}.gr{color:#2B3F8C}
+.btn{display:block;text-align:center;border-radius:.7em;padding:.8em;font-size:1.4em;font-weight:600;background:#2B3F8C;color:#fff}
+.btn.off{background:#FBE9E6;color:#BF2B1D}
+.bub{font-size:1.3em;border-radius:1em;padding:.7em 1em;margin-bottom:.7em;max-width:86%}
+.bub.me{background:#FBEFC9;margin-left:auto}.bub.yo{background:#F1F3F5}
+.chips{display:grid;gap:.6em;margin-top:.6em}.chips i{font-style:normal;font-size:1.3em;border:.09em solid #2B3F8C;color:#2B3F8C;border-radius:.7em;text-align:center;padding:.5em;font-weight:600}
+.pin{position:absolute;width:2.6em;height:2.6em;border-radius:50%;background:#10161C;color:#fff;z-index:5;display:grid;place-items:center;box-shadow:0 0 0 .35em rgba(255,255,255,.85)}
+.pin::before{font-style:normal;content:attr(data-n);font-size:1.35em;font-weight:600;line-height:1}
+.cal{display:grid;grid-template-columns:8em repeat(4,1fr);height:41em;grid-template-rows:4em repeat(4,1fr)}
+.cal>*{border-bottom:.08em solid #E6EAEE;border-left:.08em solid #E6EAEE;padding:.6em .7em;min-width:0}
+.cal>.d,.cal>.l{border-left:0}.cal .d b,.cal .l b{font-size:1.3em}.cal .d,.cal .l{display:flex;align-items:center}
+.ev{border-radius:.6em;padding:.5em .7em;background:#E6EAF8;margin-bottom:.5em;border:.12em solid transparent}
+.ev b{display:block;font-size:1.2em;color:#2B3F8C;white-space:nowrap}.ev span{font-size:1.1em;color:#57606A;white-space:nowrap}
+.ev.x{background:#FDF0EE;border:.12em dashed #BF2B1D}.ev.x b{color:#BF2B1D}.ev.sv{background:#EAF3EC}.ev.sv b{color:#1F6A45}.ev.sn{background:#FBF3E2}.ev.sn b{color:#8A5A00}
+.kp{display:grid;grid-template-columns:repeat(3,1fr);padding:1.6em 2em;gap:2em}
+.kp small{white-space:nowrap;display:block;font-size:1.2em;color:#57606A}.kp b{display:block;font-size:2.5em;letter-spacing:-.03em;line-height:1.35;white-space:nowrap}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:2em;padding:0 2em}
+.two h4{margin:0;font-size:1.3em;padding:.5em 0;border-bottom:.15em solid #10161C}
+.bars{display:flex;align-items:end;gap:1.1em;height:11em;padding:0 2em;margin-top:1.6em}
+.bars i{flex:1;background:#C9D1EC;border-radius:.3em .3em 0 0;position:relative}.bars i.hi{background:#2B3F8C}
+.bars i::after{content:attr(data-d);position:absolute;bottom:-1.7em;left:0;right:0;text-align:center;font:500 1.1em/1.4 var(--sans);color:#57606A}
+.site{padding:0}
+.site .hv{height:22em;background:linear-gradient(170deg,#0C4A5E,#2B3F8C 70%,#7DB58C);color:#fff;padding:3em 2.4em;position:relative;overflow:hidden}
+.site .hv svg{position:absolute;inset:0;width:100%;height:100%}
+.site .hv b{position:relative;display:block;font-size:3.4em;line-height:1.25;letter-spacing:-.03em;font-weight:700}
+.site .se{position:relative;display:grid;grid-template-columns:1.2fr 1.2fr .8fr 1fr;background:#fff;color:#10161C;border-radius:.8em;margin-top:1.8em;overflow:hidden}
+.site .se span{padding:1em 1.3em;font-size:1.25em;border-right:.08em solid #E6EAEE}.site .se span:last-child{background:#10161C;color:#fff;font-weight:600;display:grid;place-items:center;border:0}
+.site .se small{display:block;font-size:.85em;color:#57606A}
+.pk{display:grid;grid-template-columns:repeat(3,1fr);gap:1.6em;padding:2em 2.4em}
+.pk div{border-top:.5em solid #2B3F8C;padding-top:1em}.pk div:nth-child(2){border-color:#28506E}.pk div:nth-child(3){border-color:#C98A1B}
+.pk b{display:block;font-size:1.5em}.pk span{display:block;font-size:1.2em;color:#57606A}.pk strong{display:block;font-size:1.7em;margin-top:.3em}
+.tl{position:relative;padding-left:1.8em;margin-top:1em}
+.tl::before{content:"";position:absolute;left:.45em;top:.6em;bottom:.6em;width:.14em;background:#C9D1EC}
+.tl li{position:relative;padding:.55em 0;font-size:1.3em}.tl li::before{content:"";position:absolute;left:-1.35em;top:1em;width:.75em;height:.75em;border-radius:50%;background:#fff;border:.2em solid #2B3F8C}
+.tl li.now::before{background:#2B3F8C}.tl em{font-style:normal;color:#57606A;display:block;font-size:.88em}
+.s5 .ph,.s5 .fl{background:#14253D;color:#EAF1FB;border-color:#2A3E5C}.s5 .ph .t,.s5 .fl .t,.s5 .row em{color:#93A7C4}.s5 .row{border-color:#243650}
+.s5 .gr{color:#A9BBF7}.s5 .r{color:#FFB27A}.s5 .btn{background:#A9BBF7;color:#0A1230}
+.map{position:absolute;left:0;top:0;width:100%;height:100%}
+.map text{font:600 1.5px var(--sans);fill:#93A7C4}
+
+.tb>div{display:grid;gap:1em;align-items:center;padding:0 2em;height:6em;border-bottom:.1em solid #E6EAEE}
+.tb.a>div{grid-template-columns:1.75fr .7fr 1.15fr 1fr}.tb.b>div{grid-template-columns:1.2fr 1fr 1fr 1fr}.tb.d>div{grid-template-columns:9em 1fr 1.05fr 1fr 1.25fr}.tb.e>div{grid-template-columns:1.4fr 1fr 1fr 1fr 1fr}
+.tb.b>div{height:5.2em}.tb.b>.th{height:3.6em}.tb.b span:not(:first-child),.tb.e span:not(:first-child){text-align:right}
+.tri{display:grid;grid-template-columns:repeat(3,1fr);font-size:1.4em;margin-top:.3em}.tri b{margin-left:.4em}
+.tb span{font-size:1.3em;white-space:nowrap;font-variant-numeric:tabular-nums}
+.tb .th{height:3.6em;background:#F5F6F8}.tb .th span{font-size:1.15em;color:#57606A}
+.op2{display:grid;gap:.7em}.op2 p{display:flex;justify-content:space-between;align-items:center;border:.1em solid #DFE4E9;border-radius:.7em;padding:.75em .9em;font-size:1.3em}.op2 .on{border-color:#2B3F8C;background:#E6EAF8;color:#2B3F8C}
+.btn.b2{background:#F1F3F5;color:#10161C}
+.ct{display:flex;gap:1.8em;align-items:center;height:4em;padding:0 2em;border-bottom:.1em solid #DFE4E9;font-size:1.2em;white-space:nowrap}.ct b{color:#2B3F8C}.ct em{font-style:normal;margin-left:auto;font-weight:600}
+.pg{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5em 1.8em;padding:1.6em 2em}.pg i{display:block;height:12.2em;border-radius:.5em;background:#EEEBE4 50% 50%/cover}.pg b{display:inline-block;font-size:1.35em;margin-top:.45em}.pg span{float:right;font-size:1.35em;margin-top:.45em;font-variant-numeric:tabular-nums}
+.pv .pg{padding-top:1.5em;gap:1.1em 1.8em}.pv .pg i{height:11em;border-radius:var(--pr)}.pv .pg span{font-weight:600}
+.hom .hv{height:19em;padding:2em 2.4em;color:#fff;background:linear-gradient(90deg,rgba(24,34,84,.88),rgba(24,34,84,.35)),url(photo/lobby.jpg) 50% 45%/cover}
+.hom .hv header{display:flex;gap:2em;align-items:center;font-size:1.3em}.hom .hv header b{font-size:1.3em;margin-right:auto}.hom .hv h4{margin:.9em 0 0;font-size:3em;line-height:1.3;letter-spacing:-.02em}
+.qs{display:grid;grid-template-columns:repeat(3,1fr);gap:1.1em 1.8em;padding:1.8em 2.4em}.qs div{border-top:.15em solid #10161C;padding:.8em 0 .4em}.qs b{display:block;font-size:1.35em;line-height:1.4;min-height:2.8em}.qs span{display:block;font-size:1.15em;color:#57606A;margin-top:.3em}
+.pv .qs div{border-color:var(--ac)}.pv .qs span{color:var(--ps)}
+/* default wide positions */
+.ph.a{left:71em;top:4.5em}.bd{left:4em;top:4.5em}.bar{left:4em;bottom:4.5em;width:63em}
+.s0 .bd,.s1 .bd,.s2 .bd,.s3 .bd{height:40em}.s4 .bd{height:43em}
+
+.s5 .ph.a{left:37.5em}
+/* compact positions: emitted for narrow screens and for cards by build.py */
+@media (max-width:760px){.step .sc:not(.s5){aspect-ratio:40/72}.step .st{font-size:2.5cqw}.step .bd{left:2.44em;top:2.44em;width:44em;zoom:.82}.step .ph.a{left:7.5em;top:34em}.step .hm{display:none}.step .tb>div{padding:0 1.4em;gap:.7em}.step .tb.a>div{grid-template-columns:20em 5em 1fr}.step .tb.d>div{grid-template-columns:8.2em 1fr 1.05fr 1.2fr}.step .tb.e>div{grid-template-columns:1.5fr 1fr 1fr 1fr 1fr}.step .qs{grid-template-columns:1fr 1fr;padding:1.4em;gap:1em 1.4em}.step .qs div:nth-child(n+5){display:none}.step .kp{gap:1em;padding:1.4em}.step .kp b{font-size:2.1em}.step .two{padding:0 1.4em;gap:1.4em}.step .bars{gap:.6em;padding:0 1.4em}.step .s3 .ph.a{top:37em}.step .s4 .ph.a{top:37.6em}.step .sc.s4.s4{aspect-ratio:40/76}.step .s5 .ph.a{left:7.5em;top:3em}.step .sc.s5{aspect-ratio:40/52}.step .bar{display:none}.step .f5a{display:none}.step .f5b{display:none}.step .f5c{display:none}.step .f5d{display:none}.step .pin{display:none}.step .fl p{font-size:1.4em}.pvw .sc{aspect-ratio:40/72}.pvw .st{font-size:2.5cqw}.pvw .bd{left:2.44em;top:2.44em;width:44em;zoom:.82}.pvw .ph.a{left:7.5em;top:34em}.pvw .hm{display:none}.pvw .tb>div{padding:0 1.4em;gap:.7em}.pvw .tb.a>div{grid-template-columns:20em 5em 1fr}.pvw .tb.d>div{grid-template-columns:8.2em 1fr 1.05fr 1.2fr}.pvw .tb.e>div{grid-template-columns:1.5fr 1fr 1fr 1fr 1fr}.pvw .qs{grid-template-columns:1fr 1fr;padding:1.4em;gap:1em 1.4em}.pvw .qs div:nth-child(n+5){display:none}.pvw .kp{gap:1em;padding:1.4em}.pvw .kp b{font-size:2.1em}.pvw .two{padding:0 1.4em;gap:1.4em}.pvw .bars{gap:.6em;padding:0 1.4em}.pvw .s3 .ph.a{top:37em}.pvw .s4 .ph.a{top:37.6em}.pvw .s4{aspect-ratio:40/76}.pvw .s5 .ph.a{left:7.5em;top:3em}.pvw .s5.sc{aspect-ratio:40/52}.pvw .bar{display:none}.pvw .f5a{display:none}.pvw .f5b{display:none}.pvw .f5c{display:none}.pvw .f5d{display:none}.pvw .pin{display:none}.pvw .fl p{font-size:1.4em}}
+
+
+@media (prefers-reduced-motion:no-preference){
+  .mv{transition:transform .9s var(--ease)}
+  .sc:not(.on) .mv.up{transform:translateY(2em)}.sc:not(.on) .mv.lf{transform:translateX(2em)}
+  .on .shake{animation:sh 5s 1s infinite}.on .pulse{animation:pu 2.4s infinite}
+  @keyframes sh{0%,86%,100%{transform:none}89%{transform:translateX(.35em)}92%{transform:translateX(-.35em)}95%{transform:translateX(.2em)}}
+  @keyframes pu{50%{opacity:.45}}
+}
+@media (max-width:760px){
+  .w{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+  .top .w{grid-template-columns:1fr;height:52px}.brand{display:none}
+  .rail{justify-content:space-between}.rail a{padding:0 4px;height:52px}
+  .hero{padding-block:36px 0;min-height:0;padding-bottom:72vw}.hero::before{inset:auto 0 0;aspect-ratio:1/1;background:url(photo/desk.jpg) 88% 100%/cover;-webkit-mask-image:linear-gradient(transparent,#000 38%);mask-image:linear-gradient(transparent,#000 38%)}
+  .mom{min-height:100vw;margin-bottom:24px}.mom .w{padding-block:24px;flex-direction:column;align-items:flex-start;gap:16px}.mom .per{text-align:left;justify-self:start}
+  .ladder{display:flex;overflow-x:auto;gap:12px;padding-bottom:56px;margin-inline:-16px;padding-inline:16px;scrollbar-width:none}
+  .ladder a{flex:none;width:148px}
+  .step{padding-block:0 56px}.end{padding-block:56px}
+  .g{grid-template-columns:1fr;gap:20px}
+  .cusg{grid-template-columns:1fr;gap:28px}.cusimg{min-height:80vw;margin-bottom:28px}.pv .bd{height:39em}
+  .price b{font-size:26px}.cm .k i{display:none}
+  .sh{display:grid;grid-template-columns:1fr auto;margin-bottom:20px;gap:16px}.sh .h{grid-column:1/-1;grid-row:2}.per{grid-row:1;grid-column:2}
+}
+</style>
+<header class="top"><div class="w"><span class="brand">bigC company</span><nav class="rail" aria-label="비용 단계"><a href="#t0">25만</a><a href="#t1">60만</a><a href="#t2">110만</a><a href="#t3">130만</a><a href="#t4">320만~</a><a href="#t5">확장</a><i></i></nav></div></header>
+<main><section class="hero"><div class="w"><h1><span>같은 설명을,</span> <span>오늘은 몇 번</span> <span>보내셨습니까?</span></h1><p class="sub">반복되는 질문은 안내 링크 하나로 정리하고, 안내가 바뀌면 예전 안내를 읽은 고객까지 챙깁니다.<br>대표님 사무실에 필요한 단계부터 시작하십시오.</p>
+<div class="pain"><span>먼저 해결하고 싶은 업무를 선택해 주십시오.</span><button type="button" data-go="t0" aria-pressed="false">같은 설명 반복</button><button type="button" data-go="t2" aria-pressed="false">바뀐 규정</button><button type="button" data-go="t3" aria-pressed="false">빠진 서류</button><button type="button" data-go="t4" aria-pressed="false">놓친 문의</button></div></div></section>
+<div class="w"><nav class="ladder" aria-label="여섯 장면"><a href="#t0" aria-label="답변 정비, 25만 원"><div class="sc s0 on" aria-hidden="true"><canvas></canvas><div class="st"><div class="bd mv up"><header><b>반복된 질문</b><span>최근 30일 · 상위 5개 76번</span></header><div class="tb a"><div class="th"><span>질문</span><span>받은 횟수</span><span class="hm">지금까지 보낸 안내</span><span>확인</span></div><div class=""><span><b>비자 연장, 어디서 합니까</b></span><span>23번</span><span class="hm">서로 다른 설명 4가지</span><span><b class="r">하나로 정리</b></span></div><div class=""><span><b>입주할 때 처음 내는 돈</b></span><span>19번</span><span class="hm">서로 다른 설명 3가지</span><span><b class="r">하나로 정리</b></span></div><div class=""><span><b>연례 신고 준비물</b></span><span>14번</span><span class="hm">작년 안내 그대로</span><span><b class="r">다시 확인</b></span></div><div class=""><span><b>주차가 포함됩니까</b></span><span>11번</span><span class="hm">같은 안내 1가지</span><span><b class="gr">정상</b></span></div><div class=""><span><b>보증금은 언제 돌려받습니까</b></span><span>9번</span><span class="hm">서로 다른 설명 2가지</span><span><b class="r">하나로 정리</b></span></div></div></div>
+<div class="ph a mv lf"><div><p class="t">안내 카드 · 비자</p><p class="h" style="margin:.1em 0 .4em">관광비자 연장,<br>어디서 합니까</p><div class="row"><span>첫 29일</span><span>온라인</span></div><div class="row"><span>첫 연장</span><span><b>이민국 방문</b></span></div><div class="row"><span>2~5개월째</span><span>온라인</span></div><div class="row"><span>6개월째</span><span><b>이민국 방문</b></span></div><div class="row"><span>7~12개월째</span><span>온라인</span></div><p class="h" style="font-size:1.5em;margin:1.05em 0 .1em">이 안내의 근거</p><div class="row"><span>확인한 날</span><span><b class="gr">11월 26일</b></span></div><div class="row"><span>출처</span><span>이민국 공지</span></div><span class="btn" style="margin-top:1.1em">안내 링크 복사</span><span class="btn b2" style="margin-top:.5em">카톡 이미지로 저장</span></div></div><div class="fl mv up bar"><p class="t">정리할 질문 20개</p><p><b>비자 8개</b> · <b>임대와 매매 9개</b> · <b>생활 3개</b> · 확인이 필요한 안내 <b class="r">12개</b></p></div><i class="pin" data-n="1" style="left:2.7em;top:3.2em"></i><i class="pin" data-n="2" style="left:69.7em;top:8em"></i><i class="pin" data-n="3" style="left:69.7em;top:34em"></i></div></div><b class="n">25만 원</b><small>답변 정비</small></a><a href="#t1" aria-label="개인 페이지, 60만 원"><div class="sc s1 on" aria-hidden="true"><canvas></canvas><div class="st"><div class="bd hom mv up"><div class="hv"><header><b>대표님 사무실</b><span>비자</span><span>임대</span><span>매매</span><span>상담 예약</span></header><h4>마닐라의 집과 비자,<br>궁금한 것부터 확인하십시오.</h4></div><div class="qs"><div><b>비자 연장, 어디서 합니까</b><span>11월 26일 확인</span></div><div><b>입주할 때 처음 내는 돈</b><span>11월 24일 확인</span></div><div><b>연례 신고 준비물</b><span>11월 26일 확인</span></div><div><b>보증금은 언제 돌려받습니까</b><span>11월 20일 확인</span></div><div><b>주차가 포함됩니까</b><span>11월 18일 확인</span></div><div><b>학교와 가까운 콘도</b><span>11월 22일 확인</span></div></div></div>
+<div class="ph a mv lf"><div><p class="t">비자 연장 · 질문 1 / 2</p><p class="h" style="margin:.2em 0 .7em">마닐라에 오신 지<br>몇 개월째이십니까?</p><div class="op2"><p>첫 한 달</p><p class="on"><b>2개월 ~ 5개월</b><b>선택</b></p><p>6개월</p><p>7개월 ~ 12개월</p><p>1년 넘음</p></div><p class="h" style="font-size:1.5em;margin:1.05em 0 .1em">대표님 사무실 안내</p><div class="row"><span>접수</span><span><b>온라인</b></span></div><div class="row" style="border:0"><span>확인한 날</span><span><b class="gr">11월 26일</b></span></div><span class="btn" style="margin-top:.7em">15분 상담 예약</span></div></div><div class="fl mv up bar"><p class="t">단톡방에 올린 링크 하나 · 이번 주</p><p>안내를 본 분 <b>64명</b> · 가장 많이 본 안내 <b>입주할 때 처음 내는 돈</b> · 상담 예약 <b>7건</b></p></div><i class="pin" data-n="1" style="left:69.7em;top:8em"></i><i class="pin" data-n="2" style="left:2.7em;top:3.2em"></i><i class="pin" data-n="3" style="left:69.7em;top:48em"></i></div></div><b class="n">60만 원</b><small>개인 페이지</small></a><a href="#t2" aria-label="답변 관리, 110만 원"><div class="sc s2 on" aria-hidden="true"><canvas></canvas><div class="st"><div class="bd mv up"><header><b>예전 안내를 읽은 고객</b><span>관광비자 연장 · 11월 20일에 안내가 바뀜</span></header><div class="tb d"><div class="th"><span>고객</span><span>읽은 날</span><span class="hm">그때 안내</span><span>지금 안내</span><span>확인</span></div><div class=""><span><b>김지훈</b></span><span>10월 2일</span><span class="hm">온라인 접수</span><span>이민국 방문</span><span><b class="gr">새 안내 읽음</b></span></div><div class=""><span><b>이수민</b></span><span>10월 14일</span><span class="hm">온라인 접수</span><span>이민국 방문</span><span><b class="r">아직 모름</b></span></div><div class=""><span><b>박정우</b></span><span>10월 21일</span><span class="hm">온라인 접수</span><span>이민국 방문</span><span><b class="gr">새 안내 읽음</b></span></div><div class=""><span><b>최은영</b></span><span>11월 3일</span><span class="hm">온라인 접수</span><span>이민국 방문</span><span><b class="r">아직 모름</b></span></div><div class=""><span><b>한도윤</b></span><span>11월 11일</span><span class="hm">온라인 접수</span><span>이민국 방문</span><span><b class="gr">새 안내 읽음</b></span></div></div></div>
+<div class="ph a mv lf"><div><p class="t">보내기 전 확인</p><p class="h r" style="margin:.1em 0 .1em">322일 전에 확인한 안내입니다</p><p class="t">연례 신고 준비물</p><div style="margin-top:.7em"><div class="row"><span>마지막 확인</span><span><b class="r">1월 8일</b></span></div><div class="row"><span>정해 두신 확인 주기</span><span>90일</span></div><div class="row"><span>보낸 링크</span><span>41개</span></div><div class="row"><span>출처</span><span>이민국 공지</span></div></div><p class="h" style="font-size:1.5em;margin:1.05em 0 .1em">확인할 것</p><div class="row"><span>기간</span><span>1월 ~ 2월</span></div><div class="row"><span>비용</span><span><b class="r">작년 금액</b></span></div><div class="row"><span>온라인 접수</span><span><b class="r">작년 안내</b></span></div><span class="btn off" style="margin-top:1em">보내기 잠김</span><span class="btn" style="margin-top:.5em">확인한 내용으로 저장</span></div></div><div class="fl mv up bar"><p class="t">안내 하나를 고치면</p><p>보낸 링크 <b>36개</b>가 함께 바뀜 · 예전 안내를 읽은 고객 <b>9명</b> · 아직 모르는 고객 <b class="r">4명</b></p></div><i class="pin" data-n="1" style="left:2.7em;top:3.2em"></i><i class="pin" data-n="2" style="left:69.7em;top:8em"></i><i class="pin" data-n="3" style="left:2.7em;top:50.4em"></i></div></div><b class="n">110만 원</b><small>답변 관리</small></a><a href="#t3" aria-label="고객과 서류, 130만 원"><div class="sc s3 on" aria-hidden="true"><canvas></canvas><div class="st"><div class="bd mv up"><header><b>고객과 서류</b><span>진행 중 5명</span></header><div class="tb d"><div class="th"><span>고객</span><span class="hm">업무</span><span>빠진 서류</span><span>다음 날짜</span><span>확인</span></div><div class=""><span><b>이수민</b></span><span class="hm">콘도 임대</span><span>선일자 수표</span><span>12월 1일</span><span><b class="r">1건 남음</b></span></div><div class=""><span><b>김지훈</b></span><span class="hm">관광비자 연장</span><span>없음</span><span>12월 3일</span><span><b class="gr">준비 끝</b></span></div><div class=""><span><b>최은영</b></span><span class="hm">취업비자 갱신</span><span>계약서 서명</span><span>12월 5일</span><span><b class="r">1건 남음</b></span></div><div class=""><span><b>박정우</b></span><span class="hm">은퇴비자</span><span>연금 증빙, 사진</span><span>12월 10일</span><span><b class="r">2건 남음</b></span></div><div class=""><span><b>한도윤</b></span><span class="hm">임대 연장</span><span>없음</span><span>1월 15일</span><span><b class="gr">준비 끝</b></span></div></div></div>
+<div class="ph a mv lf"><div><p class="t">이수민 님 · 입주 첫 비용</p><p class="big">₱138,500</p><div style="margin-top:.4em"><div class="row"><span>보증금 <em>2개월</em></span><span>₱90,000</span></div><div class="row"><span>선납 월세 <em>1개월</em></span><span>₱45,000</span></div><div class="row"><span>입주 청소</span><span>₱3,500</span></div></div><p class="h" style="font-size:1.5em;margin:1.05em 0 .1em">준비하실 것</p><div class="row"><span>여권 사본</span><span><b class="gr">확인</b></span></div><div class="row"><span>계약서 서명</span><span><b class="gr">확인</b></span></div><div class="row"><span>선일자 수표</span><span><b class="r">11장 남음</b></span></div><div class="row"><span>계약 시작 <em>1년</em></span><span>12월 5일</span></div><span class="btn" style="margin-top:1em">사진으로 올리기</span><p class="t" style="margin-top:.8em">사본은 계약이 끝나고 30일 뒤 삭제됩니다</p></div></div><div class="fl mv up bar"><p class="t">다가오는 만료</p><p><b>김지훈 체류</b> 12월 6일 · <b>최은영 비자</b> 12월 18일 · <b>박정우 여권</b> 2월 20일</p></div><i class="pin" data-n="1" style="left:2.7em;top:3.2em"></i><i class="pin" data-n="2" style="left:69.7em;top:8em"></i><i class="pin" data-n="3" style="left:2.7em;top:50.4em"></i></div></div><b class="n">130만 원</b><small>고객과 서류</small></a><a href="#t4" aria-label="통합 운영, 320만~400만 원"><div class="sc s4 on" aria-hidden="true"><canvas></canvas><div class="st"><div class="bd mv up"><header><b>대표 화면</b><span>11월 26일 목 22:10</span></header>
+<div class="kp"><div><small>오늘 문의</small><b>14건</b></div><div><small>안내 링크로 해결</small><b class="gr">9건</b></div><div><small>대표님이 직접 응대할 문의</small><b>5건</b></div></div>
+<div class="two"><div><h4>자동 확인</h4><div class="row"><span>확인일 지난 안내</span><span><b class="r">2건</b></span></div><div class="row"><span>빠진 서류</span><span><b class="r">4건</b></span></div><div class="row"><span>12월 만료</span><span>2명</span></div></div><div><h4>대표님 결정</h4><div class="row"><span>이수민 <em>12월 1일</em></span><span>수표 기한</span></div><div class="row"><span>박정우 <em>15분</em></span><span>상담 시간</span></div><div class="row"><span>새 매물 <em>2곳</em></span><span>소개 여부</span></div></div></div><div class="bars"><i data-d="9시" style="height:34%"></i><i data-d="11시" style="height:46%"></i><i data-d="13시" style="height:40%"></i><i data-d="15시" style="height:38%"></i><i data-d="17시" style="height:44%"></i><i data-d="19시" style="height:62%"></i><i data-d="21시" style="height:88%" class="hi"></i><i data-d="22시" style="height:100%" class="hi"></i><i data-d="23시" style="height:82%" class="hi"></i><i data-d="0시" style="height:48%"></i></div></div>
+<div class="ph a mv lf"><div><p class="t">11월 수수료</p><p class="big">₱97,000</p><div style="margin-top:.4em"><div class="row"><span>임대 중개 <em>1건</em></span><span>₱45,000</span></div><div class="row"><span>임대 연장 <em>1건</em></span><span>₱20,000</span></div><div class="row"><span>비자 대행 <em>4건</em></span><span>₱32,000</span></div></div><p class="h" style="font-size:1.5em;margin:1.05em 0 .1em">받은 돈</p><div class="row"><span>입금 확인</span><span><b class="gr">₱62,000</b></span></div><div class="row"><span>받을 돈</span><span><b class="r">₱35,000</b></span></div><p class="h" style="font-size:1.5em;margin:1.05em 0 .1em">들어올 날</p><div class="row"><span>이수민 <em>12월 1일</em></span><span>₱25,000</span></div><div class="row"><span>박정우 <em>12월 10일</em></span><span>₱10,000</span></div><span class="btn" style="margin-top:.8em">안내 링크 보내기</span></div></div><div class="fl mv up bar"><p class="t">변경 이력</p><p><b>관광비자 연장</b> 11월 26일 09:12 · 3판 → 4판 · 창구와 출처를 고침 · 대표님</p></div><i class="pin" data-n="1" style="left:2.7em;top:10em"></i><i class="pin" data-n="2" style="left:69.7em;top:8em"></i><i class="pin" data-n="3" style="left:2.7em;top:50.4em"></i></div></div><b class="n">320만 원부터</b><small>통합 운영</small></a><a href="#t5" aria-label="확장 구상, 검토 후 제안"><div class="sc s5 on" aria-hidden="true"><canvas></canvas><div class="st"><svg class="map" viewBox="0 0 100 62" aria-hidden="true"><g fill="#16294A"><rect x="4" y="8" width="24" height="3.6" rx="1.4"/><rect x="58" y="14" width="34" height="3.6" rx="1.4"/><rect x="6" y="20" width="18" height="3.6" rx="1.4"/><rect x="66" y="26" width="26" height="3.6" rx="1.4"/><rect x="4" y="32" width="30" height="3.6" rx="1.4"/><rect x="56" y="38" width="36" height="3.6" rx="1.4"/><rect x="8" y="44" width="22" height="3.6" rx="1.4"/><rect x="62" y="50" width="30" height="3.6" rx="1.4"/><rect x="4" y="56" width="26" height="3.6" rx="1.4"/></g></svg>
+<div class="ph a mv up"><div><p class="t">07:10 · 대표님 휴대폰</p><p class="h" style="margin:.1em 0 .2em">밤사이 문의 6건,<br>회신 초안 4건</p><p class="t">확인하신 안내로만 썼습니다</p><div style="margin-top:1em"><div class="row"><span>비자 연장 <em>2건</em></span><span><b class="gr">초안 준비</b></span></div><div class="row"><span>입주 첫 비용 <em>2건</em></span><span><b class="gr">초안 준비</b></span></div><div class="row"><span>은퇴비자 조건</span><span><b class="r">근거 없음</b></span></div><div class="row"><span>학교 추천</span><span><b class="r">대표님 직접 회신</b></span></div><p class="h" style="font-size:1.5em;margin:1.05em 0 .1em">문의가 온 시각</p><div class="row"><span>22시</span><span>3건</span></div><div class="row"><span>23시</span><span>2건</span></div><div class="row" style="border:0"><span>0시</span><span>1건</span></div></div><p class="t" style="margin:.6em 0 .5em">승인 전에는 보내지 않습니다</p><span class="btn">초안 4건 확인하기</span></div></div>
+<div class="fl mv lf f5a" style="left:68em;top:4.5em;width:28em"><p class="t">고객 · English</p><p>Two months deposit and one month advance. Please see the full list here.</p></div>
+<div class="fl mv lf f5b" style="left:68em;top:17em;width:28em"><p class="t">공지 변경 알림</p><p>확인하시는 공지가 바뀌었습니다. <b>안내 2개</b>를 다시 확인하시겠습니까?</p></div>
+<div class="fl mv lf f5c" style="left:68em;top:31em;width:28em"><p class="t">단톡방용 카드</p><p>1월 연례 신고 안내 카드가 준비되었습니다. 확인한 날 <b>11월 26일</b></p></div>
+<div class="fl mv up f5d" style="left:4em;bottom:4.5em;width:29em"><p class="t">새 안내 제안</p><p>이번 주에 반려동물 가능한 콘도를 7명이 물었습니다. 안내를 새로 만드시겠습니까?</p></div><i class="pin" data-n="1" style="left:36.2em;top:8em"></i><i class="pin" data-n="2" style="left:66.7em;top:15.7em"></i><i class="pin" data-n="3" style="left:66.7em;top:3.2em"></i></div></div><b class="n">검토 후 제안</b><small>확장 구상</small></a></nav></div>
+<section class="step" id="t0"><div class="mom" style="background-image:url(photo/notes.jpg);background-position:50% 55%"><div class="w"><div><p class="pr"><span>답변 정비</span><b class="n">25만 원</b></p><h2><span>매번 다시 쓰던 설명을</span> <span>안내 하나로 정리합니다.</span></h2></div><a class="per" href="#ask" data-ask="0"><small>제작 일정</small>담당자 문의</a></div></div><div class="w">
+<div class="sc s0 " aria-hidden="true"><canvas></canvas><div class="st"><div class="bd mv up"><header><b>반복된 질문</b><span>최근 30일 · 상위 5개 76번</span></header><div class="tb a"><div class="th"><span>질문</span><span>받은 횟수</span><span class="hm">지금까지 보낸 안내</span><span>확인</span></div><div class=""><span><b>비자 연장, 어디서 합니까</b></span><span>23번</span><span class="hm">서로 다른 설명 4가지</span><span><b class="r">하나로 정리</b></span></div><div class=""><span><b>입주할 때 처음 내는 돈</b></span><span>19번</span><span class="hm">서로 다른 설명 3가지</span><span><b class="r">하나로 정리</b></span></div><div class=""><span><b>연례 신고 준비물</b></span><span>14번</span><span class="hm">작년 안내 그대로</span><span><b class="r">다시 확인</b></span></div><div class=""><span><b>주차가 포함됩니까</b></span><span>11번</span><span class="hm">같은 안내 1가지</span><span><b class="gr">정상</b></span></div><div class=""><span><b>보증금은 언제 돌려받습니까</b></span><span>9번</span><span class="hm">서로 다른 설명 2가지</span><span><b class="r">하나로 정리</b></span></div></div></div>
+<div class="ph a mv lf"><div><p class="t">안내 카드 · 비자</p><p class="h" style="margin:.1em 0 .4em">관광비자 연장,<br>어디서 합니까</p><div class="row"><span>첫 29일</span><span>온라인</span></div><div class="row"><span>첫 연장</span><span><b>이민국 방문</b></span></div><div class="row"><span>2~5개월째</span><span>온라인</span></div><div class="row"><span>6개월째</span><span><b>이민국 방문</b></span></div><div class="row"><span>7~12개월째</span><span>온라인</span></div><p class="h" style="font-size:1.5em;margin:1.05em 0 .1em">이 안내의 근거</p><div class="row"><span>확인한 날</span><span><b class="gr">11월 26일</b></span></div><div class="row"><span>출처</span><span>이민국 공지</span></div><span class="btn" style="margin-top:1.1em">안내 링크 복사</span><span class="btn b2" style="margin-top:.5em">카톡 이미지로 저장</span></div></div><div class="fl mv up bar"><p class="t">정리할 질문 20개</p><p><b>비자 8개</b> · <b>임대와 매매 9개</b> · <b>생활 3개</b> · 확인이 필요한 안내 <b class="r">12개</b></p></div><i class="pin" data-n="1" style="left:2.7em;top:3.2em"></i><i class="pin" data-n="2" style="left:69.7em;top:8em"></i><i class="pin" data-n="3" style="left:69.7em;top:34em"></i></div></div><ol class="g cm"><li class="ok"><p class="k"><i>1</i><u>즉시 적용 가능</u></p><h3>반복 질문 정리</h3><p>골라 주신 카톡 대화에서 반복된 질문 20개를 추리고, 서로 다른 설명을 하나로 정리합니다.</p></li><li class="ok"><p class="k"><i>2</i><u>즉시 적용 가능</u></p><h3>안내 카드와 링크</h3><p>질문마다 짧은 링크와 카톡 이미지를 만듭니다. 단톡방에도 그대로 올리실 수 있습니다.</p></li><li class="ok"><p class="k"><i>3</i><u>즉시 적용 가능</u></p><h3>확인일과 출처</h3><p>안내마다 확인한 날과 출처를 적습니다. 내용은 대표님이 확인하신 것만 씁니다.</p></li><li><p class="k">준비해 주실 자료</p><h3>반복되는 카톡 대화, 지금 쓰시는 안내 글</h3></li></ol></div></section>
+<section class="step" id="t1"><div class="mom" style="background-image:url(photo/lobby.jpg);background-position:50% 45%"><div class="w"><div><p class="pr"><span>개인 페이지</span><b class="n">60만 원</b></p><h2><span>상담 전에 질문으로</span> <span>고객의 상황을 수집합니다.</span></h2></div><a class="per" href="#ask" data-ask="1"><small>제작 일정</small>담당자 문의</a></div></div><div class="w">
+<div class="sc s1 " aria-hidden="true"><canvas></canvas><div class="st"><div class="bd hom mv up"><div class="hv"><header><b>대표님 사무실</b><span>비자</span><span>임대</span><span>매매</span><span>상담 예약</span></header><h4>마닐라의 집과 비자,<br>궁금한 것부터 확인하십시오.</h4></div><div class="qs"><div><b>비자 연장, 어디서 합니까</b><span>11월 26일 확인</span></div><div><b>입주할 때 처음 내는 돈</b><span>11월 24일 확인</span></div><div><b>연례 신고 준비물</b><span>11월 26일 확인</span></div><div><b>보증금은 언제 돌려받습니까</b><span>11월 20일 확인</span></div><div><b>주차가 포함됩니까</b><span>11월 18일 확인</span></div><div><b>학교와 가까운 콘도</b><span>11월 22일 확인</span></div></div></div>
+<div class="ph a mv lf"><div><p class="t">비자 연장 · 질문 1 / 2</p><p class="h" style="margin:.2em 0 .7em">마닐라에 오신 지<br>몇 개월째이십니까?</p><div class="op2"><p>첫 한 달</p><p class="on"><b>2개월 ~ 5개월</b><b>선택</b></p><p>6개월</p><p>7개월 ~ 12개월</p><p>1년 넘음</p></div><p class="h" style="font-size:1.5em;margin:1.05em 0 .1em">대표님 사무실 안내</p><div class="row"><span>접수</span><span><b>온라인</b></span></div><div class="row" style="border:0"><span>확인한 날</span><span><b class="gr">11월 26일</b></span></div><span class="btn" style="margin-top:.7em">15분 상담 예약</span></div></div><div class="fl mv up bar"><p class="t">단톡방에 올린 링크 하나 · 이번 주</p><p>안내를 본 분 <b>64명</b> · 가장 많이 본 안내 <b>입주할 때 처음 내는 돈</b> · 상담 예약 <b>7건</b></p></div><i class="pin" data-n="1" style="left:69.7em;top:8em"></i><i class="pin" data-n="2" style="left:2.7em;top:3.2em"></i><i class="pin" data-n="3" style="left:69.7em;top:48em"></i></div></div><ol class="g cm"><li class="ok"><p class="k"><i>1</i><u>즉시 적용 가능</u></p><h3>질문 하나씩 묻는 안내</h3><p>체류 기간이나 예산을 고르면 그 고객에게 맞는 안내가 나오고, 고른 내용은 상담 전에 대표님께 정리돼 옵니다.</p></li><li class="ok"><p class="k"><i>2</i><u>즉시 적용 가능</u></p><h3>한 장 페이지</h3><p>소개와 안내, 상담 예약을 한 주소에 모읍니다. 한국어와 영어로 제공합니다.</p></li><li class="ok"><p class="k"><i>3</i><u>즉시 적용 가능</u></p><h3>상담 예약</h3><p>가능한 시간을 열어 두시면, 고객이 고른 조건과 함께 예약이 들어옵니다.</p></li><li><p class="k">준비해 주실 자료</p><h3>소개 글, 업무 범위, 상담 가능한 시간</h3></li></ol></div></section>
+<section class="step" id="t2"><div class="mom" style="background-image:url(photo/desk2.jpg);background-position:50% 50%"><div class="w"><div><p class="pr"><span>답변 관리</span><b class="n">110만 원</b><span>월 관리 5만 원 별도</span></p><h2><span>규정이 바뀌면, 예전 안내를 읽은</span> <span>고객부터 챙깁니다.</span></h2></div><a class="per" href="#ask" data-ask="2"><small>제작 일정</small>담당자 문의</a></div></div><div class="w">
+<div class="sc s2 " aria-hidden="true"><canvas></canvas><div class="st"><div class="bd mv up"><header><b>예전 안내를 읽은 고객</b><span>관광비자 연장 · 11월 20일에 안내가 바뀜</span></header><div class="tb d"><div class="th"><span>고객</span><span>읽은 날</span><span class="hm">그때 안내</span><span>지금 안내</span><span>확인</span></div><div class=""><span><b>김지훈</b></span><span>10월 2일</span><span class="hm">온라인 접수</span><span>이민국 방문</span><span><b class="gr">새 안내 읽음</b></span></div><div class=""><span><b>이수민</b></span><span>10월 14일</span><span class="hm">온라인 접수</span><span>이민국 방문</span><span><b class="r">아직 모름</b></span></div><div class=""><span><b>박정우</b></span><span>10월 21일</span><span class="hm">온라인 접수</span><span>이민국 방문</span><span><b class="gr">새 안내 읽음</b></span></div><div class=""><span><b>최은영</b></span><span>11월 3일</span><span class="hm">온라인 접수</span><span>이민국 방문</span><span><b class="r">아직 모름</b></span></div><div class=""><span><b>한도윤</b></span><span>11월 11일</span><span class="hm">온라인 접수</span><span>이민국 방문</span><span><b class="gr">새 안내 읽음</b></span></div></div></div>
+<div class="ph a mv lf"><div><p class="t">보내기 전 확인</p><p class="h r" style="margin:.1em 0 .1em">322일 전에 확인한 안내입니다</p><p class="t">연례 신고 준비물</p><div style="margin-top:.7em"><div class="row"><span>마지막 확인</span><span><b class="r">1월 8일</b></span></div><div class="row"><span>정해 두신 확인 주기</span><span>90일</span></div><div class="row"><span>보낸 링크</span><span>41개</span></div><div class="row"><span>출처</span><span>이민국 공지</span></div></div><p class="h" style="font-size:1.5em;margin:1.05em 0 .1em">확인할 것</p><div class="row"><span>기간</span><span>1월 ~ 2월</span></div><div class="row"><span>비용</span><span><b class="r">작년 금액</b></span></div><div class="row"><span>온라인 접수</span><span><b class="r">작년 안내</b></span></div><span class="btn off" style="margin-top:1em">보내기 잠김</span><span class="btn" style="margin-top:.5em">확인한 내용으로 저장</span></div></div><div class="fl mv up bar"><p class="t">안내 하나를 고치면</p><p>보낸 링크 <b>36개</b>가 함께 바뀜 · 예전 안내를 읽은 고객 <b>9명</b> · 아직 모르는 고객 <b class="r">4명</b></p></div><i class="pin" data-n="1" style="left:2.7em;top:3.2em"></i><i class="pin" data-n="2" style="left:69.7em;top:8em"></i><i class="pin" data-n="3" style="left:2.7em;top:50.4em"></i></div></div><ol class="g cm"><li class="ok"><p class="k"><i>1</i><u>즉시 적용 가능</u></p><h3>예전 안내를 읽은 고객</h3><p>고객별 링크로 보낸 안내는 누가 언제 읽었는지 남습니다. 단톡방 링크는 조회 수만 남습니다.</p></li><li class="ok"><p class="k"><i>2</i><u>즉시 적용 가능</u></p><h3>확인일 지난 안내 잠금</h3><p>정해 두신 주기가 지난 안내는 다시 확인하실 때까지 보낼 수 없습니다.</p></li><li class="ok"><p class="k"><i>3</i><u>즉시 적용 가능</u></p><h3>한 번에 바뀌는 링크</h3><p>안내를 고치면 이미 보낸 링크도 새 내용으로 열립니다. 규정 확인은 대표님이 하십니다.</p></li><li><p class="k">준비해 주실 자료</p><h3>정리된 안내, 안내마다 확인할 주기와 출처</h3></li></ol></div></section>
+<section class="step" id="t3"><div class="mom" style="background-image:url(photo/passport.jpg);background-position:50% 55%"><div class="w"><div><p class="pr"><span>고객과 서류</span><b class="n">130만 원</b><span>월 관리 5만 원 별도</span></p><h2><span>고객마다 빠진 서류와</span> <span>다음 날짜를 확인합니다.</span></h2></div><a class="per" href="#ask" data-ask="3"><small>제작 일정</small>담당자 문의</a></div></div><div class="w">
+<div class="sc s3 " aria-hidden="true"><canvas></canvas><div class="st"><div class="bd mv up"><header><b>고객과 서류</b><span>진행 중 5명</span></header><div class="tb d"><div class="th"><span>고객</span><span class="hm">업무</span><span>빠진 서류</span><span>다음 날짜</span><span>확인</span></div><div class=""><span><b>이수민</b></span><span class="hm">콘도 임대</span><span>선일자 수표</span><span>12월 1일</span><span><b class="r">1건 남음</b></span></div><div class=""><span><b>김지훈</b></span><span class="hm">관광비자 연장</span><span>없음</span><span>12월 3일</span><span><b class="gr">준비 끝</b></span></div><div class=""><span><b>최은영</b></span><span class="hm">취업비자 갱신</span><span>계약서 서명</span><span>12월 5일</span><span><b class="r">1건 남음</b></span></div><div class=""><span><b>박정우</b></span><span class="hm">은퇴비자</span><span>연금 증빙, 사진</span><span>12월 10일</span><span><b class="r">2건 남음</b></span></div><div class=""><span><b>한도윤</b></span><span class="hm">임대 연장</span><span>없음</span><span>1월 15일</span><span><b class="gr">준비 끝</b></span></div></div></div>
+<div class="ph a mv lf"><div><p class="t">이수민 님 · 입주 첫 비용</p><p class="big">₱138,500</p><div style="margin-top:.4em"><div class="row"><span>보증금 <em>2개월</em></span><span>₱90,000</span></div><div class="row"><span>선납 월세 <em>1개월</em></span><span>₱45,000</span></div><div class="row"><span>입주 청소</span><span>₱3,500</span></div></div><p class="h" style="font-size:1.5em;margin:1.05em 0 .1em">준비하실 것</p><div class="row"><span>여권 사본</span><span><b class="gr">확인</b></span></div><div class="row"><span>계약서 서명</span><span><b class="gr">확인</b></span></div><div class="row"><span>선일자 수표</span><span><b class="r">11장 남음</b></span></div><div class="row"><span>계약 시작 <em>1년</em></span><span>12월 5일</span></div><span class="btn" style="margin-top:1em">사진으로 올리기</span><p class="t" style="margin-top:.8em">사본은 계약이 끝나고 30일 뒤 삭제됩니다</p></div></div><div class="fl mv up bar"><p class="t">다가오는 만료</p><p><b>김지훈 체류</b> 12월 6일 · <b>최은영 비자</b> 12월 18일 · <b>박정우 여권</b> 2월 20일</p></div><i class="pin" data-n="1" style="left:2.7em;top:3.2em"></i><i class="pin" data-n="2" style="left:69.7em;top:8em"></i><i class="pin" data-n="3" style="left:2.7em;top:50.4em"></i></div></div><ol class="g cm"><li class="ok"><p class="k"><i>1</i><u>즉시 적용 가능</u></p><h3>빠진 서류 표시</h3><p>업무마다 필요한 서류를 정해 두고, 남은 것만 고객과 대표님 화면에 보여 드립니다.</p></li><li class="ok"><p class="k"><i>2</i><u>즉시 적용 가능</u></p><h3>첫 비용 계산</h3><p>보증금, 선납 월세, 선일자 수표 장수를 조건에 맞게 계산해 보내 드립니다.</p></li><li class="if"><p class="k"><i>3</i><u>협의 후 적용</u></p><h3>만료일과 사본 관리</h3><p>체류, 비자, 여권 만료를 미리 알립니다. 사본은 보관 기한을 정해 삭제합니다.</p></li><li><p class="k">준비해 주실 자료</p><h3>업무별 서류 목록, 진행 중인 고객 명단</h3></li></ol></div></section>
+<section class="step" id="t4"><div class="mom" style="background-image:url(photo/dusk.jpg);background-position:50% 40%"><div class="w"><div><p class="pr"><span>통합 운영</span><b class="n">320만~400만 원</b><span>월 관리 10만 원 별도</span></p><h2><span>하루를 마칠 때,</span> <span>직접 응대할 문의만 남습니다.</span></h2></div><a class="per" href="#ask" data-ask="4"><small>제작 일정</small>담당자 문의</a></div></div><div class="w">
+<div class="sc s4 " aria-hidden="true"><canvas></canvas><div class="st"><div class="bd mv up"><header><b>대표 화면</b><span>11월 26일 목 22:10</span></header>
+<div class="kp"><div><small>오늘 문의</small><b>14건</b></div><div><small>안내 링크로 해결</small><b class="gr">9건</b></div><div><small>대표님이 직접 응대할 문의</small><b>5건</b></div></div>
+<div class="two"><div><h4>자동 확인</h4><div class="row"><span>확인일 지난 안내</span><span><b class="r">2건</b></span></div><div class="row"><span>빠진 서류</span><span><b class="r">4건</b></span></div><div class="row"><span>12월 만료</span><span>2명</span></div></div><div><h4>대표님 결정</h4><div class="row"><span>이수민 <em>12월 1일</em></span><span>수표 기한</span></div><div class="row"><span>박정우 <em>15분</em></span><span>상담 시간</span></div><div class="row"><span>새 매물 <em>2곳</em></span><span>소개 여부</span></div></div></div><div class="bars"><i data-d="9시" style="height:34%"></i><i data-d="11시" style="height:46%"></i><i data-d="13시" style="height:40%"></i><i data-d="15시" style="height:38%"></i><i data-d="17시" style="height:44%"></i><i data-d="19시" style="height:62%"></i><i data-d="21시" style="height:88%" class="hi"></i><i data-d="22시" style="height:100%" class="hi"></i><i data-d="23시" style="height:82%" class="hi"></i><i data-d="0시" style="height:48%"></i></div></div>
+<div class="ph a mv lf"><div><p class="t">11월 수수료</p><p class="big">₱97,000</p><div style="margin-top:.4em"><div class="row"><span>임대 중개 <em>1건</em></span><span>₱45,000</span></div><div class="row"><span>임대 연장 <em>1건</em></span><span>₱20,000</span></div><div class="row"><span>비자 대행 <em>4건</em></span><span>₱32,000</span></div></div><p class="h" style="font-size:1.5em;margin:1.05em 0 .1em">받은 돈</p><div class="row"><span>입금 확인</span><span><b class="gr">₱62,000</b></span></div><div class="row"><span>받을 돈</span><span><b class="r">₱35,000</b></span></div><p class="h" style="font-size:1.5em;margin:1.05em 0 .1em">들어올 날</p><div class="row"><span>이수민 <em>12월 1일</em></span><span>₱25,000</span></div><div class="row"><span>박정우 <em>12월 10일</em></span><span>₱10,000</span></div><span class="btn" style="margin-top:.8em">안내 링크 보내기</span></div></div><div class="fl mv up bar"><p class="t">변경 이력</p><p><b>관광비자 연장</b> 11월 26일 09:12 · 3판 → 4판 · 창구와 출처를 고침 · 대표님</p></div><i class="pin" data-n="1" style="left:2.7em;top:10em"></i><i class="pin" data-n="2" style="left:69.7em;top:8em"></i><i class="pin" data-n="3" style="left:2.7em;top:50.4em"></i></div></div><ol class="g cm"><li class="ok"><p class="k"><i>1</i><u>즉시 적용 가능</u></p><h3>오늘 직접 응대할 문의</h3><p>페이지와 링크로 들어온 문의를 모아 대표님이 직접 회신할 것만 남깁니다.</p></li><li class="ok"><p class="k"><i>2</i><u>즉시 적용 가능</u></p><h3>수수료 장부</h3><p>받은 돈과 받을 돈, 들어올 날을 건별로 남깁니다. 카톡과 통장은 쓰시던 대로 두시면 됩니다.</p></li><li class="ok"><p class="k"><i>3</i><u>즉시 적용 가능</u></p><h3>변경 이력</h3><p>어느 안내를 언제 무엇 때문에 고쳤는지 남깁니다.</p></li><li><p class="k">준비해 주실 자료</p><h3>최근 3개월 문의와 수수료 내역</h3></li></ol></div></section>
+<section class="step" id="t5"><div class="mom" style="background-image:url(photo/night.jpg);background-position:50% 60%"><div class="w"><div><p class="pr"><span>확장 구상</span><b class="n">검토 후 제안</b></p><h2><span>밤사이 온 문의에</span> <span>아침 회신 초안이 준비됩니다.</span></h2></div><a class="per" href="#ask" data-ask="5"><small>제작 일정</small>담당자 문의</a></div></div><div class="w">
+<div class="sc s5 " aria-hidden="true"><canvas></canvas><div class="st"><svg class="map" viewBox="0 0 100 62" aria-hidden="true"><g fill="#16294A"><rect x="4" y="8" width="24" height="3.6" rx="1.4"/><rect x="58" y="14" width="34" height="3.6" rx="1.4"/><rect x="6" y="20" width="18" height="3.6" rx="1.4"/><rect x="66" y="26" width="26" height="3.6" rx="1.4"/><rect x="4" y="32" width="30" height="3.6" rx="1.4"/><rect x="56" y="38" width="36" height="3.6" rx="1.4"/><rect x="8" y="44" width="22" height="3.6" rx="1.4"/><rect x="62" y="50" width="30" height="3.6" rx="1.4"/><rect x="4" y="56" width="26" height="3.6" rx="1.4"/></g></svg>
+<div class="ph a mv up"><div><p class="t">07:10 · 대표님 휴대폰</p><p class="h" style="margin:.1em 0 .2em">밤사이 문의 6건,<br>회신 초안 4건</p><p class="t">확인하신 안내로만 썼습니다</p><div style="margin-top:1em"><div class="row"><span>비자 연장 <em>2건</em></span><span><b class="gr">초안 준비</b></span></div><div class="row"><span>입주 첫 비용 <em>2건</em></span><span><b class="gr">초안 준비</b></span></div><div class="row"><span>은퇴비자 조건</span><span><b class="r">근거 없음</b></span></div><div class="row"><span>학교 추천</span><span><b class="r">대표님 직접 회신</b></span></div><p class="h" style="font-size:1.5em;margin:1.05em 0 .1em">문의가 온 시각</p><div class="row"><span>22시</span><span>3건</span></div><div class="row"><span>23시</span><span>2건</span></div><div class="row" style="border:0"><span>0시</span><span>1건</span></div></div><p class="t" style="margin:.6em 0 .5em">승인 전에는 보내지 않습니다</p><span class="btn">초안 4건 확인하기</span></div></div>
+<div class="fl mv lf f5a" style="left:68em;top:4.5em;width:28em"><p class="t">고객 · English</p><p>Two months deposit and one month advance. Please see the full list here.</p></div>
+<div class="fl mv lf f5b" style="left:68em;top:17em;width:28em"><p class="t">공지 변경 알림</p><p>확인하시는 공지가 바뀌었습니다. <b>안내 2개</b>를 다시 확인하시겠습니까?</p></div>
+<div class="fl mv lf f5c" style="left:68em;top:31em;width:28em"><p class="t">단톡방용 카드</p><p>1월 연례 신고 안내 카드가 준비되었습니다. 확인한 날 <b>11월 26일</b></p></div>
+<div class="fl mv up f5d" style="left:4em;bottom:4.5em;width:29em"><p class="t">새 안내 제안</p><p>이번 주에 반려동물 가능한 콘도를 7명이 물었습니다. 안내를 새로 만드시겠습니까?</p></div><i class="pin" data-n="1" style="left:36.2em;top:8em"></i><i class="pin" data-n="2" style="left:66.7em;top:15.7em"></i><i class="pin" data-n="3" style="left:66.7em;top:3.2em"></i></div></div><ol class="g cm"><li class="ask"><p class="k"><i>1</i><u>사전 검토 필요</u></p><h3>회신 초안</h3><p>확인하신 안내로만 초안을 쓰고, 근거가 없으면 비워 둡니다. 승인하신 것만 나갑니다.</p></li><li class="ask"><p class="k"><i>2</i><u>사전 검토 필요</u></p><h3>공지 변경 알림</h3><p>정해 두신 공지가 바뀌면 다시 확인할 안내를 알려 드립니다. 공지 사이트의 허용 여부를 먼저 확인합니다.</p></li><li class="if"><p class="k"><i>3</i><u>협의 후 적용</u></p><h3>외국인 고객</h3><p>영어 안내를 함께 준비해 같은 링크로 보냅니다.</p></li><li><p class="k">준비해 주실 자료</p><h3>통합 운영 단계의 안내와 문의 기록</h3></li></ol></div></section>
+
+<section class="end"><div class="w"><h2>진행 방식</h2><ol class="g way"><li><b>업무 진단</b><p>현재 사용하시는 카톡 안내 글, 서류 목록, 장부를 그대로 검토합니다. 필요하면 현장 상담도 가능합니다. 담당자에게 문의해 주십시오(비용이 발생할 수 있습니다).</p></li><li><b>맞춤 시안</b><p>상호와 업무, 색상을 적용한 화면을 먼저 보여 드립니다.</p></li><li><b>계약과 제작</b><p>시안을 확정하신 뒤 선금 50%로 제작을 시작합니다.</p></li><li><b>납품과 보완</b><p>납품 후 2주까지 문구와 배치 수정은 횟수를 제한하지 않습니다. 모든 자료는 대표님의 소유입니다.</p></li></ol></div></section>
+<section class="cus" id="ask"><div class="cusimg"><div class="w"><h2><span>대표님의 취향과 운영 방식을 담아</span> <span>먼저 보여 드립니다.</span></h2></div></div>
+<div class="w cusg"><form class="opt" autocomplete="off" onsubmit="return false">
+<label class="fld"><span>상호</span><input id="co" type="text" maxlength="14" placeholder="상호를 입력해 주십시오"></label>
+<fieldset><legend>대표 색상</legend><div class="sw"><button type="button" data-c="#2B3F8C" data-n="잉크색" style="--c:#2B3F8C" aria-label="잉크색" aria-pressed="true"></button><button type="button" data-c="#8F2A1C" data-n="벽돌색" style="--c:#8F2A1C" aria-label="벽돌색" aria-pressed="false"></button><button type="button" data-c="#0A6B49" data-n="짙은 녹색" style="--c:#0A6B49" aria-label="짙은 녹색" aria-pressed="false"></button><button type="button" data-c="#23282B" data-n="먹색" style="--c:#23282B" aria-label="먹색" aria-pressed="false"></button><button type="button" data-c="#86652A" data-n="황동" style="--c:#86652A" aria-label="황동" aria-pressed="false"></button><button type="button" data-c="#4A2C5A" data-n="가지색" style="--c:#4A2C5A" aria-label="가지색" aria-pressed="false"></button></div></fieldset>
+<fieldset><legend>분위기</legend><div class="seg" data-k="mood"><button type="button" data-v="0" aria-pressed="true">단정하게</button><button type="button" data-v="1" aria-pressed="false">품격 있게</button><button type="button" data-v="2" aria-pressed="false">친근하게</button></div></fieldset>
+<fieldset><legend>화면</legend><div class="seg" data-k="dark"><button type="button" data-v="0" aria-pressed="true">밝은 화면</button><button type="button" data-v="1" aria-pressed="false">어두운 화면</button></div></fieldset>
+<fieldset><legend>고객 안내 언어</legend><div class="seg" data-k="lang"><button type="button" data-v="0" aria-pressed="true">한국어</button><button type="button" data-v="1" aria-pressed="false">영어 추가</button><button type="button" data-v="2" aria-pressed="false">중국어까지</button></div></fieldset>
+<fieldset><legend>관심 단계</legend><div class="seg pick"><button type="button" data-k="0" aria-pressed="false">답변 정비</button><button type="button" data-k="1" aria-pressed="false">개인 페이지</button><button type="button" data-k="2" aria-pressed="false">답변 관리</button><button type="button" data-k="3" aria-pressed="false">고객과 서류</button><button type="button" data-k="4" aria-pressed="false">통합 운영</button><button type="button" data-k="5" aria-pressed="false">확장 구상</button></div></fieldset>
+</form><div class="pvw"><div class="sc pv on" id="pv" aria-hidden="true"><div class="st"><div class="bd site"><div class="ph2"><header><b data-co>대표님 사무실</b><span>비자</span><span>임대</span><span>매매</span><em data-lang>한국어</em></header><h4>마닐라의 집과 비자,<br>궁금한 것부터 확인하십시오.</h4></div><div class="qs"><div><b>비자 연장, 어디서 합니까</b><span>11월 26일 확인</span></div><div><b>입주할 때 처음 내는 돈</b><span>11월 24일 확인</span></div><div><b>연례 신고 준비물</b><span>11월 26일 확인</span></div><div><b>보증금은 언제 돌려받습니까</b><span>11월 20일 확인</span></div><div><b>주차가 포함됩니까</b><span>11월 18일 확인</span></div><div><b>학교와 가까운 콘도</b><span>11월 22일 확인</span></div></div></div><div class="ph a"><div><p class="t" data-co>대표님 사무실</p><p class="h" style="margin:.1em 0 .6em" data-slip>입주할 때 처음 내는 돈</p><p class="t">월세 ₱45,000 · 1년 계약</p><p class="big">₱138,500</p><div style="margin-top:.6em"><div class="row"><span>보증금 <em>2개월</em></span><span>₱90,000</span></div><div class="row"><span>선납 월세 <em>1개월</em></span><span>₱45,000</span></div><div class="row"><span>입주 청소</span><span>₱3,500</span></div><div class="row"><span><b>확인한 날</b></span><span><b>11월 24일</b></span></div></div><span class="btn" style="margin-top:1em">15분 상담 예약</span><span class="btn b2" style="margin-top:.6em">다른 질문 보기</span></div></div></div></div><p class="note">선택하신 내용이 바로 반영되는 예시 화면입니다.</p></div></div>
+<div class="w msgw"><label for="msg">문의 내용</label><textarea id="msg"></textarea><button type="button" class="cta" id="copy">맞춤 시안 문의하기</button><p class="note">문의 내용이 복사됩니다. 이 주소를 받으신 카카오톡 대화방에 붙여 넣어 보내 주십시오.</p></div></section>
+<section class="end"><div class="w"><h2>내부 검토용 이미지</h2><div class="cards" tabindex="0" aria-label="카톡 이미지 묶음"><img src="cards/0.jpg" width="1080" height="1440" alt="카톡 이미지 1: 표지"><img src="cards/1.jpg" width="1080" height="1440" alt="카톡 이미지 2: 답변 정비"><img src="cards/2.jpg" width="1080" height="1440" alt="카톡 이미지 3: 개인 페이지"><img src="cards/3.jpg" width="1080" height="1440" alt="카톡 이미지 4: 답변 관리"><img src="cards/4.jpg" width="1080" height="1440" alt="카톡 이미지 5: 고객과 서류"><img src="cards/5.jpg" width="1080" height="1440" alt="카톡 이미지 6: 통합 운영"><img src="cards/6.jpg" width="1080" height="1440" alt="카톡 이미지 7: 확장 구상"></div><p class="note">이미지를 길게 누르면 저장하실 수 있습니다.</p></div></section></main>
+<footer><div class="w">화면의 이름, 비자와 임대 조건, 금액, 날짜와 사진은 모두 예시입니다. 비자와 임대 안내는 대표님이 확인하신 내용으로 채우며, 규정의 확인과 고객 안내의 책임은 대표님 사무실에 있습니다. 본 제안은 법률 또는 이민 자문이 아니며 비자 결과를 약속하지 않습니다. 카카오톡은 해당 회사의 서비스이며 당사와 제휴 관계가 아닙니다. 표시된 금액은 제작비이며 서버, 도메인, 외부 서비스와 AI 이용 비용은 계약 전에 별도로 안내해 드립니다.</div></footer>
+<script>
+(() => {
+  const TIERS = [["답변 정비","25만 원"],["개인 페이지","60만 원"],["답변 관리","110만 원"],["고객과 서류","130만 원"],["통합 운영","320만~400만 원"],["확장 구상","검토 후 제안"]];
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+
+  // chat bubbles behind every scene
+  function contour(sc) {
+    const cv = sc.querySelector('canvas'); if (!cv) return; const w = sc.clientWidth, h = sc.clientHeight;
+    if (!w || !h) return;
+    const d = Math.min(devicePixelRatio || 1, 2), k = +(sc.className.match(/s(\d)/) || [0, 0])[1];
+    cv.width = w * d; cv.height = h * d;
+    const c = cv.getContext('2d'); let seed = 71 + k * 37;
+    const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+    c.fillStyle = getComputedStyle(sc).getPropertyValue('--ct');
+    const u = cv.width / 100, M = 100 * h / w;
+    for (let y = 1.6, n = 0; y < M; y += 5.4, n++) {
+      const l = 12 + rnd() * 26, x = n % 2 ? 97 - l : 3 + rnd() * 4;
+      c.beginPath(); c.roundRect(x * u, y * u, l * u, 3.4 * u, 1.5 * u); c.fill();
+    }
+  }
+  const all = $$('.sc'); all.forEach(contour);
+  let rt; addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(() => all.forEach(contour), 200); });
+
+  const steps = $$('.step'); if (!steps.length) return;
+  const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) e.target.classList.add('on'); }), { rootMargin: '0px 0px -15% 0px' });
+  $$('.step .sc').forEach((s) => io.observe(s));
+
+  // price rail
+  const links = $$('.rail a'), bar = document.querySelector('.rail i');
+  let cur = -1;
+  function mark() {
+    let k = -1; steps.forEach((s, i) => { if (s.getBoundingClientRect().top < innerHeight * 0.45) k = i; });
+    const end = document.querySelector('.end').getBoundingClientRect().top < 120; if (end) k = -1;
+    if (k === cur) return; cur = k;
+    links.forEach((a, i) => (i === k ? a.setAttribute('aria-current', 'true') : a.removeAttribute('aria-current')));
+    if (k < 0) { bar.style.width = '0'; return; }
+    bar.style.width = links[k].offsetWidth + 'px'; bar.style.transform = `translateX(${links[k].offsetLeft}px)`;
+  }
+  addEventListener('scroll', mark, { passive: true }); mark();
+
+  // pick a pain -> jump to the scene that stops it, and pre-fill the message
+  const pains = $$('.pain button'), picks = $$('.pick button'), msg = document.getElementById('msg'), pv = document.getElementById('pv'), co = document.getElementById('co');
+  const MOOD = ['단정하게', '품격 있게', '친근하게'], DARK = ['밝은 화면', '어두운 화면'], LANG = ['한국어', '한국어, 영어', '한국어, 영어, 중국어'];
+  const FONT = ['var(--sans)', '"Nanum Myeongjo",serif', '"Gowun Dodum",sans-serif'], RAD = ['.9em', '.15em', '2em'];
+  const S = { tier: 0, why: '', color: '잉크색', hex: '#2B3F8C', mood: 0, dark: 0, lang: 0, touched: false };
+  function paint() {
+    picks.forEach((b) => b.setAttribute('aria-pressed', String(+b.dataset.k === S.tier)));
+    pv.style.setProperty('--ac', S.hex); pv.style.setProperty('--pf', FONT[S.mood]); pv.style.setProperty('--pr', RAD[S.mood]);
+    pv.classList.toggle('dk', !!S.dark);
+    $$('[data-co]', pv).forEach((e) => { e.textContent = co.value.trim() || '대표님 사무실'; });
+    $$('[data-lang]', pv).forEach((e) => { e.textContent = ['한국어', '한국어 · EN', '한국어 · EN · 中文'][S.lang]; });
+    msg.value = `안녕하십니까. 업무 제안을 보고 문의드립니다.\n\n상호: ${co.value.trim()}\n관심 단계: ${TIERS[S.tier][0]} (${TIERS[S.tier][1]})\n먼저 해결할 업무: ${S.why}\n희망 색상: ${S.color}\n희망 분위기: ${MOOD[S.mood]}, ${DARK[S.dark]}\n고객 안내 언어: ${LANG[S.lang]}\n하시는 업무(부동산, 비자 등):\n하루에 받으시는 문의 수:\n희망 일정:\n연락 가능한 시간:`;
+  }
+  pains.forEach((b) => b.addEventListener('click', () => {
+    pains.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+    steps.forEach((s) => s.classList.toggle('hit', s.id === b.dataset.go));
+    S.tier = +b.dataset.go.slice(1); S.why = b.textContent; paint();
+    document.getElementById(b.dataset.go).scrollIntoView();
+  }));
+  picks.forEach((b) => b.addEventListener('click', () => { S.tier = +b.dataset.k; paint(); }));
+  $$('[data-ask]').forEach((x) => x.addEventListener('click', () => { S.tier = +x.dataset.ask; paint(); }));
+  $$('.sw button').forEach((b) => b.addEventListener('click', () => { $$('.sw button').forEach((x) => x.setAttribute('aria-pressed', String(x === b))); S.color = b.dataset.n; S.hex = b.dataset.c; paint(); }));
+  $$('.seg[data-k]').forEach((g) => $$('button', g).forEach((b) => b.addEventListener('click', () => { $$('button', g).forEach((x) => x.setAttribute('aria-pressed', String(x === b))); S[g.dataset.k] = +b.dataset.v; paint(); })));
+  co.addEventListener('input', paint);
+  paint();
+  const btn = document.getElementById('copy');
+  btn.addEventListener('click', async () => {
+    let ok = false;
+    try { await navigator.clipboard.writeText(msg.value); ok = true; } catch { msg.focus(); msg.select(); try { ok = document.execCommand('copy'); } catch {} }
+    btn.textContent = ok ? '복사되었습니다' : '문의 내용을 길게 눌러 복사해 주십시오';
+    setTimeout(() => { btn.textContent = '맞춤 시안 문의하기'; }, 2600);
+  });
+})();
+</script>
+</body></html>

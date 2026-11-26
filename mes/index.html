@@ -1,0 +1,804 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}body{margin:0;font:14px system-ui}img{max-width:100%}[hidden]{display:none!important}</style><meta name="description" content="오더 등록부터 출고까지 한 화면으로. 쓰시던 ERP는 그대로 두고, 공장 밖에서도 휴대폰 앱으로 생산라인을 실시간으로 봅니다. 3분 데모는 로그인 없이 바로."><meta property="og:type" content="website"><meta property="og:site_name" content="bigC company"><meta property="og:url" content="https://keunpan.com/mes/"><link rel="canonical" href="https://keunpan.com/mes/"><meta property="og:title" content="아직도 수기로 업무지시와 생산라인에 제작을 부탁하고 계십니까?"><meta property="og:description" content="오더 등록부터 출고까지 한 화면으로. 쓰시던 ERP는 그대로 두고, 공장 밖에서도 휴대폰 앱으로 생산라인을 실시간으로 봅니다. 3분 데모는 로그인 없이 바로."><meta property="og:image" content="https://keunpan.com/mes/og.jpg?v=1"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="600"><meta name="twitter:card" content="summary_large_image"></head><body><title>bigC 공장 생산관리</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap">
+<style>
+/* v3 (153)(154): customer voices → one question's route → 7-step click tour → how we change entrenched ways → steps → price → data → FAQ → request.
+   One 12-col column, quiet ruled sections; the tour is the only loud element. */
+:root{
+  --bg:#FBFCFC;--panel:#F1F4F4;--ink:#0E1517;--soft:#566266;--line:#DCE3E4;--go:#0D5E5A;--go-ink:#fff;--go-soft:#E2EFEE;
+  --late:#B3261E;--late-soft:#FBE9E7;--warn:#8A5A00;--warn-soft:#FBF1DC;--ok:#1B6E3A;--ok-soft:#E4F2E8;--hot:#E8590C;
+  --sans:"IBM Plex Sans KR","Pretendard","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  --mono:"IBM Plex Mono","Consolas",monospace;
+  --ease:cubic-bezier(.22,.8,.24,1);color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0B1112;--panel:#131B1C;--ink:#E8EFEF;--soft:#97A6A8;--line:#243032;--go:#6FCBC2;--go-ink:#05201E;--go-soft:#12302E;
+  --late:#FF8A7E;--late-soft:#3A1915;--warn:#E9B654;--warn-soft:#33270F;--ok:#7FD39C;--ok-soft:#143020;--hot:#FF9A5C;color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0B1112;--panel:#131B1C;--ink:#E8EFEF;--soft:#97A6A8;--line:#243032;--go:#6FCBC2;--go-ink:#05201E;--go-soft:#12302E;
+  --late:#FF8A7E;--late-soft:#3A1915;--warn:#E9B654;--warn-soft:#33270F;--ok:#7FD39C;--ok-soft:#143020;--hot:#FF9A5C;color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:76px}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.65 var(--sans);-webkit-font-smoothing:antialiased;word-break:keep-all;overflow-wrap:anywhere}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:40;background:var(--bg)}
+h1,h2,h3,h4,h5,p,ul,ol,figure,dl,dd,blockquote{margin:0;padding:0}ul,ol{list-style:none}
+a{color:inherit;text-decoration:none}
+button,input,select,textarea{font:inherit;color:inherit}
+button{background:none;border:0;padding:0;cursor:pointer;text-align:inherit}
+:focus-visible{outline:2px solid var(--go);outline-offset:2px}
+.n{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.w{max-width:1248px;margin:0 auto;padding-left:max(24px,env(safe-area-inset-left,0px));padding-right:max(24px,env(safe-area-inset-right,0px))}
+@media (max-width:640px){.w{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}}
+
+/* top */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.top .w{display:flex;align-items:center;gap:28px;height:64px}
+.brand{font-weight:700;white-space:nowrap;letter-spacing:-.01em}
+.brand small{font-weight:500;color:var(--soft);margin-left:8px;font-size:13px}
+.nav{display:flex;gap:4px;margin-left:auto}
+.nav a{padding:8px 12px;font-size:14px;color:var(--soft);border-radius:6px;white-space:nowrap}
+.nav a:hover{color:var(--ink);background:var(--panel)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 18px;border-radius:8px;font-weight:600;font-size:15px;white-space:nowrap;transition:filter .15s,border-color .15s}
+.btn.pri{background:var(--go);color:var(--go-ink)}
+.btn.pri:hover{filter:brightness(1.08)}
+.btn.sec{border:1px solid var(--line);background:var(--bg)}
+.btn.sec:hover{border-color:var(--ink)}
+@media (max-width:1000px){.nav{display:none}.top .btn{margin-left:auto}}
+@media (max-width:420px){.brand small{display:none}}
+
+/* hero */
+.hero{padding-block:72px 56px;border-bottom:1px solid var(--line)}
+.hero .w{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:48px;align-items:center}
+.eyebrow{font-size:13px;font-weight:600;letter-spacing:.06em;color:var(--go)}
+.hero h1{margin-top:16px;font-size:clamp(32px,4.3vw,54px);line-height:1.2;font-weight:700;letter-spacing:-.035em;text-wrap:balance}
+.hero .sub{margin-top:20px;font-size:18px;color:var(--soft);max-width:32em;text-wrap:pretty}
+.hero .act{margin-top:28px;display:flex;flex-wrap:wrap;gap:10px}
+.hero .meta{margin-top:22px;display:flex;flex-wrap:wrap;gap:6px 18px;font-size:14px;color:var(--soft)}
+.hero .meta span::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--go);margin-right:8px;vertical-align:2px}
+.hero figure{position:relative;aspect-ratio:4/5;max-width:100%;border-radius:12px;overflow:hidden;background:var(--panel)}
+.hero figure img{width:100%;height:100%;object-fit:cover;display:block}
+.hero figcaption{position:absolute;left:14px;bottom:12px;right:14px;font-size:13px;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.6)}
+@media (max-width:900px){.hero{padding-block:44px 36px}.hero .w{grid-template-columns:1fr;gap:28px}.hero figure{aspect-ratio:16/9}}
+
+/* sections */
+section.blk{padding-block:96px;border-bottom:1px solid var(--line)}
+section.alt{background:var(--panel)}
+.sh{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:48px;align-items:end;margin-bottom:44px}
+.sh h2{font-size:clamp(26px,3vw,38px);line-height:1.25;font-weight:700;letter-spacing:-.03em;text-wrap:balance}
+.sh p{color:var(--soft);max-width:38em;text-wrap:pretty}
+@media (max-width:900px){section.blk{padding-block:64px}.sh{grid-template-columns:1fr;gap:12px;margin-bottom:28px}}
+
+/* voices */
+.voices{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.role{display:flex;flex-direction:column;gap:12px}
+.role h3{display:flex;align-items:center;gap:10px;font-size:15px;font-weight:700;padding-bottom:12px;border-bottom:2px solid var(--ink)}
+.role h3 i{width:30px;height:30px;border-radius:50%;background:var(--go-soft);color:var(--go);display:grid;place-items:center;font:600 13px var(--sans);font-style:normal;flex:none}
+.role h3 small{display:block;font-size:12px;font-weight:500;color:var(--soft)}
+.q{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:16px 16px 14px}
+.q blockquote{font-size:15px;line-height:1.6;font-weight:500;text-wrap:pretty}
+.q blockquote::before{content:"“";display:block;font:700 28px/0.6 var(--sans);color:var(--go);margin-bottom:8px}
+.q .leak{margin-top:10px;font-size:13px;color:var(--late);font-weight:600}
+.vnote{margin-top:28px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:14px;align-items:center;padding:18px 20px;border-radius:10px;background:var(--ink);color:var(--bg)}
+.vnote b{font-size:20px;letter-spacing:-.02em;white-space:nowrap}
+.vnote p{font-size:15px;opacity:.85}
+@media (max-width:1060px){.voices{grid-template-columns:repeat(2,minmax(0,1fr));gap:28px 16px}}
+@media (max-width:600px){.voices{grid-template-columns:1fr}.vnote{grid-template-columns:1fr;gap:4px}}
+
+/* route */
+.route{display:grid;gap:20px}
+.rt{display:grid;grid-template-columns:130px minmax(0,1fr);gap:20px;align-items:center;padding:22px 24px;border:1px solid var(--line);border-radius:12px;background:var(--bg)}
+.rt>h3{font-size:16px;font-weight:700}
+.rt>h3 small{display:block;font-size:13px;font-weight:500;color:var(--soft);margin-top:2px}
+.hops{display:flex;align-items:stretch;gap:0;overflow-x:auto;padding-bottom:2px}
+.hop{flex:1 0 116px;position:relative;padding:12px 14px;border-radius:8px;background:var(--panel);margin-right:22px}
+.hop:last-child{margin-right:0}
+.hop:not(:last-child)::after{content:"";position:absolute;right:-17px;top:50%;width:12px;height:12px;border-top:2px solid var(--soft);border-right:2px solid var(--soft);transform:translateY(-50%) rotate(45deg)}
+.hop time{display:block;font:600 12px var(--mono);color:var(--soft)}
+.hop b{display:block;font-size:14px;margin-top:2px}
+.hop span{display:block;font-size:12px;color:var(--soft)}
+.rt.bad .hop:last-child{background:var(--late-soft)}
+.rt.bad .hop:last-child time{color:var(--late)}
+.rt.good{border-color:var(--go)}
+.rt.good .hop{background:var(--go-soft);flex-basis:180px}
+.rt.good .hop:last-child time{color:var(--go)}
+@media (max-width:760px){.rt{grid-template-columns:1fr;gap:12px;padding:18px}.hops{flex-direction:column;overflow:visible}.hop{flex:none;margin:0 0 20px}.hop:last-child{margin:0}.hop:not(:last-child)::after{right:auto;left:22px;top:auto;bottom:-15px;transform:rotate(135deg)}}
+
+/* ================= TOUR ================= */
+#demo{padding-block:80px 96px;border-bottom:1px solid var(--line)}
+.tour{display:grid;grid-template-columns:280px minmax(0,1fr);border:1px solid var(--line);border-radius:14px;background:var(--bg);overflow:hidden;box-shadow:0 1px 0 var(--line),0 24px 60px -32px rgba(0,0,0,.4)}
+.steps{border-right:1px solid var(--line);padding:18px 14px;display:flex;flex-direction:column;gap:2px;background:var(--panel)}
+.steps .hd{display:flex;justify-content:space-between;align-items:center;padding:0 8px 12px}
+.steps .hd b{font-size:14px}
+.steps .hd span{font:600 12px var(--mono);color:var(--soft)}
+#t-list button{display:grid;grid-template-columns:26px minmax(0,1fr);gap:10px;align-items:start;padding:10px 8px;border-radius:8px;text-align:left;width:100%}
+#t-list button:hover{background:var(--bg)}
+#t-list button i{width:24px;height:24px;border-radius:50%;border:1.5px solid var(--line);display:grid;place-items:center;font:600 12px var(--mono);font-style:normal;color:var(--soft);background:var(--bg)}
+#t-list button b{display:block;font-size:14px;font-weight:600;color:var(--soft)}
+#t-list button small{display:block;font-size:12px;color:var(--soft);line-height:1.45;margin-top:1px}
+#t-list button[aria-current="step"]{background:var(--bg)}
+#t-list button[aria-current="step"] i{border-color:var(--go);background:var(--go);color:var(--go-ink)}
+#t-list button[aria-current="step"] b{color:var(--ink)}
+#t-list button.done i{border-color:var(--go);color:var(--go)}
+#t-list button.done b{color:var(--ink)}
+.steps .lang{margin-top:auto;padding:14px 8px 0;display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:12px;color:var(--soft)}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:7px;overflow:hidden;background:var(--bg)}
+.seg button{white-space:nowrap;height:30px;padding:0 9px;font-size:12px;font-weight:600;color:var(--soft)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.stagew{display:flex;flex-direction:column;min-width:0}
+.sbar{display:flex;align-items:center;gap:12px;padding:12px 18px;border-bottom:1px solid var(--line);font-size:13px;color:var(--soft)}
+.sbar .dm{display:inline-flex;height:22px;align-items:center;padding:0 7px;border-radius:4px;font-size:11.5px;font-weight:700;background:var(--ink);color:var(--bg)}
+.sbar .sp{flex:1}
+.sbar button{height:32px;padding:0 12px;border:1px solid var(--line);border-radius:7px;font-weight:600;color:var(--ink);background:var(--bg)}
+.sbar button.go{background:var(--go);border-color:var(--go);color:var(--go-ink)}
+.sbar button:disabled{opacity:.35;cursor:default}
+.sbar .mlang{display:none}
+.stage{position:relative;flex:1;min-height:600px;padding:28px;background:radial-gradient(circle at 50% 0%,color-mix(in srgb,var(--go-soft) 70%,transparent),transparent 70%)}
+.prog{height:3px;background:var(--line)}
+.prog i{display:block;height:100%;background:var(--go);transition:width .4s var(--ease)}
+.mstep{display:none}
+@media (max-width:1000px){
+  .tour{grid-template-columns:1fr}
+  .steps{display:none}
+  .mstep{display:flex;gap:10px;align-items:center;padding:12px 16px;border-bottom:1px solid var(--line);background:var(--panel)}
+  .mstep>i{flex:none;width:26px;height:26px;border-radius:50%;background:var(--go);color:var(--go-ink);display:grid;place-items:center;font:600 12px var(--mono);font-style:normal}
+  .mstep b{font-size:14px;display:block}
+  .mstep small{font-size:12px;color:var(--soft);display:block;line-height:1.4}
+  .stage{padding:16px 12px;min-height:560px}
+  .sbar{padding:10px 12px;flex-wrap:wrap;gap:8px}
+  .sbar .txt{display:none}
+  .sbar .mlang{display:inline-flex}
+}
+
+/* hotspot + tip */
+.hs{position:absolute;z-index:5;pointer-events:none;border-radius:10px;box-shadow:0 0 0 2px var(--hot),0 0 0 6px color-mix(in srgb,var(--hot) 25%,transparent);transition:left .35s var(--ease),top .35s var(--ease),width .35s var(--ease),height .35s var(--ease)}
+.hs::after{content:"";position:absolute;right:-7px;top:-7px;width:14px;height:14px;border-radius:50%;background:var(--hot);animation:pl 1.4s infinite}
+@keyframes pl{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--hot) 60%,transparent)}100%{box-shadow:0 0 0 14px transparent}}
+.tip{position:absolute;z-index:6;width:290px;max-width:calc(100% - 24px);padding:14px 16px;border-radius:10px;background:#0E1517;color:#F4F7F7;font-size:14px;line-height:1.55;box-shadow:0 12px 30px -10px rgba(0,0,0,.45);transition:left .35s var(--ease),top .35s var(--ease)}
+.tip .k{display:block;font:600 11px var(--mono);letter-spacing:.04em;opacity:.6;margin-bottom:4px}
+.tip .row{display:flex;justify-content:space-between;align-items:center;margin-top:10px;gap:8px}
+.tip .row small{font-size:12px;opacity:.7}
+.tip .row button{height:30px;padding:0 12px;border-radius:6px;background:var(--hot);color:#fff;font-weight:700;font-size:13px;white-space:nowrap}
+.tip::before{content:"";position:absolute;width:12px;height:12px;background:#0E1517;transform:rotate(45deg);left:var(--ax,24px)}
+.tip.below::before{top:-6px}.tip.above::before{bottom:-6px}
+.tip.right::before{left:-6px;top:var(--ay,20px)}.tip.left::before{left:auto;right:-6px;top:var(--ay,20px)}
+
+/* screens (fixed light look — they are product screens) */
+.scr{color:#0E1517;font-size:14px}
+.app{max-width:820px;margin:0 auto;background:#fff;border:1px solid #DCE3E4;border-radius:12px;overflow:hidden;box-shadow:0 10px 30px -18px rgba(0,0,0,.35)}
+.app .ab{display:flex;align-items:center;gap:16px;padding:10px 16px;background:#0E1517;color:#fff;font-size:13px}
+.app .ab b{font-weight:700;white-space:nowrap}
+.app .ab nav{display:flex;gap:2px;margin-left:8px}
+.app .ab nav span{padding:4px 10px;border-radius:5px;color:#9FB0B2;white-space:nowrap}
+.app .ab nav span.on{background:#26393B;color:#fff}
+.app .ab .aw{margin-left:auto;color:#9FB0B2;white-space:nowrap}
+.app .ac{padding:18px}
+.app h4{font-size:16px;font-weight:700;margin-bottom:4px}
+.app .hint{font-size:13px;color:#566266;margin-bottom:14px}
+.paste{border:1.5px dashed #B8C4C6;border-radius:10px;padding:10px 12px;background:#F4F6F6;overflow-x:auto}
+.paste table{border-collapse:collapse;font:500 12.5px/1.6 var(--mono);color:#566266;min-width:560px}
+.paste td{padding:3px 18px 3px 0;white-space:nowrap}
+.paste td.e{color:#B3261E}
+.abtn{display:inline-flex;align-items:center;gap:6px;height:38px;padding:0 14px;border-radius:8px;background:#0D5E5A;color:#fff;font-weight:600;font-size:14px;white-space:nowrap}
+.abtn.ghost{background:#fff;color:#0E1517;border:1px solid #DCE3E4}
+.abtn:disabled{opacity:.4;cursor:default}
+.bar2{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:14px}
+.ot{width:100%;border-collapse:collapse;font-size:13px;min-width:600px}
+.ot th{font-size:12px;color:#566266;font-weight:600;text-align:left;padding:8px;border-bottom:1px solid #DCE3E4;white-space:nowrap}
+.ot td{padding:9px 8px;border-bottom:1px solid #EEF1F2;white-space:nowrap}
+.ot td.miss{background:#FBE9E7;color:#B3261E;font-weight:600}
+.ot td.fixd{background:#E4F2E8;color:#1B6E3A;font-weight:600}
+.ot select{height:28px;border:1px solid #B3261E;border-radius:6px;background:#fff;font-size:13px;padding:0 6px;color:#B3261E}
+.okline{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:#1B6E3A;background:#E4F2E8;padding:6px 10px;border-radius:6px}
+.errline{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:#B3261E;background:#FBE9E7;padding:6px 10px;border-radius:6px}
+.sc{overflow-x:auto}
+.kp{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:#DCE3E4;border:1px solid #DCE3E4;border-radius:10px;overflow:hidden;margin-bottom:14px}
+.kp div{background:#fff;padding:12px 14px}
+.kp dt{font-size:12px;color:#566266}
+.kp dd{font:600 22px var(--mono);letter-spacing:-.02em}
+.kp dd small{font:500 12px var(--sans);color:#566266;margin-left:3px}
+.kp dd.r{color:#B3261E}.kp dd.g{color:#1B6E3A}
+.dash{display:grid;grid-template-columns:minmax(0,1fr) 230px;gap:14px}
+.cards{display:grid;gap:10px;align-content:start}
+.cd{border:1px solid #DCE3E4;border-left:4px solid #B3261E;border-radius:10px;padding:12px 14px;display:grid;gap:4px;transition:background .5s,border-color .5s}
+.cd.w{border-left-color:#C7860A}
+.cd.ok{border-left-color:#1B6E3A;background:#F1F8F3}
+.cd h5{font-size:14px;font-weight:700;display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.cd p{font-size:13px;color:#33403F}
+.cd .more{display:grid;grid-template-columns:auto 1fr;gap:2px 10px;font-size:13px;margin-top:6px;padding-top:8px;border-top:1px solid #EEF1F2}
+.cd .more dt{color:#566266}
+.cd .lk{justify-self:start;font-size:13px;font-weight:600;color:#0D5E5A;margin-top:2px}
+.tg{display:inline-flex;height:22px;align-items:center;padding:0 7px;border-radius:4px;font-size:11.5px;font-weight:700}
+.tg.r{background:#FBE9E7;color:#B3261E}.tg.y{background:#FBF1DC;color:#8A5A00}.tg.g{background:#E4F2E8;color:#1B6E3A}
+.side{display:grid;gap:10px;align-content:start}
+.box{border:1px solid #DCE3E4;border-radius:10px;padding:12px 14px}
+.box h5{font-size:13px;font-weight:700;margin-bottom:6px;display:flex;justify-content:space-between;gap:8px}
+.box h5 small{font-weight:500;color:#566266;font-size:11.5px;text-align:right}
+.inv{display:grid;gap:5px;font-size:13px}
+.inv li{display:flex;justify-content:space-between;gap:8px}
+.inv li.low{color:#B3261E;font-weight:600}
+.lg{display:grid;gap:5px;font-size:12.5px;color:#33403F}
+.lg li{display:grid;grid-template-columns:42px 1fr;gap:6px}
+.lg li time{font-family:var(--mono);color:#566266}
+.lg li.nw{background:#E2EFEE;border-radius:4px}
+.flashy{animation:fy 1.6s var(--ease)}
+@keyframes fy{0%{box-shadow:0 0 0 0 rgba(13,94,90,.5)}100%{box-shadow:0 0 0 14px rgba(13,94,90,0)}}
+.ntf{display:flex;gap:8px;align-items:center;margin-bottom:12px;padding:8px 12px;border-radius:8px;background:#E2EFEE;color:#0D5E5A;font-size:13px;font-weight:600}
+@media (max-width:760px){.kp{grid-template-columns:repeat(2,minmax(0,1fr))}.dash{grid-template-columns:1fr}.app .ab nav{display:none}.app .ac{padding:14px}}
+
+.phones{display:flex;justify-content:center;gap:28px;flex-wrap:wrap}
+.pw{display:flex;flex-direction:column;align-items:center;gap:8px}
+.pw>p{font-size:13px;color:var(--soft);font-weight:600}
+.ph{width:270px;border-radius:32px;padding:9px;background:#111819;box-shadow:0 14px 34px -16px rgba(0,0,0,.55)}
+.ph .in{border-radius:24px;overflow:hidden;background:#EEF1F2;min-height:440px;display:flex;flex-direction:column}
+.ph .st{display:flex;justify-content:space-between;padding:9px 16px 4px;font:600 11px var(--mono);color:#0E1517;background:#fff}
+.ph .ttl{padding:4px 14px 10px;background:#fff;border-bottom:1px solid #DCE3E4}
+.ph .ttl b{display:block;font-size:14px}
+.ph .ttl small{font-size:11.5px;color:#566266}
+.msgs{padding:12px;display:flex;flex-direction:column;gap:8px}
+.mg{align-self:flex-start;max-width:94%;background:#fff;border-radius:4px 12px 12px 12px;padding:8px 10px;font-size:12.5px;line-height:1.5;box-shadow:0 1px 0 #DCE3E4}
+.mg time{display:block;font:500 10.5px var(--mono);color:#8D9C9F;margin-top:2px}
+.mg.nw{outline:2px solid #33B39E}
+.wk{padding:12px 14px;display:flex;flex-direction:column;gap:12px;background:#F6F8F8;flex:1}
+.wk .lbl{font-size:11.5px;font-weight:600;color:#566266;margin-bottom:5px}
+.lm3{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.lm3 button{height:42px;border-radius:8px;border:1px solid #DCE3E4;background:#fff;font:600 13px var(--mono);position:relative;text-align:center}
+.lm3 button i{position:absolute;top:5px;right:6px;width:7px;height:7px;border-radius:50%;background:#33B39E}
+.lm3 button i.s{background:#E5483B}
+.lm3 button[aria-pressed="true"]{border:2px solid #0D5E5A;color:#0D5E5A}
+.st2{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.st2 button{height:48px;border-radius:10px;border:1px solid #DCE3E4;background:#fff;font-weight:700;font-size:14px;text-align:center}
+.st2 button[aria-pressed="true"].run{background:#0D5E5A;color:#fff;border-color:#0D5E5A}
+.st2 button[aria-pressed="true"].stop{background:#B3261E;color:#fff;border-color:#B3261E}
+.sendb{height:50px;border-radius:12px;background:#0D5E5A;color:#fff;font-weight:700;font-size:16px;text-align:center}
+.sendb:disabled{opacity:.35}
+.tst{font-size:12px;color:#1B6E3A;background:#E4F2E8;border-radius:8px;padding:8px 10px}
+.wkside{max-width:250px;align-self:center;display:grid;gap:14px}
+.wkside div{border-left:3px solid var(--go);padding:2px 0 2px 12px}
+.wkside b{display:block;font-size:15px;color:var(--ink)}
+.wkside span{font-size:13px;color:var(--soft)}
+@media (max-width:640px){.ph{width:250px}.wkside{display:none}.phones{gap:20px}}
+.askw{max-width:760px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.chips button{min-height:36px;padding:6px 12px;border-radius:18px;border:1px solid #DCE3E4;background:#fff;font-size:13.5px;font-weight:600}
+.chips button[aria-pressed="true"]{border-color:#0D5E5A;color:#0D5E5A;background:#E2EFEE}
+.thr{display:grid;gap:10px}
+.bq{justify-self:end;background:#0E1517;color:#fff;border-radius:14px 14px 4px 14px;padding:8px 14px;font-weight:600;font-size:13.5px;max-width:85%}
+.ba{border:1px solid #DCE3E4;border-radius:14px 14px 14px 4px;padding:12px 14px;display:grid;gap:8px;font-size:13.5px;max-width:100%}
+.en{border-radius:8px;background:#F4F6F6;padding:10px 12px;display:grid;gap:6px}
+.en small{font-size:11.5px;color:#566266;font-weight:600}
+.en p{font:500 13px/1.55 var(--sans)}
+.sum{max-width:680px;margin:0 auto;display:grid;gap:16px;text-align:center;padding-top:20px}
+.sum h4{font-size:clamp(22px,2.6vw,30px);font-weight:700;letter-spacing:-.02em;color:var(--ink)}
+.sum ol{display:grid;gap:10px;text-align:left;margin:8px auto 0;max-width:500px}
+.sum li{display:grid;grid-template-columns:26px 1fr;gap:10px;align-items:start;font-size:15px;color:var(--ink)}
+.sum li i{width:22px;height:22px;border-radius:50%;background:var(--go);color:var(--go-ink);display:grid;place-items:center;font-size:12px;font-style:normal;font-weight:700;margin-top:2px}
+.sum .act{display:flex;justify-content:center;flex-wrap:wrap;gap:10px;margin-top:10px}
+
+/* fix */
+.fix{display:grid;border-top:1px solid var(--line)}
+.fix li{display:grid;grid-template-columns:minmax(0,4fr) 40px minmax(0,7fr);gap:20px;align-items:start;padding:26px 0;border-bottom:1px solid var(--line)}
+.fix h3{font-size:18px;font-weight:700;line-height:1.4}
+.fix h3 small{display:block;font-size:14px;font-weight:500;color:var(--soft);margin-top:4px}
+.fix .ar{font:400 22px var(--mono);color:var(--go);text-align:center}
+.fix p{color:var(--soft)}
+.fix p b{color:var(--ink);font-weight:600}
+@media (max-width:760px){.fix li{grid-template-columns:1fr;gap:6px}.fix .ar{display:none}}
+
+/* process */
+.proc{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.proc li{border:1px solid var(--line);border-radius:10px;padding:20px;display:flex;flex-direction:column;gap:8px;background:var(--bg)}
+.proc .no{font:600 13px var(--mono);color:var(--go)}
+.proc h3{font-size:17px;font-weight:700}
+.proc p{font-size:15px;color:var(--soft)}
+.proc .out{margin-top:auto;padding-top:12px;border-top:1px solid var(--line);font-size:14px;color:var(--ink)}
+.proc .out b{color:var(--go);font-weight:600;margin-right:6px}
+@media (max-width:1000px){.proc{grid-template-columns:1fr 1fr}}
+@media (max-width:560px){.proc{grid-template-columns:1fr}}
+
+/* price */
+.scroll{overflow-x:auto}
+.price{width:100%;border-collapse:collapse;min-width:640px}
+.price th,.price td{padding:16px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+.price thead th{font-size:13px;color:var(--soft);font-weight:600}
+.price td.v{font:700 20px var(--sans);font-variant-numeric:tabular-nums;white-space:nowrap;letter-spacing:-.01em}
+.price td.v small{display:block;font:400 13px var(--sans);color:var(--soft);text-decoration:line-through;margin-top:2px}
+.price .nm{font-weight:700;font-size:16px;white-space:nowrap}
+.price .ds{font-size:14px;color:var(--soft)}
+.pnote{margin-top:18px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;font-size:14px;color:var(--soft)}
+.pnote b{display:block;color:var(--ink);font-size:15px;margin-bottom:2px}
+@media (max-width:900px){.pnote{grid-template-columns:1fr}}
+
+/* safe */
+.safe{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.safe li{padding-top:16px;border-top:2px solid var(--ink)}
+.safe h3{font-size:16px;font-weight:700}
+.safe p{margin-top:6px;font-size:14.5px;color:var(--soft)}
+@media (max-width:900px){.safe{grid-template-columns:1fr 1fr;gap:24px 16px}}
+@media (max-width:520px){.safe{grid-template-columns:1fr}}
+
+/* faq */
+.faq{border-top:1px solid var(--line);max-width:880px}
+.faq details{border-bottom:1px solid var(--line)}
+.faq summary{list-style:none;cursor:pointer;padding:18px 32px 18px 0;font-weight:600;position:relative}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";position:absolute;right:4px;top:16px;font:400 22px var(--mono);color:var(--soft)}
+.faq details[open] summary::after{content:"−"}
+.faq details p{padding:0 0 20px;color:var(--soft);max-width:44em}
+
+/* form */
+.form{display:grid;grid-template-columns:minmax(0,6fr) minmax(0,6fr);gap:40px}
+.fg{display:grid;gap:18px}
+.fld label,.fld .lgd{display:block;font-size:14px;font-weight:600;margin-bottom:6px}
+.fld input,.fld select{width:100%;height:46px;border:1px solid var(--line);border-radius:8px;padding:0 12px;background:var(--bg)}
+.fld input:focus,.fld select:focus{outline:2px solid var(--go);outline-offset:0;border-color:transparent}
+.opts{display:flex;flex-wrap:wrap;gap:6px}
+.opts label{position:relative;display:inline-flex;align-items:center;gap:6px;height:38px;padding:0 12px;border:1px solid var(--line);border-radius:19px;font-size:14px;font-weight:500;cursor:pointer;margin:0}
+.fld .opts input{position:absolute;left:0;top:0;width:1px;height:1px;opacity:0;pointer-events:none}
+.opts label:has(input:checked){border-color:var(--go);background:var(--go-soft);color:var(--go);font-weight:600}
+.opts label:has(input:focus-visible){outline:2px solid var(--go);outline-offset:2px}
+.msg{border:1px solid var(--line);border-radius:10px;background:var(--panel);padding:20px;display:flex;flex-direction:column;gap:12px}
+.msg pre{margin:0;white-space:pre-wrap;font:400 14px/1.7 var(--sans);min-height:220px}
+.msg .row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.msg small{font-size:13px;color:var(--soft)}
+.dflow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:28px}
+.dflow li{display:grid;grid-template-columns:28px minmax(0,1fr);gap:2px 10px;align-items:center;padding:14px 16px;border:1px solid var(--line);border-radius:10px;background:var(--bg)}
+.dflow i{grid-row:span 2;width:26px;height:26px;border-radius:50%;background:var(--go);color:var(--go-ink);display:grid;place-items:center;font:600 12px var(--mono);font-style:normal}
+.dflow b{font-size:15px}
+.dflow span{font-size:13px;color:var(--soft)}
+.fld2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:700px){.dflow{grid-template-columns:1fr}}
+@media (max-width:480px){.fld2{grid-template-columns:1fr;gap:18px}}
+.who{margin-top:36px;padding-top:20px;border-top:1px solid var(--line);font-size:14px;color:var(--soft)}
+.who b{color:var(--ink);margin-right:8px}
+@media (max-width:900px){.form{grid-template-columns:1fr}}
+
+footer{padding-block:40px 56px;font-size:13px;color:var(--soft)}
+footer .w{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+</style>
+
+<header class="top"><div class="w">
+  <span class="brand">bigC company<small>공장 생산관리(MES)</small></span>
+  <nav class="nav" aria-label="이 페이지"><a href="#voice">현장의 말</a><a href="#route">질문 하나의 길</a><a href="#demo">3분 데모</a><a href="#fix">바꾸는 순서</a><a href="#price">비용</a><a href="#faq">질문</a></nav>
+  <a class="btn pri" href="#ask">무료 현장 진단</a>
+</div></header>
+
+<section class="hero"><div class="w">
+  <div>
+    <p class="eyebrow">베트남·필리핀 한국계 섬유 공장 · 생산관리 시스템</p>
+    <h1>아직도 수기로 업무지시와 생산라인에 제작을 부탁하고 계십니까?</h1>
+    <p class="sub">오더 등록부터 출고까지 종이·엑셀·카톡으로 흩어진 공장 일을 한 화면으로 모읍니다. 영업 담당은 생산팀에 묻지 않고 바이어에게 답하고, 대표님은 공장 밖에서도 휴대폰 앱으로 생산라인 현황을 실시간으로 보십니다. 쓰시던 ERP는 그대로 둡니다.</p>
+    <div class="act"><a class="btn pri" href="#demo">3분 데모 눌러 보기</a><a class="btn sec" href="#ask">무료 현장 진단 신청</a></div>
+    <p class="meta"><span>데모는 로그인 없이 바로</span><span>공장 밖에서도 앱으로 실시간</span><span>한국어 · Tiếng Việt · English</span></p>
+  </div>
+  <figure><img src="photo/floor.jpg" alt="웨빙 직기가 줄지어 선 공장 통로"><figcaption>웨빙 직기 줄. 예시 사진입니다.</figcaption></figure>
+</div></section>
+
+<section class="blk alt" id="voice"><div class="w">
+  <div class="sh"><h2>현장에서는 이렇게 말합니다</h2><p>베트남·필리핀의 한국계 공장에서 들은 말을 옮겼습니다. 이름과 회사는 밝히지 않습니다. 모든 공장이 이렇지는 않습니다. 다만 이 가운데 두세 가지가 겹치면 현장에서는 한마디로 부릅니다.</p></div>
+  <div class="voices">
+    <div class="role"><h3><i>영</i><span>영업 실무자(MD)<small>바이어와 공장 사이</small></span></h3>
+      <div class="q"><blockquote>바이어가 내일 출고되냐고 묻는데, 생산팀은 「봐야 안다」고만 해요. 결국 제가 라인마다 돌아다니면서 물어봅니다.</blockquote><p class="leak">답 하나에 반나절</p></div>
+      <div class="q"><blockquote>급한 오더 하나 끼워 달라고 하면 그때부터 싸움이에요. 출고 날 색이 틀리면, 영업은 지시했다고 하고 생산은 못 들었다고 하고요.</blockquote><p class="leak">책임 떠넘기기 · 카톡 뒤지기</p></div>
+      <div class="q"><blockquote>오더는 매번 엑셀에서 손으로 다시 칩니다. 한 줄 빠져도 아무도 몰라요.</blockquote><p class="leak">수동 등록 · 누락</p></div>
+    </div>
+    <div class="role"><h3><i>생</i><span>생산라인 담당<small>오래 현장을 지킨 분</small></span></h3>
+      <div class="q"><blockquote>지금도 잘 돌아가는데 왜 바꿉니까. 프로그램 들어오면 입력할 일만 늘어요.</blockquote><p class="leak">굳은 방식 · 한 사람에게 묶인 정보</p></div>
+      <div class="q"><blockquote>베트남어로 지시하고 한국어로 보고하는 사이에 말이 바뀝니다. 통역이 없으면 손짓으로 합니다.</blockquote><p class="leak">번역 손실</p></div>
+    </div>
+    <div class="role"><h3><i>공</i><span>공장장 · 법인장<small>현지 임원</small></span></h3>
+      <div class="q"><blockquote>원사가 몇 롤 남았는지 물으면 창고에 사람을 보내야 합니다. 엑셀 숫자와 실물이 다르니까요.</blockquote><p class="leak">실 재고를 모름</p></div>
+      <div class="q"><blockquote>라인마다 현황을 직접 확인하러 다니다 보면 하루가 갑니다. 정작 제 일은 저녁에 합니다.</blockquote><p class="leak">실 업무에 집중 못 함</p></div>
+    </div>
+    <div class="role"><h3><i>대</i><span>한국 본사 대표<small>결정하는 사람</small></span></h3>
+      <div class="q"><blockquote>한국에서는 카톡 보고만 봅니다. 늦어지는 오더가 있는지는 문제가 터지고 나서야 압니다.</blockquote><p class="leak">늦게 아는 손해</p></div>
+      <div class="q"><blockquote>비싼 ERP를 들였는데 현장은 여전히 엑셀을 따로 돌립니다. 숫자가 두 벌이에요.</blockquote><p class="leak">현장과 안 맞는 ERP</p></div>
+    </div>
+  </div>
+  <div class="vnote"><b>「총체적 난국」</b><p>사람이 일을 못해서가 아닙니다. 오더·재고·생산 현황이 한곳에 없어서, 모두가 서로에게 묻고 기다리는 구조입니다.</p></div>
+</div></section>
+
+<section class="blk" id="route"><div class="w">
+  <div class="sh"><h2>바이어 질문 하나가 공장을 도는 길</h2><p>「W-1104 내일 출고됩니까?」 같은 질문 하나에 답이 나오기까지를 따라가 보았습니다. 아래 시각은 예시입니다.</p></div>
+  <div class="route">
+    <div class="rt bad"><h3>지금<small>사람에게 묻고 기다림</small></h3>
+      <ol class="hops">
+        <li class="hop"><time>09:10</time><b>바이어 메일</b><span>영업 담당 수신</span></li>
+        <li class="hop"><time>09:20</time><b>카톡으로 문의</b><span>생산팀장 회의 중</span></li>
+        <li class="hop"><time>11:00</time><b>라인 담당 확인</b><span>직기 한 대 정지</span></li>
+        <li class="hop"><time>13:30</time><b>창고 실사</b><span>원사 수량 다름</span></li>
+        <li class="hop"><time>15:00</time><b>엑셀 다시 계산</b><span>사람마다 다른 숫자</span></li>
+        <li class="hop"><time>15:40</time><b>바이어에게 답</b><span>그래도 확실하지 않음</span></li>
+      </ol></div>
+    <div class="rt good"><h3>바뀐 뒤<small>화면에 이미 있음</small></h3>
+      <ol class="hops">
+        <li class="hop"><time>09:10</time><b>바이어 메일</b><span>영업 담당 수신</span></li>
+        <li class="hop"><time>09:11</time><b>질문창에서 오더 확인</b><span>남은 길이 · 끝나는 시각 · 원사 재고</span></li>
+        <li class="hop"><time>09:12</time><b>영문 답장 복사해 회신</b><span>생산팀에 묻지 않음</span></li>
+      </ol></div>
+  </div>
+</div></section>
+
+<section id="demo" class="alt"><div class="w">
+  <div class="sh"><h2>3분 데모 — 오더 하나를 끝까지 따라가 보십시오</h2><p>주황색 테두리가 누를 곳입니다. 일곱 단계, 로그인은 없습니다. 화면 속 회사·고객·수량은 모두 가명과 예시입니다.</p></div>
+  <div class="tour" id="tour">
+    <aside class="steps" aria-label="데모 단계">
+      <div class="hd"><b>데모 순서</b><span id="t-cnt"></span></div>
+      <div id="t-list"></div>
+      <div class="lang"><span>화면 언어</span><span class="seg" role="group" aria-label="화면 언어" data-lang><button type="button" data-l="ko" aria-pressed="true">한국어</button><button type="button" data-l="vi" aria-pressed="false">VI</button><button type="button" data-l="en" aria-pressed="false">EN</button></span></div>
+    </aside>
+    <div class="stagew">
+      <div class="mstep" id="t-m"></div>
+      <div class="sbar"><span class="dm">DEMO</span><span class="txt">가람 웨빙 VINA (가명) · 오늘 14:30 기준</span><span class="seg mlang" role="group" aria-label="화면 언어" data-lang><button type="button" data-l="ko" aria-pressed="true">한국어</button><button type="button" data-l="vi" aria-pressed="false">VI</button><button type="button" data-l="en" aria-pressed="false">EN</button></span><span class="sp"></span><button type="button" id="t-prev">이전</button><button type="button" class="go" id="t-next">다음</button></div>
+      <div class="prog"><i id="t-prog"></i></div>
+      <div class="stage scr" id="stage" aria-live="polite"></div>
+    </div>
+  </div>
+</div></section>
+
+<section class="blk" id="fix"><div class="w">
+  <div class="sh"><h2>오래 굳은 방식은 이 순서로 바꿉니다</h2><p>좋은 프로그램이 없어서 못 바꾼 공장은 드뭅니다. 현장이 받아들이지 않아서 멈춘 경우가 대부분입니다. 그래서 사람을 바꾸지 않고, 일하는 순서를 그대로 화면에 옮기는 데서 시작합니다.</p></div>
+  <ol class="fix">
+    <li><h3>종이 · 엑셀 · 카톡으로 굳은 방식<small>「원래 이렇게 해 왔습니다」</small></h3><span class="ar">→</span><p><b>쓰시던 엑셀 양식을 그대로 화면으로 옮깁니다.</b> 오더는 엑셀에서 복사해 붙여 넣으면 줄마다 읽히고, 빈칸이 있으면 등록 전에 멈춥니다. 첫날부터 새 양식을 외울 필요가 없습니다.</p></li>
+    <li><h3>현장과 맞지 않는 기존 ERP<small>「숫자가 두 벌입니다」</small></h3><span class="ar">→</span><p><b>ERP는 회계와 본사에 그대로 둡니다.</b> 저희는 그 옆에서 공장 바닥의 오더 진행 · 현장 입력 · 재고만 맡고, ERP가 자료를 내보내는 방식에 맞춰 연결합니다.</p></li>
+    <li><h3>한 사람에게 묶인 정보<small>「팀장님이 안 계시면 아무도 모릅니다」</small></h3><span class="ar">→</span><p><b>오래 현장을 지킨 분의 순서를 먼저 화면에 담습니다.</b> 그분의 판단 순서대로 화면을 짜고, 입력은 버튼 몇 번으로 줄입니다. 가장 반대하던 분이 먼저 편해져야 공장 전체가 따라옵니다.</p></li>
+    <li><h3>말이 바뀌는 번역<small>「통역이 없으면 손짓으로 합니다」</small></h3><span class="ar">→</span><p><b>같은 화면을 각자 자기 말로 봅니다.</b> 작업자는 베트남어, 본사는 한국어, 바이어 답장은 영어로. 지시와 보고가 한 기록에 남아 「못 들었다」가 사라집니다.</p></li>
+  </ol>
+</div></section>
+
+<section class="blk alt" id="how"><div class="w">
+  <div class="sh"><h2>한 공정부터 시작해, 단계마다 결정하십니다</h2><p>공장 전체를 한 번에 바꾸지 않습니다. 단계가 끝날 때마다 결과물을 보여 드리고, 다음으로 넘어갈지는 대표님이 정하십니다. 일정은 공장 크기와 공정 수에 따라 달라 상담 때 담당자가 말씀드립니다.</p></div>
+  <ol class="proc">
+    <li><span class="no">1</span><h3>현장 진단</h3><p>사전 질문으로 공장 사정을 먼저 듣고, 상담에서 날짜를 맞춰 방문합니다. 오더가 들어와 출고될 때까지를 따라가며 어디에 무엇이 적히는지 봅니다.</p><p class="out"><b>받으시는 것</b>업무 흐름 한 장 · 새는 곳 목록 (무료)</p></li>
+    <li><span class="no">2</span><h3>화면 시안</h3><p>대표님 공장의 오더와 직기 이름을 넣어 눌러 볼 수 있는 화면부터 만듭니다. 「이게 아닌데」는 만들기 전에 잡습니다.</p><p class="out"><b>받으시는 것</b>눌러 보는 시안 · 화면 목록</p></li>
+    <li><span class="no">3</span><h3>한 공정부터</h3><p>오더 → 현장 입력 → 본사 화면처럼 한 줄만 먼저 켭니다. 작업자 몇 명이 실제로 쓰고, 그 기록으로 확인합니다.</p><p class="out"><b>받으시는 것</b>운영 서버 · 사용 기록 보고</p></li>
+    <li><span class="no">4</span><h3>넓히고 넘겨드림</h3><p>재고, 불량, 패킹, 본사 보고로 넓힙니다. 작업자 교육과 기존 자료 옮기기까지 하고, 계정과 자료는 대표님 회사 명의로 정리합니다.</p><p class="out"><b>받으시는 것</b>계정 · 자료 · 백업 · 사용 설명</p></li>
+  </ol>
+</div></section>
+
+<section class="blk" id="price"><div class="w">
+  <div class="sh"><h2>단계별 비용</h2><p>처음 다섯 곳은 시범가로 합니다. 그 대신 사용 후기와 익명 사례 공개를 부탁드립니다. 공장마다 공정이 달라 최종 금액은 현장 진단 뒤에 정합니다.</p></div>
+  <div class="scroll"><table class="price">
+    <thead><tr><th scope="col">단계</th><th scope="col">하는 일</th><th scope="col">첫 5곳 시범가</th></tr></thead>
+    <tbody>
+      <tr><td><p class="nm">업무 정비</p></td><td><p class="ds">현장 방문 진단, 오더·작업지시 양식 정리, 엑셀 정돈</p></td><td class="v">80만 원<small>정가 160만 원</small></td></tr>
+      <tr><td><p class="nm">오더와 납기</p></td><td><p class="ds">엑셀 붙여넣기 오더 등록, 작업지시, 끝나는 시각 계산, 늦어질 오더 알림</p></td><td class="v">200만 원<small>정가 400만 원</small></td></tr>
+      <tr><td><p class="nm">현장 입력과 현황판</p></td><td><p class="ds">작업자 휴대폰 입력(현지어), 본사 화면, 벽 TV, 공장 밖 휴대폰 앱 실시간 확인, 인터넷 끊김 보관</p></td><td class="v">240만 원<small>정가 480만 원</small></td></tr>
+      <tr><td><p class="nm">재고와 불량 추적</p></td><td><p class="ds">원사 재고와 남은 오더 대조, 불량 기록, 패킹 잔량</p></td><td class="v">260만 원<small>정가 520만 원</small></td></tr>
+      <tr><td><p class="nm">통합 운영</p></td><td><p class="ds">위 전부 + 질문창, 잘로·카톡 알림, 역할별 권한, 지워지지 않는 기록, 3개 언어</p></td><td class="v">800만~1,000만 원<small>정가 1,600만~2,000만 원</small></td></tr>
+    </tbody>
+  </table></div>
+  <div class="pnote">
+    <p><b>서버·백업·수정 포함 월 관리</b>단계 운영 월 15만 원, 통합 운영 월 30만 원. 선택입니다. 서버 이용료는 실비입니다.</p>
+    <p><b>대금</b>선금 50%, 납품 후 50%. 한국 계좌 또는 현지 계좌로 받습니다.</p>
+    <p><b>계정과 자료</b>서버 계정과 자료는 대표님 회사 명의로 만듭니다.</p>
+  </div>
+</div></section>
+
+<section class="blk alt" id="safe"><div class="w">
+  <div class="sh"><h2>공장 자료는 이렇게 지킵니다</h2><p>생산 숫자는 단가와 거래처로 이어집니다.</p></div>
+  <ul class="safe">
+    <li><h3>맡은 화면만 엽니다</h3><p>작업자, 공장장, 영업, 구매, 본사로 나눠 권한을 줍니다. 누구에게 무엇을 열지는 대표님 회사 조직표대로 정합니다.</p></li>
+    <li><h3>지워지지 않는 기록</h3><p>누가 · 언제 · 무엇을 · 전과 후를 그 순간에 남깁니다. 고치거나 지우는 길은 만들지 않습니다.</p></li>
+    <li><h3>인터넷이 끊겨도 한 번만</h3><p>휴대폰이 입력을 보관했다가 다시 연결되면 확인 후 보냅니다. 같은 입력이 두 번 들어가지 않습니다.</p></li>
+    <li><h3>백업과 복원 연습</h3><p>매일·매주 백업과 외부 보관본을 두고, 실제로 되살려 보는 연습까지 합니다.</p></li>
+  </ul>
+</div></section>
+
+<section class="blk" id="faq"><div class="w">
+  <div class="sh"><h2>자주 받는 질문</h2><p>상담 전에 미리 답해 둡니다.</p></div>
+  <div class="faq">
+    <details><summary>지금 쓰는 ERP를 바꿔야 합니까?</summary><p>아닙니다. 회계와 본사 업무는 쓰시던 ERP에 두고, 공장 바닥의 오더 진행 · 현장 입력 · 재고만 맡습니다. ERP가 자료를 어떤 방식으로 내보내는지 현장 진단 때 확인해 연결 방법을 정합니다.</p></details>
+    <details><summary>오래된 현장 담당자들이 정말 쓸까요?</summary><p>그분들의 일하는 순서를 먼저 화면에 옮기고, 입력은 버튼 몇 번으로 줄입니다. 처음에는 한 라인의 몇 분만 쓰고, 입력이 빠지는 시간을 기록으로 보면서 넓힙니다.</p></details>
+    <details><summary>공장 밖에서도 볼 수 있습니까?</summary><p>예. 휴대폰 앱으로 출장 중에도, 한국에서도 생산라인 현황 · 늦어질 오더 · 재고를 실시간으로 봅니다. 누가 무엇을 볼지는 사람마다 따로 정합니다.</p></details>
+    <details><summary>공장 인터넷이 자주 끊깁니다.</summary><p>휴대폰이 입력을 보관했다가 다시 연결되면 보냅니다. 그 사이 서버 값이 바뀌었으면 차이를 보여 주고 사람이 확인해야 보내므로, 같은 입력이 두 번 들어가지 않습니다.</p></details>
+    <details><summary>기계에 센서를 달아야 합니까?</summary><p>달지 않아도 됩니다. 휴대폰 입력만으로 시작합니다. 나중에 직기에 센서를 달아 기계가 가동·정지와 짠 길이를 직접 보고하게 하는 단계도 가능하며, 필요하시면 상담 때 방법과 비용을 따로 말씀드립니다.</p></details>
+    <details><summary>필리핀 공장도 됩니까?</summary><p>됩니다. 마닐라 근교와 호치민 근교는 직접 방문합니다. 화면 언어는 한국어·베트남어·영어가 있고, 다른 언어는 상담 때 말씀해 주십시오.</p></details>
+    <details><summary>데모의 숫자는 실제 공장 자료입니까?</summary><p>아닙니다. 공장 이름, 고객, 오더, 수량은 모두 가명과 예시입니다.</p></details>
+  </div>
+</div></section>
+
+<section class="blk" id="ask" style="border-bottom:0"><div class="w">
+  <div class="sh"><h2>공장을 한 번 보여 주십시오. 진단은 무료입니다.</h2><p>방문 전에 공장 사정을 먼저 듣고, 일정 조율 상담에서 날짜와 볼 곳을 정합니다. 미리 알수록 현장에서 보는 시간이 짧아지고 진단이 정확해집니다.</p></div>
+  <ol class="dflow">
+    <li><i>1</i><b>사전 질문</b><span>아래 양식으로 공장 사정을 보내 주십시오</span></li>
+    <li><i>2</i><b>일정 조율 상담</b><span>통화·카톡으로 날짜와 볼 공정을 정합니다</span></li>
+    <li><i>3</i><b>현장 진단 방문</b><span>업무 흐름 한 장 · 새는 곳 목록을 드립니다</span></li>
+  </ol>
+  <form class="form" id="f" novalidate>
+    <div class="fg">
+      <div class="fld"><label for="f-co">회사 이름</label><input id="f-co" autocomplete="organization" placeholder="예: ○○ 웨빙"></div>
+      <div class="fld2">
+        <div class="fld"><label for="f-where">공장 위치</label><select id="f-where"><option>베트남 남부 (호치민·빈증·동나이·롱안)</option><option>베트남 북부</option><option>필리핀</option><option>인도네시아</option><option>기타</option></select></div>
+        <div class="fld"><label for="f-ind">업종</label><select id="f-ind"><option>섬유·원부자재 (웨빙·지퍼·라벨·끈)</option><option>봉제·의류</option><option>사출·플라스틱</option><option>금속·가공</option><option>전자·조립</option><option>기타 제조</option></select></div>
+      </div>
+      <div class="fld2">
+        <div class="fld"><label for="f-size">현장 인원</label><select id="f-size"><option>50명 미만</option><option selected>50~150명</option><option>150~300명</option><option>300명 이상</option></select></div>
+        <div class="fld"><label for="f-mc">설비(직기·기계) 수</label><select id="f-mc"><option>20대 미만</option><option selected>20~60대</option><option>60~150대</option><option>150대 이상</option></select></div>
+      </div>
+      <div class="fld2">
+        <div class="fld"><label for="f-ord">한 달 오더 건수</label><select id="f-ord"><option>50건 미만</option><option selected>50~200건</option><option>200~500건</option><option>500건 이상</option></select></div>
+        <div class="fld"><label for="f-erp">쓰는 ERP (있으면)</label><input id="f-erp" placeholder="예: 이카운트, 더존, 자체 엑셀"></div>
+      </div>
+      <div class="fld"><span class="lgd">지금 쓰는 것</span><div class="opts" id="f-now">
+        <label><input type="checkbox" value="ERP" checked>ERP</label><label><input type="checkbox" value="엑셀" checked>엑셀</label><label><input type="checkbox" value="카톡·잘로" checked>카톡·잘로</label><label><input type="checkbox" value="종이 작업지시서">종이 작업지시서</label></div></div>
+      <div class="fld"><span class="lgd">가장 답답한 곳</span><div class="opts" id="f-pain">
+        <label><input type="checkbox" value="바이어 납기 답변" checked>바이어 납기 답변</label><label><input type="checkbox" value="오더 누락">오더 누락</label><label><input type="checkbox" value="재고 파악">재고 파악</label><label><input type="checkbox" value="생산 현황 파악" checked>생산 현황 파악</label><label><input type="checkbox" value="영업·생산 갈등">영업·생산 갈등</label><label><input type="checkbox" value="번역">번역</label></div></div>
+      <div class="fld"><label for="f-first">가장 먼저 풀고 싶은 일 (한 줄)</label><input id="f-first" placeholder="예: 바이어 납기 문의에 그날 바로 답하고 싶다"></div>
+    </div>
+    <div class="msg">
+      <pre id="f-out"></pre>
+      <div class="row"><button type="button" class="btn pri" id="f-copy">글 복사</button><small id="f-st">복사한 글을 이 주소를 받으신 카카오톡이나 메일로 보내 주십시오.</small></div>
+    </div>
+  </form>
+  <p class="who"><b>bigC company</b>현장 18년 · 다양한 프로젝트 개발 · 현장 참여 프로젝트 기획·개발</p>
+</div></section>
+
+<footer><div class="w"><span>bigC company · 공장 생산관리(MES)</span><span>현장의 말은 들은 말을 옮긴 것이며 이름·회사는 밝히지 않습니다. 데모 속 회사·고객·수량은 가명과 예시입니다.</span></div></footer>
+
+<script>
+(()=>{
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const D0=new Date();D0.setHours(14,30,0,0);
+const day=n=>{const d=new Date(D0);d.setDate(d.getDate()+n);return d};
+const WD={ko:['일','월','화','수','목','금','토'],en:['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],vi:['CN','T2','T3','T4','T5','T6','T7']};
+const md=(n,l)=>{const d=day(n);return `${d.getMonth()+1}/${d.getDate()}(${WD[l][d.getDay()]})`};
+const MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const enDate=n=>{const d=day(n);return `${MON[d.getMonth()]} ${d.getDate()}`};
+
+/* ---------- screen words ---------- */
+const T={
+ko:{nav:['오더','현황','재고','기록'],who:'본사 · 대표',
+ reg:'오더 등록',regH:'바이어 오더 엑셀에서 줄을 복사해 붙여 넣으세요. 빈칸이 있으면 등록 전에 멈춥니다.',paste:'붙여넣기',regBtn:n=>`${n}줄 등록`,miss:'색상 빈칸 1줄 — 등록 전에 채워 주세요',pick:'색 선택',ok:n=>`${n}줄 등록 · 빠진 칸 0`,
+ h:['오더','고객(가명)','품목','색상','수량(m)','납기'],
+ k:['오늘 생산','가동 직기','지연 예상 오더','부족한 원사'],cnt:'건',
+ c1:'W-1104 납기 지연 예상',c1g:'W-1104 납기 내 완료 예정',late:'지연 예상',ontime:'납기 내',
+ c1p:(a,b)=>`끝나는 시각 ${a} · 납기 ${b}`,why:'이유',how:'방법',c1w:'직기 L-14 정지 2시간 10분째 (경사 끊김)',c1h:'L-14 재가동, 또는 대기 중인 L-31을 붙이면 납기 내 완료',c1gp:a=>`끝나는 시각 ${a} · 현장에서 L-14 재가동`,more:'이유 보기',
+ c2:'W-1112 반사사가 모자랍니다',c2p:'남은 실 3,200m 분량 · 남은 오더 5,900m',mat:'자재',
+ inv:'원사 재고',invS:'입고·투입 기록 기준',inv1:'나일론 블랙',inv2:'PP 올리브',inv3:'반사사',roll:'롤',
+ log:'기록',logS:'지워지지 않음',l1:'L-25 정지 · 색 교체',l2:'L-14 정지 · 경사 끊김',l3:'W-1131~1134 등록 · 영업',l4:'L-14 정지 → 가동 · 직기 담당',
+ ntf:'방금 현장 입력: L-14 정지 → 가동',
+ pz:'공장장 휴대폰',pk:'대표님 휴대폰 (한국)',zt:'잘로 · 공장장',zs:'자동 알림',kt:'카카오톡 · 대표님',ks:'자동 알림',
+ a1:'L-14 30분 넘게 정지 · 경사 끊김',a2:a=>`W-1104 납기 넘김 예상 · 끝나는 시각 ${a}`,a3:'L-14 다시 가동 · W-1104 납기 내 완료로 회복',
+ wt:'직기 입력',ws:'Nguyễn V. An · 주간조',wl:'직기 고르기',wst:'상태',run:'가동',stop:'정지',send:'보내기',sent:'보냈습니다. 본사 화면이 바뀌었습니다.',
+ w1:'버튼 세 번',w1s:'직기 · 상태 · 보내기. 숫자는 짠 길이를 넣을 때만 씁니다.',w2:'작업자 말로',w2s:'실제 현장에서는 베트남어 화면입니다. 「화면 언어」에서 바꿔 보실 수 있습니다.',
+ askT:'영업 담당 질문창',askS:'바이어에게 답하기 전에 묻습니다',
+ q:['W-1104 내일 출고 돼요?','반사사 재고 몇 롤?','오늘 라인별 생산량?'],ex:'예시 답',
+ a1q:a=>`예. W-1104는 ${a}에 제직이 끝나 납기(18:00) 안입니다. 남은 길이 19,200m, 직기 5대가 돌고 있습니다.`,
+ a2q:'기록상 반사사는 3롤 남아 있습니다. W-1112를 끝내려면 6롤이 필요해 3롤이 모자랍니다. 구매 요청 버튼이 공장장 화면에 떠 있습니다.',
+ a3q:'1라인 18,400m · 2라인 15,120m · 3라인 12,760m. 어제 같은 시각보다 1,380m 많습니다.',
+ enT:'바이어에게 보낼 영어 문장',copy:'복사',copied:'복사했습니다'},
+vi:{nav:['Đơn hàng','Hiện trạng','Tồn kho','Nhật ký'],who:'Trụ sở · Giám đốc',
+ reg:'Nhập đơn hàng',regH:'Dán các dòng từ file Excel đơn hàng. Nếu có ô trống, hệ thống dừng trước khi lưu.',paste:'Dán',regBtn:n=>`Lưu ${n} dòng`,miss:'1 dòng thiếu màu — điền trước khi lưu',pick:'Chọn màu',ok:n=>`Đã lưu ${n} dòng · thiếu 0`,
+ h:['Đơn','Khách (giả định)','Mặt hàng','Màu','SL (m)','Hạn'],
+ k:['Sản lượng hôm nay','Máy đang chạy','Đơn sẽ trễ','Sợi thiếu'],cnt:'',
+ c1:'Đơn W-1104 dự kiến trễ hạn',c1g:'Đơn W-1104 dự kiến xong trong hạn',late:'Dự kiến trễ',ontime:'Trong hạn',
+ c1p:(a,b)=>`Xong lúc ${a} · hạn ${b}`,why:'Lý do',how:'Cách xử lý',c1w:'Máy L-14 dừng 2 giờ 10 phút (đứt sợi dọc)',c1h:'Chạy lại L-14, hoặc thêm L-31 đang chờ thì kịp',c1gp:a=>`Xong lúc ${a} · xưởng đã chạy lại L-14`,more:'Xem lý do',
+ c2:'Đơn W-1112 thiếu sợi phản quang',c2p:'Sợi còn đủ 3.200m · đơn còn 5.900m',mat:'Vật tư',
+ inv:'Tồn kho sợi',invS:'theo nhập kho · xuất dùng',inv1:'Nylon đen',inv2:'PP ô liu',inv3:'Sợi phản quang',roll:'cuộn',
+ log:'Nhật ký',logS:'không thể xoá',l1:'L-25 dừng · đổi màu',l2:'L-14 dừng · đứt sợi dọc',l3:'Nhập W-1131~1134 · kinh doanh',l4:'L-14 dừng → chạy · thợ dệt',
+ ntf:'Vừa nhập tại xưởng: L-14 dừng → chạy',
+ pz:'Điện thoại quản đốc',pk:'Điện thoại giám đốc (Hàn Quốc)',zt:'Zalo · Quản đốc',zs:'Thông báo tự động',kt:'KakaoTalk · Giám đốc',ks:'Thông báo tự động',
+ a1:'L-14 dừng quá 30 phút · đứt sợi dọc',a2:a=>`W-1104 dự kiến trễ · xong lúc ${a}`,a3:'L-14 đã chạy lại · W-1104 trở lại trong hạn',
+ wt:'Nhập máy dệt',ws:'Nguyễn V. An · Ca ngày',wl:'Chọn máy',wst:'Trạng thái',run:'Chạy',stop:'Dừng',send:'Gửi',sent:'Đã gửi. Màn hình trụ sở đã cập nhật.',
+ w1:'Ba lần bấm',w1s:'Máy · trạng thái · gửi.',w2:'Bằng tiếng của công nhân',w2s:'Tại xưởng màn hình này dùng tiếng Việt.',
+ askT:'Hỏi nhanh · kinh doanh',askS:'Hỏi trước khi trả lời khách',
+ q:['W-1104 mai xuất được không?','Sợi phản quang còn mấy cuộn?','Sản lượng theo chuyền hôm nay?'],ex:'Trả lời mẫu',
+ a1q:a=>`Được. W-1104 dệt xong lúc ${a}, trong hạn (18:00). Còn 19.200m, 5 máy đang chạy.`,
+ a2q:'Theo sổ sách còn 3 cuộn sợi phản quang. W-1112 cần 6 cuộn, thiếu 3. Nút yêu cầu mua đang hiện ở màn hình quản đốc.',
+ a3q:'Chuyền 1: 18.400m · Chuyền 2: 15.120m · Chuyền 3: 12.760m. Nhiều hơn cùng giờ hôm qua 1.380m.',
+ enT:'Câu tiếng Anh gửi khách',copy:'Sao chép',copied:'Đã sao chép'},
+en:{nav:['Orders','Status','Stock','Log'],who:'HQ · CEO',
+ reg:'Add orders',regH:'Paste rows copied from the buyer’s Excel order. Blank cells stop the import before saving.',paste:'Paste',regBtn:n=>`Save ${n} rows`,miss:'1 row missing color — fill in before saving',pick:'Pick color',ok:n=>`${n} rows saved · 0 missing`,
+ h:['Order','Customer (fictional)','Item','Color','Qty (m)','Due'],
+ k:['Output today','Looms running','Orders at risk','Yarn short'],cnt:'',
+ c1:'W-1104 delay expected',c1g:'W-1104 expected within due date',late:'Delay expected',ontime:'Within due date',
+ c1p:(a,b)=>`Finishes ${a} · due ${b}`,why:'Why',how:'Fix',c1w:'Loom L-14 stopped for 2h 10m (warp break)',c1h:'Restart L-14, or add idle L-31, and it is on time',c1gp:a=>`Finishes ${a} · L-14 restarted on the floor`,more:'See why',
+ c2:'W-1112 is short of reflective yarn',c2p:'Yarn on hand covers 3,200 m · 5,900 m left',mat:'Material',
+ inv:'Yarn stock',invS:'from receipts and issues',inv1:'Nylon black',inv2:'PP olive',inv3:'Reflective',roll:'cones',
+ log:'Log',logS:'cannot be deleted',l1:'L-25 stopped · color change',l2:'L-14 stopped · warp break',l3:'W-1131~1134 added · sales',l4:'L-14 stopped → running · operator',
+ ntf:'Floor entry just now: L-14 stopped → running',
+ pz:'Plant manager phone',pk:'CEO phone (Korea)',zt:'Zalo · Plant manager',zs:'Automatic alert',kt:'KakaoTalk · CEO',ks:'Automatic alert',
+ a1:'L-14 stopped over 30 min · warp break',a2:a=>`W-1104 expected late · finishes ${a}`,a3:'L-14 running again · W-1104 back within due date',
+ wt:'Loom entry',ws:'Nguyễn V. An · Day shift',wl:'Pick loom',wst:'Status',run:'Running',stop:'Stopped',send:'Send',sent:'Sent. The HQ screen has updated.',
+ w1:'Three taps',w1s:'Loom · status · send.',w2:'In the operator’s language',w2s:'On the floor this screen is in Vietnamese.',
+ askT:'Sales quick questions',askS:'Ask before you answer the buyer',
+ q:['Will W-1104 ship tomorrow?','How many cones of reflective yarn?','Output by line today?'],ex:'Sample answer',
+ a1q:a=>`Yes. W-1104 finishes weaving ${a}, within the due time (18:00). 19,200 m left, 5 looms running.`,
+ a2q:'Records show 3 cones of reflective yarn left. W-1112 needs 6, so 3 short. The purchase request button is waiting on the plant manager’s screen.',
+ a3q:'Line 1: 18,400 m · Line 2: 15,120 m · Line 3: 12,760 m. 1,380 m more than the same time yesterday.',
+ enT:'English sentence for the buyer',copy:'Copy',copied:'Copied'}
+};
+const COLOR={ko:['블랙','올리브','네이비','레드'],vi:['Đen','Ô liu','Xanh navy','Đỏ'],en:['Black','Olive','Navy','Red']};
+const ITEM={ko:['25mm 나일론','38mm PP','50mm 폴리','20mm 나일론'],vi:['Nylon 25mm','PP 38mm','Poly 50mm','Nylon 20mm'],en:['25 mm nylon','38 mm PP','50 mm poly','20 mm nylon']};
+
+/* ---------- state ---------- */
+let L='ko',D;
+const fresh=()=>({pasted:false,fixed:false,saved:false,open:false,sel:null,st:null,sent:false,q:null,copied:false,flash:false});
+const fin=()=>D.sent?`${md(1,L)} 16:06`:`${md(1,L)} 22:30`;
+const due=()=>`${md(1,L)} 18:00`;
+
+/* ---------- screens ---------- */
+const appbar=on=>{const t=T[L];return `<div class="ab"><b>${L==='ko'?'가람 웨빙 VINA':'Garam Webbing VINA'}</b><nav>${t.nav.map((x,k)=>`<span class="${k===on?'on':''}">${x}</span>`).join('')}</nav><span class="aw">${t.who}</span></div>`};
+function sOrders(){
+  const t=T[L],rows=[['W-1131','Alder Bags',0,0,'12,000',6],['W-1132','Pinecrest Outdoor',1,1,'8,000',7],['W-1133','Harbor Strap',2,null,'15,000',10],['W-1134','Kestrel Gear',3,3,'6,000',11]];
+  const raw=`<table>${rows.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td>${ITEM[L][r[2]]}</td>${r[3]==null?'<td class="e">—</td>':`<td>${COLOR[L][r[3]]}</td>`}<td>${r[4]}</td><td>${md(r[5],L)}</td></tr>`).join('')}</table>`;
+  let body;
+  if(!D.pasted) body=`<div class="paste" id="s-raw">${raw}</div><div class="bar2"><button type="button" class="abtn" id="s-paste">${t.paste}</button></div>`;
+  else{
+    const tr=rows.map(r=>{const c=r[3]==null?(D.fixed?`<td class="fixd">${COLOR[L][2]}</td>`:`<td class="miss" id="s-miss"><select aria-label="${t.pick}" id="s-sel"><option value="">${t.pick}</option>${COLOR[L].map((c,k)=>`<option value="${k}">${c}</option>`).join('')}</select></td>`):`<td>${COLOR[L][r[3]]}</td>`;
+      return `<tr><td class="n"><b>${r[0]}</b></td><td>${r[1]}</td><td>${ITEM[L][r[2]]}</td>${c}<td class="n">${r[4]}</td><td class="n">${md(r[5],L)}</td></tr>`}).join('');
+    body=`<div class="sc"><table class="ot"><thead><tr>${t.h.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${tr}</tbody></table></div>
+    <div class="bar2">${D.saved?`<span class="okline">✓ ${t.ok(4)}</span>`:D.fixed?`<button type="button" class="abtn" id="s-save">${t.regBtn(4)}</button>`:`<span class="errline">${t.miss}</span><button type="button" class="abtn" disabled>${t.regBtn(4)}</button>`}</div>`;
+  }
+  return `<div class="app">${appbar(0)}<div class="ac"><h4>${t.reg}</h4><p class="hint">${t.regH}</p>${body}</div></div>`;
+}
+function sDash(after){
+  const t=T[L];
+  const k=after?[['46,280','m',''],['41','/ 48',''],['0',t.cnt,'g'],['1',t.cnt,'r']]:[['46,280','m',''],['40','/ 48',''],['1',t.cnt,'r'],['1',t.cnt,'r']];
+  const kp=`<dl class="kp">${t.k.map((x,n)=>`<div><dt>${x}</dt><dd class="${k[n][2]}">${k[n][0]}<small>${k[n][1]}</small></dd></div>`).join('')}</dl>`;
+  const c1=after?`<article class="cd ok${D.flash?' flashy':''}" id="s-c1"><h5>${t.c1g} <span class="tg g">${t.ontime}</span></h5><p>${t.c1gp(fin())}</p></article>`
+   :`<article class="cd" id="s-c1"><h5>${t.c1} <span class="tg r">${t.late}</span></h5><p>${t.c1p(fin(),due())}</p>${D.open?`<dl class="more"><dt>${t.why}</dt><dd>${t.c1w}</dd><dt>${t.how}</dt><dd>${t.c1h}</dd></dl>`:`<button type="button" class="lk" id="s-more">${t.more} →</button>`}</article>`;
+  const c2=`<article class="cd w"><h5>${t.c2} <span class="tg y">${t.mat}</span></h5><p>${t.c2p}</p></article>`;
+  const inv=`<div class="box" id="s-inv"><h5>${t.inv}<small>${t.invS}</small></h5><ul class="inv"><li><span>${t.inv1}</span><span class="n">42 ${t.roll}</span></li><li><span>${t.inv2}</span><span class="n">18 ${t.roll}</span></li><li class="low"><span>${t.inv3}</span><span class="n">3 ${t.roll}</span></li></ul></div>`;
+  const lg=`<div class="box" id="s-log"><h5>${t.log}<small>${t.logS}</small></h5><ol class="lg">${after?`<li class="nw"><time>14:30</time><span>${t.l4}</span></li>`:''}<li><time>14:12</time><span>${t.l3}</span></li><li><time>14:05</time><span>${t.l1}</span></li><li><time>12:20</time><span>${t.l2}</span></li></ol></div>`;
+  return `<div class="app">${appbar(1)}<div class="ac">${after?`<p class="ntf">● ${t.ntf}</p>`:''}${kp}<div class="dash"><div class="cards">${c1}${c2}</div><div class="side">${inv}${lg}</div></div></div></div>`;
+}
+const phone=(title,sub,inner)=>`<div class="ph"><div class="in"><div class="st"><span>14:30</span><span>●●● 4G</span></div><div class="ttl"><b>${title}</b><small>${sub}</small></div>${inner}</div></div>`;
+function sAlerts(){
+  const t=T[L];
+  return `<div class="phones"><div class="pw"><p>${t.pz}</p>${phone(t.zt,t.zs,`<div class="msgs"><div class="mg"><b>${t.a1}</b><time>12:50</time></div><div class="mg" id="s-z2">${t.a2(`${md(1,L)} 22:30`)}<time>12:52</time></div></div>`)}</div><div class="pw"><p>${t.pk}</p>${phone(t.kt,t.ks,`<div class="msgs"><div class="mg" id="s-k1">${t.a2(`${md(1,L)} 22:30`)}<time>12:52</time></div></div>`)}</div></div>`;
+}
+function sWorker(){
+  const t=T[L],my=['L-11','L-12','L-13','L-14','L-15','L-31'];
+  const st=D.sent?'run':(D.st||'stop');
+  const inner=`<div class="wk"><div><p class="lbl">${t.wl}</p><div class="lm3">${my.map(id=>`<button type="button" data-lm="${id}" aria-pressed="${D.sel===id}">${id}<i class="${id==='L-14'&&!D.sent?'s':''}"></i></button>`).join('')}</div></div>
+   <div><p class="lbl">${t.wst}${D.sel?' · '+D.sel:''}</p><div class="st2"><button type="button" class="run" id="s-run" aria-pressed="${!!D.sel&&st==='run'}">${t.run}</button><button type="button" class="stop" aria-pressed="${!!D.sel&&st==='stop'}">${t.stop}</button></div></div>
+   ${D.sent?`<p class="tst">✓ ${t.sent}</p>`:''}
+   <button type="button" class="sendb" id="s-send" ${D.sel==='L-14'&&D.st==='run'&&!D.sent?'':'disabled'}>${t.send}</button></div>`;
+  return `<div class="phones">${phone(t.wt,t.ws,inner)}<div class="wkside"><div><b>${t.w1}</b><span>${t.w1s}</span></div><div><b>${t.w2}</b><span>${t.w2s}</span></div></div></div>`;
+}
+function sAsk(){
+  const t=T[L];
+  let th='';
+  if(D.q!=null){
+    const a=[t.a1q(`${md(1,L)} 16:06`),t.a2q,t.a3q][D.q];
+    th=`<p class="bq">${t.q[D.q]}</p><div class="ba"><span class="tg g" style="justify-self:start">${t.ex}</span><p>${a}</p>${D.q===0?`<div class="en"><small>${t.enT}</small><p id="s-en">Order W-1104 will be completed on ${enDate(1)} at 16:06, within the due date. We will ship as scheduled.</p><button type="button" class="abtn ghost" id="s-copy" style="justify-self:start;height:32px">${D.copied?'✓ '+t.copied:t.copy}</button></div>`:''}</div>`;
+  }
+  return `<div class="app askw">${appbar(0)}<div class="ac"><h4>${t.askT}</h4><p class="hint">${t.askS}</p><div class="chips">${t.q.map((x,k)=>`<button type="button" data-q="${k}" aria-pressed="${D.q===k}">${x}</button>`).join('')}</div><div class="thr">${th}</div></div></div>`;
+}
+function sSum(){
+  const it=['오더 4줄을 엑셀에서 붙여 넣고, 빠진 색상 한 칸을 등록 전에 잡았습니다.','지연 예상 오더를 출고 하루 전, 직기가 선 그 시각에 알았습니다.','공장장 잘로와 대표님 카톡에 같은 알림이 갔습니다.','작업자의 버튼 세 번으로 본사 화면이 「납기 내」로 바뀌었습니다.','영업 담당이 생산팀에 묻지 않고 바이어 영문 답장까지 만들었습니다.'];
+  return `<div class="sum"><h4>3분 동안 아무도 전화하지 않았습니다</h4><ol>${it.map(x=>`<li><i>✓</i><span>${x}</span></li>`).join('')}</ol><div class="act"><button type="button" class="btn sec" id="s-again">처음부터 다시</button><a class="btn pri" href="#ask">무료 현장 진단 신청</a></div></div>`;
+}
+
+/* ---------- steps ---------- */
+const S=[
+ {t:'오더 등록',s:'엑셀 붙여넣기 · 빠진 칸 잡기',v:sOrders,a:[
+   {sel:'#s-paste',tip:'바이어 오더 엑셀에서 네 줄을 복사해 왔습니다. 손으로 다시 치지 않고 그대로 붙여 넣습니다.',do:()=>{D.pasted=true}},
+   {sel:'#s-miss',tip:'세 번째 줄에 색상이 비어 있습니다. 예전 같으면 출고 날에야 알았을 누락입니다. 「네이비」를 고르십시오.',on:'change',do:()=>{D.fixed=true}},
+   {sel:'#s-save',tip:'빈칸이 없어야 등록 버튼이 열립니다. 눌러서 네 줄을 등록하십시오.',do:()=>{D.saved=true}},
+   {sel:'.okline',tip:'네 줄이 빠짐없이 들어갔습니다. 이제 본사 화면으로 가 보겠습니다.',next:true}]},
+ {t:'지연 예상',s:'출고 전에 본사가 먼저 압니다',v:()=>sDash(false),a:[
+   {sel:'#s-c1',tip:'오후 2시 30분, 본사 화면에 빨간 카드가 떴습니다. 내일 출고할 W-1104가 납기를 넘긴다는 경고입니다.',next:true},
+   {sel:'#s-more',tip:'왜 늦어지는지 눌러 보십시오.',do:()=>{D.open=true}},
+   {sel:'#s-c1',tip:'직기 L-14가 두 시간째 서 있습니다. 누가 보고하지 않아도 이유와 바꿀 방법이 같이 나옵니다.',next:true},
+   {sel:'#s-inv',tip:'원사 재고도 창고에 묻기 전에 화면에서 먼저 봅니다. 입고와 투입 기록으로 계산한 재고입니다.',next:true}]},
+ {t:'알림',s:'공장장 잘로 · 대표님 카톡',v:sAlerts,a:[
+   {sel:'#s-z2',tip:'같은 경고가 현지 공장장의 잘로로 갔습니다.',next:true},
+   {sel:'#s-k1',tip:'한국에 계신 대표님은 카톡으로 받습니다. 전화로 묻지 않아도 됩니다.',next:true}]},
+ {t:'현장 입력',s:'작업자 버튼 세 번',v:sWorker,a:[
+   {sel:'[data-lm="L-14"]',pos:'left',tip:'정비를 마친 작업자가 휴대폰에서 L-14를 고릅니다.',do:()=>{D.sel='L-14'}},
+   {sel:'#s-run',pos:'left',tip:'「가동」을 누르십시오.',do:()=>{D.st='run'}},
+   {sel:'#s-send',pos:'left',tip:'보내기. 작업자가 하는 일은 여기까지입니다.',do:()=>{D.sent=true;D.flash=true}}]},
+ {t:'납기 회복',s:'본사 화면이 먼저 바뀝니다',v:()=>sDash(true),a:[
+   {sel:'#s-c1',tip:'빨간 카드가 「납기 내」로 바뀌었습니다. 이 화면은 공장 밖에서도 휴대폰 앱으로 실시간으로 봅니다. 한국에 계신 대표님도 같은 순간에 확인합니다.',next:true},
+   {sel:'#s-log',tip:'누가 · 언제 · 무엇을 바꿨는지 기록에 남습니다. 「못 들었다」는 말이 나올 자리가 없습니다.',next:true}]},
+ {t:'영업 질문창',s:'바이어에게 바로 답합니다',v:sAsk,a:[
+   {sel:'[data-q="0"]',tip:'바이어가 W-1104 출고를 묻습니다. 영업 담당은 생산팀 대신 질문창을 누릅니다.',do:()=>{D.q=0}},
+   {sel:'#s-en',tip:'답과 함께 바이어에게 보낼 영어 문장이 만들어집니다. 번역하느라 시간을 쓰지 않습니다.',next:true},
+   {sel:'#s-copy',tip:'복사해서 그대로 보내면 끝입니다.',do:()=>{D.copied=true}},
+   {sel:'[data-q="1"]',tip:'원사 재고도 물어보십시오.',do:()=>{D.q=1}},
+   {sel:'.ba',tip:'창고에 묻기 전에 화면에서 먼저 확인합니다. 화면의 답은 예시 답입니다.',next:true}]},
+ {t:'정리',s:'3분 동안 한 일',v:sSum,a:[]}
+];
+let i=0,j=0;
+
+function draw(){
+  const st=S[i];
+  $('#stage').innerHTML=st.v()+'<div class="hs" id="hs" hidden></div><div class="tip" id="tip" hidden></div>';
+  D.flash=false;
+  $('#t-list').innerHTML=S.map((x,k)=>`<button type="button" data-go="${k}" class="${k<i?'done':''}" ${k===i?'aria-current="step"':''}><i>${k<i?'✓':k+1}</i><span><b>${x.t}</b><small>${x.s}</small></span></button>`).join('');
+  $('#t-cnt').textContent=`${i+1} / ${S.length}`;
+  $('#t-m').innerHTML=`<i>${i+1}</i><span><b>${st.t} <span style="font-weight:400;color:var(--soft);font-size:12px">${i+1}/${S.length}</span></b><small>${st.s}</small></span>`;
+  $('#t-prog').style.width=((i+(st.a.length?j/st.a.length:1))/S.length*100).toFixed(1)+'%';
+  $('#t-prev').disabled=i===0&&j===0;
+  $('#t-next').disabled=i===S.length-1;
+  place();
+}
+function place(){
+  const st=S[i],ac=st.a[j],hs=$('#hs'),tp=$('#tip');if(!hs)return;
+  if(!ac){hs.hidden=true;tp.hidden=true;return}
+  const el=$('#stage').querySelector(ac.sel);
+  if(!el){hs.hidden=true;tp.hidden=true;return}
+  const sr=$('#stage').getBoundingClientRect(),r=el.getBoundingClientRect();
+  const x=r.left-sr.left,y=r.top-sr.top,pad=4;
+  Object.assign(hs.style,{left:(x-pad)+'px',top:(y-pad)+'px',width:(r.width+pad*2)+'px',height:(r.height+pad*2)+'px'});hs.hidden=false;
+  const last=j===st.a.length-1;
+  tp.innerHTML=`<span class="k">${i+1}-${j+1}</span>${ac.tip}<span class="row"><small>${ac.next?'':'주황 테두리를 누르십시오'}</small>${ac.next?`<button type="button" id="tip-n">${last?'다음 단계 →':'다음'}</button>`:''}</span>`;
+  tp.hidden=false;
+  const tw=tp.offsetWidth,th=tp.offsetHeight,W=sr.width;
+  const ph=ac.pos&&el.closest('.ph');
+  if(ph){
+    const pr=ph.getBoundingClientRect(),pl=pr.left-sr.left,prr=pr.right-sr.left;
+    const side=pl-16-tw>=8?'left':null;
+    if(side){
+      const left=side==='right'?prr+16:pl-16-tw;
+      const top=Math.min(Math.max(8,y+r.height/2-th/2),sr.height-th-8);
+      tp.className='tip '+side;tp.style.left=left+'px';tp.style.top=top+'px';
+      tp.style.setProperty('--ay',Math.min(Math.max(12,y+r.height/2-top-6),th-24)+'px');
+      return;
+    }
+  }
+  const left=Math.min(Math.max(12,x+r.width/2-tw/2),W-tw-12);
+  let top=y+r.height+14,cls='below';
+  if(top+th>sr.height-8&&y-th-14>8){top=y-th-14;cls='above'}
+  tp.className='tip '+cls;tp.style.left=left+'px';tp.style.top=top+'px';
+  tp.style.setProperty('--ax',Math.min(Math.max(14,x+r.width/2-left-6),tw-26)+'px');
+}
+function adv(){
+  const st=S[i];
+  if(j<st.a.length-1){j++;draw();return}
+  if(i<S.length-1){i++;j=0;draw();scrollStage()}
+}
+function goto(k){D=fresh();for(let s=0;s<k;s++)for(const a of S[s].a)a.do&&a.do();D.flash=false;i=k;j=0;draw()}
+function back(){
+  if(j>0){const k=j-1;D=fresh();for(let s=0;s<i;s++)for(const a of S[s].a)a.do&&a.do();for(let n=0;n<k;n++){const a=S[i].a[n];a.do&&a.do()}D.flash=false;j=k;draw()}
+  else if(i>0)goto(i-1);
+}
+function scrollStage(){if(!RM&&matchMedia('(max-width:1000px)').matches)$('#tour').scrollIntoView({block:'start'})}
+$('#stage').addEventListener('click',e=>{
+  if(e.target.closest('#tip-n')){adv();return}
+  if(e.target.closest('#s-again')){goto(0);return}
+  const ac=S[i].a[j];if(!ac||ac.next||ac.on==='change')return;
+  const el=$('#stage').querySelector(ac.sel);if(!el||!el.contains(e.target))return;
+  ac.do&&ac.do();adv();
+});
+$('#stage').addEventListener('change',e=>{const ac=S[i].a[j];if(ac&&ac.on==='change'&&e.target.id==='s-sel'&&e.target.value!==''){ac.do();adv()}});
+$('#t-list').addEventListener('click',e=>{const b=e.target.closest('[data-go]');if(b)goto(+b.dataset.go)});
+$('#t-next').addEventListener('click',()=>{const st=S[i];for(let n=j;n<st.a.length;n++){const a=st.a[n];a.do&&a.do()}if(i<S.length-1){i++;j=0;D.flash=true;draw();scrollStage()}});
+$('#t-prev').addEventListener('click',back);
+$$('[data-lang]').forEach(g=>g.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;L=b.dataset.l;$$('[data-lang] button').forEach(x=>x.setAttribute('aria-pressed',x.dataset.l===L));draw()}));
+addEventListener('resize',()=>{clearTimeout(place.k);place.k=setTimeout(place,120)});
+document.fonts&&document.fonts.ready.then(place);
+
+/* ---------- inquiry ---------- */
+function rForm(){
+  const v=id=>$(id).value.trim(),ck=id=>$$(id+' input:checked').map(x=>x.value).join(', ')||'—';
+  $('#f-out').textContent=`[무료 현장 진단 · 사전 질문]
+회사: ${v('#f-co')||'(회사 이름)'}
+공장 위치: ${v('#f-where')}
+업종: ${v('#f-ind')}
+현장 인원: ${v('#f-size')} · 설비 ${v('#f-mc')}
+한 달 오더: ${v('#f-ord')}
+쓰는 ERP: ${v('#f-erp')||'—'}
+지금 쓰는 것: ${ck('#f-now')}
+가장 답답한 곳: ${ck('#f-pain')}
+먼저 풀고 싶은 일: ${v('#f-first')||'—'}
+
+데모를 보고 연락드립니다. 일정 조율 상담 가능한 시간을 알려 주십시오.`;
+}
+$('#f').addEventListener('input',rForm);$('#f').addEventListener('change',rForm);$('#f').addEventListener('submit',e=>e.preventDefault());
+$('#f-copy').addEventListener('click',()=>{
+  const txt=$('#f-out').textContent,st=$('#f-st');
+  const sel=()=>{const r=document.createRange();r.selectNodeContents($('#f-out'));const s=getSelection();s.removeAllRanges();s.addRange(r);st.textContent='글을 선택해 두었습니다. 복사해서 보내 주십시오.'};
+  try{navigator.clipboard.writeText(txt).then(()=>st.textContent='복사했습니다. 이 주소를 받으신 카카오톡이나 메일로 보내 주십시오.',sel)}catch(_){sel()}
+});
+
+D=fresh();draw();rForm();
+window.__tour={goto,adv,state:()=>({i,j,D})};
+})();
+</script>
+</body></html>

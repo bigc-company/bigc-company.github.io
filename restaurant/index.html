@@ -1,0 +1,344 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="한인식당의 근무 기록과 급여, 재고, 배달 앱 정산을 한 화면에서 관리합니다."><meta property="og:type" content="website"><meta property="og:site_name" content="bigC company"><meta property="og:url" content="https://keunpan.com/restaurant/"><link rel="canonical" href="https://keunpan.com/restaurant/"><meta property="og:image" content="https://keunpan.com/restaurant/og.jpg?v=1"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="600"><meta name="twitter:card" content="summary_large_image"><meta property="og:title" content="퇴사한 직원의 3년 전 근무 기록, 지금 꺼내실 수 있습니까?"><meta property="og:description" content="근무 기록부터 앱 정산까지, 한 화면에서 관리합니다."><style>:root{color-scheme:light}body{margin:0;font:14px system-ui}img{max-width:100%}[hidden]{display:none!important}</style></head><body><title>한인식당 토탈 관리 제안</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Nanum+Myeongjo:wght@700&family=Gowun+Dodum&display=swap">
+<style>
+/* Layout: one 1120 column on a 4-column grid. Each price step = heading row, full-width scene, 4 comments on the same columns.
+   Scenes are drawn in em; 1em = 1cqw (wide 100x62) or 2.5cqw (compact 40x46), so one source feeds the page, the thumbnails and the KakaoTalk cards. */
+:root{
+  --bg:#fff;--panel:#F3F5F7;--ink:#10161C;--soft:#57606A;--line:#DFE4E9;--go:#0F5C5C;--go-ink:#fff;--stop:#BF2B1D;--warn:#8A5A00;
+  --sans:"IBM Plex Sans KR","Pretendard","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  --ease:cubic-bezier(.22,.8,.24,1);color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0C1014;--panel:#151B21;--ink:#EEF2F6;--soft:#9DA9B4;--line:#26303A;--go:#7CCFC8;--go-ink:#04211F;--stop:#FF8577;--warn:#E5B356;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0C1014;--panel:#151B21;--ink:#EEF2F6;--soft:#9DA9B4;--line:#26303A;--go:#7CCFC8;--go-ink:#04211F;--stop:#FF8577;--warn:#E5B356;color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:80px}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.6 var(--sans);-webkit-font-smoothing:antialiased;word-break:keep-all;overflow-wrap:anywhere}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--bg)}
+h1,h2,h3,p,ul,ol,figure{margin:0;padding:0}ul,ol{list-style:none}
+a{color:inherit;text-decoration:none}
+button,textarea{font:inherit;color:inherit}
+button{background:none;border:0;padding:0;cursor:pointer;text-align:inherit}
+:focus-visible{outline:2px solid var(--go);outline-offset:3px}
+.n{font-variant-numeric:tabular-nums;white-space:nowrap}
+.w{max-width:1168px;margin:0 auto;padding-left:max(24px,env(safe-area-inset-left,0px));padding-right:max(24px,env(safe-area-inset-right,0px))}
+
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);border-bottom:1px solid var(--line)}
+.top .w{display:grid;grid-template-columns:1fr auto;align-items:center;height:64px;gap:24px}
+.brand{font-weight:700;white-space:nowrap}
+.rail{position:relative;display:flex}
+.rail a{padding:0 16px;height:64px;display:flex;align-items:center;font-size:14px;color:var(--soft);white-space:nowrap}
+.rail a:hover{color:var(--ink)}
+.rail a[aria-current]{color:var(--ink);font-weight:600}
+.rail i{position:absolute;left:0;bottom:-1px;height:2px;background:var(--go);transition:transform .35s var(--ease),width .35s var(--ease)}
+
+.hero{background:#DCC9A8;color:#10161C;padding-block:56px 0;position:relative;overflow:hidden;min-height:min(52vw,820px)}
+.hero::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(240,226,200,.86),rgba(240,226,200,.6) 42%,transparent 64%),url(photo/pot.jpg) 50% 78%/cover}
+.hero .w{position:relative;z-index:1}
+.hero h1{font-size:clamp(32px,4.4vw,56px);line-height:1.18;font-weight:700;letter-spacing:-.035em;text-wrap:balance;max-width:14em}.hero h1 span{display:inline-block}
+.hero .sub{text-wrap:balance;margin-top:16px;font-size:18px;color:#27322D;max-width:31em}
+.pain{margin-top:32px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.pain span{font-size:14px;color:#27322D;width:100%;margin-bottom:2px}
+.pain button{min-height:46px;padding:0 18px;border:1px solid #fff;background:#fff;border-radius:8px;font-weight:500;transition:border-color .15s,background .15s}
+.pain button:hover{border-color:#10161C}
+.pain button[aria-pressed="true"]{border-color:#0F5C5C;color:#0F5C5C;font-weight:600}
+
+.ladder{padding-top:40px;display:grid;grid-template-columns:repeat(6,1fr);gap:16px;align-items:end;padding-bottom:88px}
+.ladder a{display:block;transition:transform .35s var(--ease)}
+.ladder a:hover{transform:translateY(-6px)}
+.ladder a>b{display:block;margin-top:12px;font-size:18px;line-height:1.3}
+.ladder a>small{font-size:14px;color:var(--soft)}
+
+.step{padding-block:0 80px}
+.mom{background-size:cover;min-height:min(38vw,560px);display:flex;align-items:flex-end;margin-bottom:40px;position:relative;color:#fff}
+.mom::before{content:"";position:absolute;inset:0;background:linear-gradient(rgba(4,10,14,.1) 20%,rgba(4,10,14,.82))}
+.mom .w{position:relative;width:100%;padding-block:40px;display:flex;justify-content:space-between;align-items:flex-end;gap:24px}
+.mom h2{font-size:clamp(26px,3.2vw,44px);line-height:1.28;letter-spacing:-.03em;font-weight:600}.mom h2 span{display:block}
+.pr{flex-wrap:wrap;row-gap:0;display:flex;gap:14px;align-items:baseline;font-size:18px;margin-bottom:10px}.pr b{font-weight:600}.pr b+span{font-size:16px}.pr span{opacity:.85;white-space:nowrap}
+.hit .mom h2{color:#BDEBE5}
+.mom .per small{color:#fff;opacity:.8}.mom .per:hover{color:#BDEBE5}
+.g{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
+.sh{align-items:end;margin-bottom:32px}
+.sh h2 span,.card h2 span{display:inline-block}
+.price b{display:block;font-size:36px;line-height:1.15;font-weight:700;letter-spacing:-.03em}
+.price small,.per small{display:block;font-size:14px;font-weight:400;color:var(--soft);white-space:nowrap}
+.sh .h{grid-column:2/4}
+.sh h2 span,.card h2 span{display:inline-block}
+.sh h2{font-size:clamp(24px,2.6vw,36px);line-height:1.25;letter-spacing:-.03em;text-wrap:balance}
+.per{text-align:right;font-weight:600;justify-self:end}.per:hover{color:var(--go)}
+.cm{margin-top:32px}
+.cm h3{font-size:16px;line-height:1.45;margin-bottom:4px}
+.cm p{font-size:16px;color:var(--soft)}
+.cm .k{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--soft);margin-bottom:8px}
+.cm .k i{flex:none;width:24px;height:24px;border-radius:50%;background:var(--ink);color:var(--bg);font:600 14px/24px var(--sans);text-align:center}
+.cm .k u{text-decoration:none}
+.cm .ok u{color:var(--go)}.cm .if u{color:var(--warn)}.cm .ask u{color:var(--stop)}
+.hit .sh h2{color:var(--go)}
+.note{margin-top:16px;font-size:14px;color:var(--soft)}
+
+.end{padding-block:80px;border-top:1px solid var(--line)}
+.end h2{font-size:clamp(24px,2.6vw,36px);line-height:1.25;letter-spacing:-.03em;margin-bottom:24px}
+.way li{border-top:2px solid var(--ink);padding-top:12px}
+.way b{display:block}
+.way p{color:var(--soft)}
+.ask .pick{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.ask .pick button{min-height:46px;padding:0 16px;border:1px solid var(--line);border-radius:8px}
+.ask .pick button[aria-pressed="true"]{border-color:var(--go);color:var(--go);font-weight:600}
+.ask textarea{display:block;width:100%;min-height:232px;padding:16px;border:1px solid var(--line);border-radius:8px;background:var(--panel);line-height:1.6;resize:vertical}
+.cta{margin-top:12px;min-height:52px;padding:0 24px;border-radius:8px;background:var(--go);color:var(--go-ink);font-weight:600}
+.cta:active{transform:scale(.97)}
+.cards{display:flex;gap:16px;overflow-x:auto;padding-bottom:12px;scroll-snap-type:x proximity}
+.cards img{flex:none;width:270px;height:auto;border:1px solid var(--line);scroll-snap-align:start}
+footer{padding-block:32px 56px;border-top:1px solid var(--line);font-size:14px;color:var(--soft)}
+
+/* ---------- scenes: fixed picture palette, independent of the page theme ---------- */
+.sc{container-type:inline-size;position:relative;overflow:hidden;aspect-ratio:100/62;background:var(--sb);color:#10161C;border-radius:4px;user-select:none}
+.sc canvas{position:absolute;inset:0;width:100%;height:100%}
+.st{position:absolute;inset:0;font-size:1cqw;line-height:1.4;font-family:var(--sans)}
+.s0{--sb:#EDE3D0;--ct:rgba(96,66,22,.12)}.s1{--sb:#D9E7E5;--ct:rgba(15,92,92,.13)}.s2{--sb:#E2E7E9;--ct:rgba(30,60,72,.11)}
+.s3{--sb:#E6D6BF;--ct:rgba(96,62,22,.13)}.s4{--sb:#0F4A4C;--ct:rgba(255,255,255,.1)}.s5{--sb:#0E1A2A;--ct:rgba(140,190,255,0)}
+.st b{font-weight:600}
+.ph,.bd,.fl{position:absolute;background:#fff}
+.ph{width:25em;height:53em;border-radius:3.2em;border:.65em solid #10161C;overflow:hidden;box-shadow:0 2.2em 4em -1.6em rgba(5,20,14,.45)}
+.ph>div{padding:2.2em 1.5em 1.5em;height:100%;position:relative}
+.ph .t{font-size:1.2em;color:#57606A}.ph .t.r{color:#BF2B1D}
+.ph .h{font-size:1.75em;font-weight:700;line-height:1.3;letter-spacing:-.02em}
+.cus{border-top:1px solid var(--line);padding-bottom:80px}
+.cusimg{background:url(photo/swatch.jpg) 50% 50%/cover;min-height:min(30vw,420px);display:flex;align-items:flex-end;color:#fff;position:relative;margin-bottom:40px}
+.cusimg::before{content:"";position:absolute;inset:0;background:linear-gradient(rgba(4,10,14,.1) 20%,rgba(4,10,14,.8))}
+.cusimg .w{position:relative;width:100%;padding-block:40px}.cusimg h2{font-size:clamp(26px,3.2vw,44px);line-height:1.28;letter-spacing:-.03em;font-weight:600}.cusimg h2 span{display:inline-block}
+.cusg{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,8fr);gap:40px;align-items:start}
+.opt{display:grid;gap:20px}.opt fieldset{border:0;margin:0;padding:0;min-width:0}.opt legend,.fld span,.msgw label{display:block;font-size:14px;color:var(--soft);padding:0;margin-bottom:8px}
+.fld input{width:100%;min-height:48px;padding:0 14px;border:1px solid var(--line);border-radius:6px;background:var(--panel);font:inherit;color:inherit}
+.sw{display:flex;gap:10px;flex-wrap:wrap}.sw button{width:44px;height:44px;border-radius:50%;background:var(--c);border:3px solid var(--bg);box-shadow:0 0 0 1px var(--line)}.sw [aria-pressed="true"]{box-shadow:0 0 0 2px var(--ink)}
+.seg{display:flex;flex-wrap:wrap;gap:8px}.seg button{min-height:44px;padding:0 14px;border:1px solid var(--line);border-radius:6px;font-size:16px}.seg [aria-pressed="true"]{border-color:var(--ink);background:var(--ink);color:var(--bg)}
+.msgw{margin-top:40px}.msgw textarea{display:block;width:100%;min-height:330px;padding:16px;border:1px solid var(--line);border-radius:6px;background:var(--panel);line-height:1.6;resize:vertical}
+.pv{--ac:#0F5C5C;--pb:#fff;--pi:#10161C;--ps:#57606A;--pl:#DFE4E9;--pr:.9em;--pf:var(--sans);--sb:#E9ECEB;transition:background .3s}
+.pv .st{font-family:var(--pf)}.pv .bd,.pv .ph{background:var(--pb);color:var(--pi);transition:background .3s,color .3s,border-radius .3s}.pv .bd{border-radius:var(--pr);height:53em}
+.pv .ph2{padding:2em 2.4em 2.6em;color:#fff;background:linear-gradient(color-mix(in srgb,var(--ac) 88%,transparent),color-mix(in srgb,var(--ac) 45%,transparent)),url(photo/pot.jpg) 50% 72%/cover;height:20em;transition:background .3s}
+.pv .ph2 header{display:flex;gap:2em;align-items:center;font-size:1.3em}.pv .ph2 header b{font-size:1.4em;margin-right:auto}.pv .ph2 header em{font-style:normal;opacity:.85}
+.pv .ph2 h4{margin:1.3em 0 0;font-size:3.2em;line-height:1.3;letter-spacing:-.02em}
+.pv .se{position:relative;display:grid;grid-template-columns:1.2fr 1.2fr .8fr 1fr;background:#fff;color:#10161C;border-radius:var(--pr);margin-top:2.2em;overflow:hidden}.pv .se span{padding:1em 1.3em;font-size:1.25em;border-right:.08em solid #E6EAEE}.pv .se span:last-child{background:var(--ac)!important;color:#fff;display:grid;place-items:center;border:0;font-weight:600}.pv .se small{display:block;font-size:.85em;color:#57606A}
+.pv .pk div,.pv .pk div:nth-child(n){border-color:var(--ac)}.pv .pk span,.pv .ph .t,.pv .row em{color:var(--ps)}.pv .row{border-color:var(--pl)}.pv .btn{background:var(--ac);border-radius:var(--pr)}.pv .btn.b2{background:transparent;color:var(--pi);box-shadow:inset 0 0 0 .1em var(--pl)}
+.pv .bd .kp{padding-top:2em}.pv .kp small,.pv .ph .t{color:var(--ps)}.pv .kp .ac{color:var(--ac)}.pv .two h4{border-color:var(--pi)}.pv.dk .kp .ac{color:var(--pi)}
+.pv.dk{--pb:#14191B;--pi:#F0F3F2;--ps:#A3AFAA;--pl:#2C3437;--sb:#2A3033}
+.ph .big{font-size:2.9em;font-weight:700;letter-spacing:-.04em;line-height:1.2}
+.bd{width:63em;height:46em;border-radius:1.1em;overflow:hidden;box-shadow:0 2.2em 4em -1.6em rgba(5,20,14,.38)}
+.bd>header{display:flex;justify-content:space-between;align-items:center;height:5em;padding:0 2em;border-bottom:.1em solid #DFE4E9}
+.bd>header b{font-size:1.6em}.bd>header span{font-size:1.2em;color:#57606A}
+.fl{border-radius:.9em;padding:1.1em 1.4em;box-shadow:0 1.4em 2.6em -1em rgba(5,20,14,.42);font-size:1em}
+.fl p{font-size:1.25em}.fl .t{font-size:1.1em;color:#57606A}
+.row{display:flex;justify-content:space-between;align-items:center;gap:1em;padding:.75em 0;border-bottom:.08em solid #E6EAEE;font-size:1.3em}
+.row em{font-style:normal;color:#57606A}
+.row span:last-child{font-variant-numeric:tabular-nums;white-space:nowrap}
+.r{color:#BF2B1D}.gr{color:#0F5C5C}
+.btn{display:block;text-align:center;border-radius:.7em;padding:.8em;font-size:1.4em;font-weight:600;background:#0F5C5C;color:#fff}
+.btn.off{background:#FBE9E6;color:#BF2B1D}
+.bub{font-size:1.3em;border-radius:1em;padding:.7em 1em;margin-bottom:.7em;max-width:86%}
+.bub.me{background:#FBEFC9;margin-left:auto}.bub.yo{background:#F1F3F5}
+.chips{display:grid;gap:.6em;margin-top:.6em}.chips i{font-style:normal;font-size:1.3em;border:.09em solid #0F5C5C;color:#0F5C5C;border-radius:.7em;text-align:center;padding:.5em;font-weight:600}
+.pin{position:absolute;width:2.6em;height:2.6em;border-radius:50%;background:#10161C;color:#fff;z-index:5;display:grid;place-items:center;box-shadow:0 0 0 .35em rgba(255,255,255,.85)}
+.pin::before{font-style:normal;content:attr(data-n);font-size:1.35em;font-weight:600;line-height:1}
+.cal{display:grid;grid-template-columns:8em repeat(4,1fr);height:41em;grid-template-rows:4em repeat(4,1fr)}
+.cal>*{border-bottom:.08em solid #E6EAEE;border-left:.08em solid #E6EAEE;padding:.6em .7em;min-width:0}
+.cal>.d,.cal>.l{border-left:0}.cal .d b,.cal .l b{font-size:1.3em}.cal .d,.cal .l{display:flex;align-items:center}
+.ev{border-radius:.6em;padding:.5em .7em;background:#DFF0EE;margin-bottom:.5em;border:.12em solid transparent}
+.ev b{display:block;font-size:1.2em;color:#0F5C5C;white-space:nowrap}.ev span{font-size:1.1em;color:#57606A;white-space:nowrap}
+.ev.x{background:#FDF0EE;border:.12em dashed #BF2B1D}.ev.x b{color:#BF2B1D}.ev.sv{background:#EAF3EC}.ev.sv b{color:#1F6A45}.ev.sn{background:#FBF3E2}.ev.sn b{color:#8A5A00}
+.kp{display:grid;grid-template-columns:repeat(3,1fr);padding:1.6em 2em;gap:2em}
+.kp small{white-space:nowrap;display:block;font-size:1.2em;color:#57606A}.kp b{display:block;font-size:2.5em;letter-spacing:-.03em;line-height:1.35;white-space:nowrap}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:2em;padding:0 2em}
+.two h4{margin:0;font-size:1.3em;padding:.5em 0;border-bottom:.15em solid #10161C}
+.bars{display:flex;align-items:end;gap:1.1em;height:11em;padding:0 2em;margin-top:1.6em}
+.bars i{flex:1;background:#C4DEDB;border-radius:.3em .3em 0 0;position:relative}.bars i.hi{background:#0F5C5C}
+.bars i::after{content:attr(data-d);position:absolute;bottom:-1.7em;left:0;right:0;text-align:center;font:500 1.1em/1.4 var(--sans);color:#57606A}
+.site{padding:0}
+.site .hv{height:22em;background:linear-gradient(170deg,#0C4A5E,#0F5C5C 70%,#7DB58C);color:#fff;padding:3em 2.4em;position:relative;overflow:hidden}
+.site .hv svg{position:absolute;inset:0;width:100%;height:100%}
+.site .hv b{position:relative;display:block;font-size:3.4em;line-height:1.25;letter-spacing:-.03em;font-weight:700}
+.site .se{position:relative;display:grid;grid-template-columns:1.2fr 1.2fr .8fr 1fr;background:#fff;color:#10161C;border-radius:.8em;margin-top:1.8em;overflow:hidden}
+.site .se span{padding:1em 1.3em;font-size:1.25em;border-right:.08em solid #E6EAEE}.site .se span:last-child{background:#10161C;color:#fff;font-weight:600;display:grid;place-items:center;border:0}
+.site .se small{display:block;font-size:.85em;color:#57606A}
+.pk{display:grid;grid-template-columns:repeat(3,1fr);gap:1.6em;padding:2em 2.4em}
+.pk div{border-top:.5em solid #0F5C5C;padding-top:1em}.pk div:nth-child(2){border-color:#28506E}.pk div:nth-child(3){border-color:#C98A1B}
+.pk b{display:block;font-size:1.5em}.pk span{display:block;font-size:1.2em;color:#57606A}.pk strong{display:block;font-size:1.7em;margin-top:.3em}
+.tl{position:relative;padding-left:1.8em;margin-top:1em}
+.tl::before{content:"";position:absolute;left:.45em;top:.6em;bottom:.6em;width:.14em;background:#C4DEDB}
+.tl li{position:relative;padding:.55em 0;font-size:1.3em}.tl li::before{content:"";position:absolute;left:-1.35em;top:1em;width:.75em;height:.75em;border-radius:50%;background:#fff;border:.2em solid #0F5C5C}
+.tl li.now::before{background:#0F5C5C}.tl em{font-style:normal;color:#57606A;display:block;font-size:.88em}
+.s5 .ph,.s5 .fl{background:#14253D;color:#EAF1FB;border-color:#2A3E5C}.s5 .ph .t,.s5 .fl .t,.s5 .row em{color:#93A7C4}.s5 .row{border-color:#243650}
+.s5 .gr{color:#8CD9D2}.s5 .r{color:#FFB27A}.s5 .btn{background:#8CD9D2;color:#04211F}
+.map{position:absolute;left:0;top:0;width:100%;height:100%}
+.map text{font:600 1.5px var(--sans);fill:#93A7C4}
+
+.tb>div{display:grid;gap:1em;align-items:center;padding:0 2em;height:6em;border-bottom:.1em solid #E6EAEE}
+.tb.a>div{grid-template-columns:1.2fr 1fr 1.2fr 1.1fr}.tb.b>div{grid-template-columns:1.2fr 1fr 1fr 1fr}.tb.d>div{grid-template-columns:9em 1fr 1.05fr 1fr 1.25fr}.tb.e>div{grid-template-columns:1.4fr 1fr 1fr 1fr 1fr}
+.tb.b>div{height:5.2em}.tb.b>.th{height:3.6em}.tb.b span:not(:first-child),.tb.e span:not(:first-child){text-align:right}
+.tri{display:grid;grid-template-columns:repeat(3,1fr);font-size:1.4em;margin-top:.3em}.tri b{margin-left:.4em}
+.tb span{font-size:1.3em;white-space:nowrap;font-variant-numeric:tabular-nums}
+.tb .th{height:3.6em;background:#F5F6F8}.tb .th span{font-size:1.15em;color:#57606A}
+.op2{display:grid;gap:.7em}.op2 p{display:flex;justify-content:space-between;align-items:center;border:.1em solid #DFE4E9;border-radius:.7em;padding:.75em .9em;font-size:1.3em}.op2 .on{border-color:#0F5C5C;background:#DFF0EE;color:#0F5C5C}
+.btn.b2{background:#F1F3F5;color:#10161C}
+.ct{display:flex;gap:1.8em;align-items:center;height:4em;padding:0 2em;border-bottom:.1em solid #DFE4E9;font-size:1.2em;white-space:nowrap}.ct b{color:#0F5C5C}.ct em{font-style:normal;margin-left:auto;font-weight:600}
+.pg{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5em 1.8em;padding:1.6em 2em}.pg i{display:block;height:12.2em;border-radius:.5em;background:#EEEBE4 50% 50%/cover}.pg b{display:inline-block;font-size:1.35em;margin-top:.45em}.pg span{float:right;font-size:1.35em;margin-top:.45em;font-variant-numeric:tabular-nums}
+.pv .pg{padding-top:1.5em;gap:1.1em 1.8em}.pv .pg i{height:11em;border-radius:var(--pr)}.pv .pg span{font-weight:600}
+/* default wide positions */
+.ph.a{left:71em;top:4.5em}.bd{left:4em;top:4.5em}.bar{left:4em;bottom:4.5em;width:63em}
+.s0 .bd,.s1 .bd,.s2 .bd{height:40em}.s3 .bd{height:42em}.s4 .bd{height:43em}
+
+.s5 .ph.a{left:37.5em}
+/* compact positions: emitted for narrow screens and for cards by build.py */
+@media (max-width:760px){.step .sc:not(.s5){aspect-ratio:40/72}.step .st{font-size:2.5cqw}.step .bd{left:2.44em;top:2.44em;width:44em;zoom:.82}.step .ph.a{left:7.5em;top:34em}.step .hm{display:none}.step .tb>div{padding:0 1.4em;gap:.7em}.step .tb.a>div{grid-template-columns:1.15fr .95fr 1.2fr 1.05fr}.step .tb.d>div{grid-template-columns:8.2em 1fr 1.05fr 1.2fr}.step .tb.e>div{grid-template-columns:1.5fr 1fr 1fr 1fr 1fr}.step .kp{gap:1em;padding:1.4em}.step .kp b{font-size:2.1em}.step .two{padding:0 1.4em;gap:1.4em}.step .bars{gap:.6em;padding:0 1.4em}.step .s3 .ph.a{top:37em}.step .s4 .ph.a{top:37.6em}.step .sc.s4.s4{aspect-ratio:40/76}.step .s5 .ph.a{left:7.5em;top:3em}.step .sc.s5{aspect-ratio:40/52}.step .bar{display:none}.step .f5a{display:none}.step .f5b{display:none}.step .f5c{display:none}.step .f5d{display:none}.step .pin{display:none}.step .fl p{font-size:1.4em}.pvw .sc{aspect-ratio:40/72}.pvw .st{font-size:2.5cqw}.pvw .bd{left:2.44em;top:2.44em;width:44em;zoom:.82}.pvw .ph.a{left:7.5em;top:34em}.pvw .hm{display:none}.pvw .tb>div{padding:0 1.4em;gap:.7em}.pvw .tb.a>div{grid-template-columns:1.15fr .95fr 1.2fr 1.05fr}.pvw .tb.d>div{grid-template-columns:8.2em 1fr 1.05fr 1.2fr}.pvw .tb.e>div{grid-template-columns:1.5fr 1fr 1fr 1fr 1fr}.pvw .kp{gap:1em;padding:1.4em}.pvw .kp b{font-size:2.1em}.pvw .two{padding:0 1.4em;gap:1.4em}.pvw .bars{gap:.6em;padding:0 1.4em}.pvw .s3 .ph.a{top:37em}.pvw .s4 .ph.a{top:37.6em}.pvw .s4{aspect-ratio:40/76}.pvw .s5 .ph.a{left:7.5em;top:3em}.pvw .s5.sc{aspect-ratio:40/52}.pvw .bar{display:none}.pvw .f5a{display:none}.pvw .f5b{display:none}.pvw .f5c{display:none}.pvw .f5d{display:none}.pvw .pin{display:none}.pvw .fl p{font-size:1.4em}}
+
+
+@media (prefers-reduced-motion:no-preference){
+  .mv{transition:transform .9s var(--ease)}
+  .sc:not(.on) .mv.up{transform:translateY(2em)}.sc:not(.on) .mv.lf{transform:translateX(2em)}
+  .on .shake{animation:sh 5s 1s infinite}.on .pulse{animation:pu 2.4s infinite}
+  @keyframes sh{0%,86%,100%{transform:none}89%{transform:translateX(.35em)}92%{transform:translateX(-.35em)}95%{transform:translateX(.2em)}}
+  @keyframes pu{50%{opacity:.45}}
+}
+@media (max-width:760px){
+  .w{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+  .top .w{grid-template-columns:1fr;height:52px}.brand{display:none}
+  .rail{justify-content:space-between}.rail a{padding:0 4px;height:52px}
+  .hero{padding-block:36px 0;min-height:0;padding-bottom:72vw}.hero::before{inset:auto 0 0;aspect-ratio:1/1;background:url(photo/pot.jpg) 88% 100%/cover;-webkit-mask-image:linear-gradient(transparent,#000 38%);mask-image:linear-gradient(transparent,#000 38%)}
+  .mom{min-height:100vw;margin-bottom:24px}.mom .w{padding-block:24px;flex-direction:column;align-items:flex-start;gap:16px}.mom .per{text-align:left;justify-self:start}
+  .ladder{display:flex;overflow-x:auto;gap:12px;padding-bottom:56px;margin-inline:-16px;padding-inline:16px;scrollbar-width:none}
+  .ladder a{flex:none;width:148px}
+  .step{padding-block:0 56px}.end{padding-block:56px}
+  .g{grid-template-columns:1fr;gap:20px}
+  .cusg{grid-template-columns:1fr;gap:28px}.cusimg{min-height:80vw;margin-bottom:28px}.pv .bd{height:39em}
+  .price b{font-size:26px}.cm .k i{display:none}
+  .sh{display:grid;grid-template-columns:1fr auto;margin-bottom:20px;gap:16px}.sh .h{grid-column:1/-1;grid-row:2}.per{grid-row:1;grid-column:2}
+}
+</style>
+<header class="top"><div class="w"><span class="brand">bigC company</span><nav class="rail" aria-label="비용 단계"><a href="#t0">30만</a><a href="#t1">250만</a><a href="#t2">180만</a><a href="#t3">180만</a><a href="#t4">580만~</a><a href="#t5">확장</a><i></i></nav></div></header>
+<main><section class="hero"><div class="w"><h1><span>퇴사한 직원의</span> <span>3년 전 근무 기록,</span> <span>지금 꺼내실 수 있습니까?</span></h1><p class="sub">직원, 급여, 재고, 배달 앱 정산을 한 화면에 모읍니다.<br>대표님 식당에 필요한 단계부터 시작하십시오.</p>
+<div class="pain"><span>먼저 해결하고 싶은 업무를 선택해 주십시오.</span><button type="button" data-go="t1" aria-pressed="false">퇴사 뒤 청구</button><button type="button" data-go="t2" aria-pressed="false">재료비</button><button type="button" data-go="t3" aria-pressed="false">앱 정산</button><button type="button" data-go="t4" aria-pressed="false">오늘 남은 돈</button></div></div></section>
+<div class="w"><nav class="ladder" aria-label="여섯 장면"><a href="#t0" aria-label="서류 정비, 30만 원"><div class="sc s0 on" aria-hidden="true"><canvas></canvas><div class="st"><div class="bd mv up"><header><b>감독 서류함</b><span>직원 12명</span></header><div class="tb a"><div class="th"><span>서류</span><span>있는 것</span><span>빠진 것</span><span>확인</span></div><div class=""><span><b>근로계약서</b></span><span>10 / 12명</span><span>조이, 엘라</span><span><b class="r">2명 없음</b></span></div><div class=""><span><b>근무 기록 3년</b></span><span>28 / 36개월</span><span>2024년 3월~10월</span><span><b class="r">8개월 없음</b></span></div><div class=""><span><b>급여대장</b></span><span>36 / 36개월</span><span>—</span><span><b class="gr">정상</b></span></div><div class=""><span><b>13월 급여 증빙</b></span><span>2 / 3년</span><span>2024년</span><span><b class="r">1년 없음</b></span></div><div class=""><span><b>보건증</b></span><span>12 / 12명</span><span>—</span><span><b class="r">만료 임박 1명</b></span></div></div></div>
+<div class="ph a mv lf"><div><p class="t">서류 촬영 · 2024년</p><p class="h" style="margin:.1em 0 .4em">종이 타임카드</p><div class="row"><span>2월 16일 ~ 29일</span><span><b class="gr">12장</b></span></div><div class="row"><span>3월 1일 ~ 15일</span><span><b class="r">없음</b></span></div><div class="row"><span>3월 16일 ~ 31일</span><span><b class="r">없음</b></span></div><div class="row"><span>4월 1일 ~ 15일</span><span><b class="r">없음</b></span></div><span class="btn" style="margin-top:1.1em">빠진 카드 촬영</span><span class="btn b2" style="margin-top:.5em">찾을 수 없음으로 표시</span><p class="h" style="font-size:1.5em;margin:1.05em 0 .1em">직원별 빠진 서류</p><div class="row"><span>조이</span><span>계약서</span></div><div class="row"><span>엘라</span><span>계약서</span></div><div class="row" style="border:0"><span>라몬 <em>12월 8일</em></span><span>보건증</span></div></div></div><div class="fl mv up bar"><p class="t">다가오는 만료</p><p><b>라몬 보건증</b> 12월 8일 · <b>영업허가</b> 1월 20일 · <b>대표님 취업허가</b> 3월 14일</p></div><i class="pin" data-n="1" style="left:2.7em;top:3.2em"></i><i class="pin" data-n="2" style="left:2.7em;top:50.1em"></i><i class="pin" data-n="3" style="left:69.7em;top:8em"></i></div></div><b class="n">30만 원</b><small>서류 정비</small></a><a href="#t1" aria-label="근무 기록과 급여, 250만 원"><div class="sc s1 on" aria-hidden="true"><canvas></canvas><div class="st"><div class="bd mv up"><header><b>퇴사 직원 청구 대조</b><span>마리아 · 2023년 11월 ~ 2026년 10월</span></header><div class="tb d"><div class="th"><span>날짜</span><span>청구 내용</span><span>서명된 기록</span><span class="hm">계산</span><span>확인</span></div><div class=""><span>8월 31일 월</span><span>공휴일 12시간</span><span>10:00 ~ 19:00</span><span class="hm">공휴일 8시간</span><span><b class="gr">지급함</b></span></div><div class=""><span>9월 5일 토</span><span>연장 4시간</span><span>10:00 ~ 20:00</span><span class="hm">연장 1시간</span><span><b class="gr">지급함</b></span></div><div class=""><span>9월 13일 일</span><span>휴무일 근무</span><span>휴무 서명</span><span class="hm">근무 없음</span><span><b class="gr">휴무</b></span></div><div class=""><span>9월 19일 토</span><span>연장 2시간</span><span>10:00 ~ 21:00</span><span class="hm">연장 2시간</span><span><b class="r">지급 필요 ₱225</b></span></div><div class=""><span>9월 24일 목</span><span>연장 3시간</span><span><b class="r">서명 없음</b></span><span class="hm">확인 전</span><span><b class="r">기록 보완</b></span></div></div></div>
+<div class="ph a mv lf"><div><p class="t">임금 기준 변경 · 9월 26일 시작</p><p class="big r">₱4,368</p><p class="t" style="margin-top:.2em">직원 3명의 기본급이 기준보다 적습니다</p><div style="margin-top:.7em"><div class="row"><span>조이 <em>₱28 × 52일</em></span><span><b class="r">₱1,456</b></span></div><div class="row"><span>라몬 <em>₱18 × 52일</em></span><span><b class="r">₱936</b></span></div><div class="row"><span>엘라 <em>₱38 × 52일</em></span><span><b class="r">₱1,976</b></span></div></div><p class="h" style="font-size:1.5em;margin:1.05em 0 .1em">기준표</p><div class="row"><span>9월 25일까지</span><span>₱658</span></div><div class="row"><span>9월 26일부터</span><span><b>₱718</b></span></div><div class="row"><span>직원 수 <em>15명 이하</em></span><span>12명</span></div><div class="row"><span>회계사 확인</span><span><b class="gr">완료</b></span></div><span class="btn" style="margin-top:1em">다음 급여에 반영</span></div></div><div class="fl mv up bar"><p class="t">3년 기록 묶음</p><p><b>근무 864일</b> · <b>급여 명세 72장</b> · <b>13월 급여 3회</b> · 서명 없는 날 <b class="r">4일</b></p></div><i class="pin" data-n="1" style="left:2.7em;top:3.2em"></i><i class="pin" data-n="2" style="left:2.7em;top:50.4em"></i><i class="pin" data-n="3" style="left:69.7em;top:8em"></i></div></div><b class="n">250만 원</b><small>근무 기록과 급여</small></a><a href="#t2" aria-label="재고와 원가, 180만 원"><div class="sc s2 on" aria-hidden="true"><canvas></canvas><div class="st"><div class="bd mv up"><header><b>한 그릇에 남는 돈</b><span>재료비와 앱 수수료를 뺀 금액</span></header><div class="tb e"><div class="th"><span>메뉴</span><span>재료비</span><span>매장</span><span>배달K</span><span>그랩</span></div><div class=""><span><b>삼겹살 200g</b></span><span>₱171</span><span>₱279</span><span>₱261</span><span>₱245</span></div><div class=""><span><b>김치찌개</b></span><span>₱118</span><span>₱202</span><span>₱188</span><span>₱178</span></div><div class=""><span><b>제육볶음</b></span><span>₱126</span><span>₱224</span><span>₱207</span><span>₱194</span></div><div class=""><span><b>순두부찌개</b></span><span>₱96</span><span>₱204</span><span>₱192</span><span>₱176</span></div><div class=""><span><b>해물파전</b></span><span>₱190</span><span>₱190</span><span>₱152</span><span><b class="r">₱114</b></span></div></div></div>
+<div class="ph a mv lf"><div><p class="t">삼겹살 · 냉장 1번</p><p class="big">6.5kg</p><p class="t" style="margin:.2em 0 .6em">레시피로 계산한 재고</p><div class="row"><span>아침 재고</span><span>14.0kg</span></div><div class="row"><span>매장 <em>22인분</em></span><span>−4.4</span></div><div class="row"><span>배달K <em>8인분</em></span><span>−1.6</span></div><div class="row"><span>그랩 <em>6인분</em></span><span>−1.2</span></div><div class="row"><span>폐기</span><span>−0.3</span></div><div class="row"><span><b>남아야 할 양</b></span><span><b>6.5kg</b></span></div><div class="row"><span>저울에 잰 양</span><span>6.1kg</span></div><div class="row r" style="background:#FDF0EE;margin:0 -1.15em;padding:.75em 1.15em;border:0"><span><b>차이</b></span><span><b>0.4kg · 2인분</b></span></div><span class="btn" style="margin-top:1em">차이 이유 남기기</span></div></div><div class="fl mv up bar"><p class="t">오늘 재료비</p><p>매출 ₱48,600 가운데 <b>₱17,100</b> · 재료비율 <b>35.2%</b> · 대표님 기준 35%</p></div><i class="pin" data-n="1" style="left:69.7em;top:8em"></i><i class="pin" data-n="2" style="left:2.7em;top:3.2em"></i><i class="pin" data-n="3" style="left:69.7em;top:39.6em"></i></div></div><b class="n">180만 원</b><small>재고와 원가</small></a><a href="#t3" aria-label="주문과 정산, 180만 원"><div class="sc s3 on" aria-hidden="true"><canvas></canvas><div class="st"><div class="bd mv up"><header><b>앱 정산 대조</b><span>11월 16일 ~ 22일</span></header><div class="tb b"><div class="th"><span></span><span>배달K</span><span>그랩</span><span>합계</span></div><div class=""><span><b>주문 합계</b></span><span>₱65,800</span><span>₱78,400</span><span>₱144,200</span></div><div class=""><span>수수료</span><span>−₱6,580</span><span>−₱15,680</span><span>−₱22,260</span></div><div class=""><span>할인 · 환불</span><span>−₱920</span><span>−₱2,640</span><span>−₱3,560</span></div><div class=""><span><b>받을 돈</b></span><span><b>₱58,300</b></span><span><b>₱60,080</b></span><span><b>₱118,380</b></span></div><div class=""><span>통장 입금</span><span>₱58,300</span><span>₱58,420</span><span>₱116,720</span></div><div class=""><span><b>차액</b></span><span><b class="gr">0</b></span><span><b class="r">−₱1,660</b></span><span><b class="r">−₱1,660</b></span></div></div></div>
+<div class="ph a mv lf"><div><p class="t">통합 주문함 · 목요일 12:18</p><p class="h" style="margin:.1em 0 .3em">조리할 주문 5건</p><div class="row"><span><b>배달K #2217</b></span><span>김치찌개 2</span></div><div class="row"><span><b>그랩 #7804</b></span><span>제육 1, 파전 1</span></div><div class="row"><span><b>배달K #2218</b></span><span>삼겹살 3</span></div><div class="row"><span><b>매장 4번</b></span><span>순두부 2</span></div><div class="row"><span><b>그랩 #7805</b></span><span><b class="r">옵션 확인</b></span></div><p class="h" style="font-size:1.5em;margin:1.05em 0 .1em">품절 표시</p><div class="row"><span>해물파전</span><span><b class="r">오징어 2인분</b></span></div><span class="btn off" style="margin:.8em 0 0">배달K · 그랩 품절 표시</span><p class="t" style="text-align:center;margin-top:.8em">앱에서 끈 뒤 완료로 남깁니다</p></div></div><div class="fl mv up bar"><p class="t">그랩 · 확인할 주문 2건</p><p><b>#7731</b> 환불 두 번 <b class="r">₱1,120</b> · <b>#7758</b> 할인 부담 주체 <b class="r">₱540</b> · 문의 글 준비됨</p></div><i class="pin" data-n="1" style="left:69.7em;top:8em"></i><i class="pin" data-n="2" style="left:2.7em;top:3.2em"></i><i class="pin" data-n="3" style="left:2.7em;top:50.4em"></i></div></div><b class="n">180만 원</b><small>주문과 정산</small></a><a href="#t4" aria-label="토탈 운영, 580만~750만 원"><div class="sc s4 on" aria-hidden="true"><canvas></canvas><div class="st"><div class="bd mv up"><header><b>대표 화면</b><span>11월 26일 목 22:10</span></header>
+<div class="kp"><div><small>오늘 매출</small><b>₱48,600</b></div><div><small>재료 · 수수료 · 인건비</small><b>₱29,580</b></div><div><small>임대료 전 남은 돈</small><b class="gr">₱19,020</b></div></div>
+<div class="two"><div><h4>자동 확인</h4><div class="row"><span>서명 없는 근무</span><span><b class="r">1건</b></span></div><div class="row"><span>정산 차액</span><span><b class="r">1건</b></span></div><div class="row"><span>만료 임박 서류</span><span>2건</span></div></div><div><h4>대표님 결정</h4><div class="row"><span>조이 <em>1시간</em></span><span>연장 승인</span></div><div class="row"><span>해물파전 <em>₱114</em></span><span>그랩 값 조정</span></div><div class="row"><span>15시 ~ 17시 <em>4명</em></span><span>근무 조정</span></div></div></div><div class="bars"><i data-d="11시" style="height:46%"></i><i data-d="12시" style="height:100%"></i><i data-d="13시" style="height:78%"></i><i data-d="14시" style="height:34%"></i><i data-d="15시" style="height:12%" class="hi"></i><i data-d="16시" style="height:14%" class="hi"></i><i data-d="17시" style="height:48%"></i><i data-d="18시" style="height:92%"></i><i data-d="19시" style="height:98%"></i><i data-d="20시" style="height:70%"></i><i data-d="21시" style="height:30%"></i></div></div>
+<div class="ph a mv lf"><div><p class="t">오늘 마감</p><p class="h" style="margin:.1em 0 .2em">매출 ₱48,600</p><div class="row"><span>매장</span><span>₱28,000</span></div><div class="row"><span>배달K</span><span>₱9,400</span></div><div class="row"><span>그랩</span><span>₱11,200</span></div><p class="h" style="font-size:1.5em;margin:1.05em 0 .1em">나간 돈</p><div class="row"><span>재료비 <em>35.2%</em></span><span>₱17,100</span></div><div class="row"><span>인건비 <em>19.1%</em></span><span>₱9,300</span></div><div class="row"><span>앱 수수료</span><span>₱3,180</span></div><p class="h" style="font-size:1.5em;margin:1.05em 0 .1em">들어올 돈</p><div class="row"><span>그랩 <em>내일</em></span><span>₱8,960</span></div><div class="row"><span>배달K <em>금요일</em></span><span>₱33,840</span></div><span class="btn" style="margin-top:.8em">마감하기</span></div></div><div class="fl mv up bar"><p class="t">변경 기록</p><p><b>마크 매니저</b> 21:42 · 조이 퇴근 시각 21:00 → 22:00 · 직원 서명 대기</p></div><i class="pin" data-n="1" style="left:2.7em;top:10em"></i><i class="pin" data-n="2" style="left:2.7em;top:50.4em"></i><i class="pin" data-n="3" style="left:69.7em;top:20em"></i></div></div><b class="n">580만 원부터</b><small>토탈 운영</small></a><a href="#t5" aria-label="확장 구상, 검토 후 제안"><div class="sc s5 on" aria-hidden="true"><canvas></canvas><div class="st"><svg class="map" viewBox="0 0 100 62" aria-hidden="true"><g stroke="#22405F" stroke-width=".15"><path d="M0 8H100"/><path d="M0 16H100"/><path d="M0 24H100"/><path d="M0 32H100"/><path d="M0 40H100"/><path d="M0 48H100"/><path d="M0 56H100"/></g><g fill="#1B3350"><rect x="2" y="10.3" width="18" height="3.4" rx=".6"/><rect x="26" y="10.3" width="24" height="3.4" rx=".6"/><rect x="70" y="10.3" width="22" height="3.4" rx=".6"/><rect x="8" y="18.3" width="24" height="3.4" rx=".6"/><rect x="50" y="18.3" width="18" height="3.4" rx=".6"/><rect x="78" y="18.3" width="18" height="3.4" rx=".6"/><rect x="2" y="26.3" width="16" height="3.4" rx=".6"/><rect x="30" y="26.3" width="30" height="3.4" rx=".6"/><rect x="72" y="26.3" width="16" height="3.4" rx=".6"/><rect x="14" y="34.3" width="22" height="3.4" rx=".6"/><rect x="44" y="34.3" width="22" height="3.4" rx=".6"/><rect x="80" y="34.3" width="18" height="3.4" rx=".6"/><rect x="4" y="42.3" width="26" height="3.4" rx=".6"/><rect x="52" y="42.3" width="22" height="3.4" rx=".6"/><rect x="82" y="42.3" width="14" height="3.4" rx=".6"/><rect x="10" y="50.3" width="18" height="3.4" rx=".6"/><rect x="36" y="50.3" width="26" height="3.4" rx=".6"/><rect x="70" y="50.3" width="24" height="3.4" rx=".6"/></g><path id="ln" d="M0 46C10 44 12 20 22 20S34 42 42 42 52 12 62 12 74 38 82 38 92 24 100 24" fill="none" stroke="#8CD9D2" stroke-width=".35" stroke-dasharray="1 .8"/><circle r=".9" fill="#fff"><animateMotion dur="16s" repeatCount="indefinite"><mpath href="#ln"/></animateMotion></circle></svg>
+<div class="ph a mv up"><div><p class="t">22:40 · 대표님 휴대폰</p><p class="h" style="margin:.1em 0 .2em">다음 주 근무표 제안</p><p class="t">월요일 ~ 일요일 · 직원 12명</p><div style="margin-top:1em"><div class="row"><span>예상 주문</span><span>412건</span></div><div class="row"><span>필요한 시간</span><span>428시간</span></div><div class="row"><span>지금 근무표</span><span>452시간</span></div><div class="row"><span><b>남는 시간</b> <em>15시 ~ 17시</em></span><span><b class="r">24시간</b></span></div><div class="row"><span>인건비 차이</span><span><b class="gr">₱2,160</b></span></div></div><p class="t" style="margin:1.4em 0 .5em">직원에게 보낼 근무표 12건</p><span class="btn">승인하고 보내기</span><p class="t" style="text-align:center;margin-top:.8em">직접 고치기</p></div></div>
+<div class="fl mv lf f5a" style="left:68em;top:4.5em;width:28em"><p class="t">직원 · English</p><p>Joy, your shifts next week: Tue to Sun, 10:00 to 19:00. Please confirm.</p></div>
+<div class="fl mv lf f5b" style="left:68em;top:17em;width:28em"><p class="t">임금 변경 미리 계산</p><p>기준이 ₱42 오르면 12명, 26일 기준으로 한 달 <b>₱13,104</b>이 늘어납니다.</p></div>
+<div class="fl mv lf f5c" style="left:68em;top:31em;width:28em"><p class="t">거래처 · English</p><p>15 kg of pork belly for Saturday, delivery 08:00 please.</p></div>
+<div class="fl mv up f5d" style="left:4em;bottom:4.5em;width:29em"><p class="t">운영 제안</p><p>토요일 저녁 예약이 12석 늘었습니다. 18시 근무를 한 명 더 두시겠습니까?</p></div><i class="pin" data-n="1" style="left:36.2em;top:8em"></i><i class="pin" data-n="2" style="left:66.7em;top:15.7em"></i><i class="pin" data-n="3" style="left:66.7em;top:29.7em"></i></div></div><b class="n">검토 후 제안</b><small>확장 구상</small></a></nav></div>
+<section class="step" id="t0"><div class="mom" style="background-image:url(photo/papers.jpg);background-position:50% 55%"><div class="w"><div><p class="pr"><span>서류 정비</span><b class="n">30만 원</b></p><h2><span>감독관이 찾을 서류를</span> <span>직원별로 먼저 맞춥니다.</span></h2></div><a class="per" href="#ask" data-ask="0"><small>제작 일정</small>담당자 문의</a></div></div><div class="w">
+<div class="sc s0 " aria-hidden="true"><canvas></canvas><div class="st"><div class="bd mv up"><header><b>감독 서류함</b><span>직원 12명</span></header><div class="tb a"><div class="th"><span>서류</span><span>있는 것</span><span>빠진 것</span><span>확인</span></div><div class=""><span><b>근로계약서</b></span><span>10 / 12명</span><span>조이, 엘라</span><span><b class="r">2명 없음</b></span></div><div class=""><span><b>근무 기록 3년</b></span><span>28 / 36개월</span><span>2024년 3월~10월</span><span><b class="r">8개월 없음</b></span></div><div class=""><span><b>급여대장</b></span><span>36 / 36개월</span><span>—</span><span><b class="gr">정상</b></span></div><div class=""><span><b>13월 급여 증빙</b></span><span>2 / 3년</span><span>2024년</span><span><b class="r">1년 없음</b></span></div><div class=""><span><b>보건증</b></span><span>12 / 12명</span><span>—</span><span><b class="r">만료 임박 1명</b></span></div></div></div>
+<div class="ph a mv lf"><div><p class="t">서류 촬영 · 2024년</p><p class="h" style="margin:.1em 0 .4em">종이 타임카드</p><div class="row"><span>2월 16일 ~ 29일</span><span><b class="gr">12장</b></span></div><div class="row"><span>3월 1일 ~ 15일</span><span><b class="r">없음</b></span></div><div class="row"><span>3월 16일 ~ 31일</span><span><b class="r">없음</b></span></div><div class="row"><span>4월 1일 ~ 15일</span><span><b class="r">없음</b></span></div><span class="btn" style="margin-top:1.1em">빠진 카드 촬영</span><span class="btn b2" style="margin-top:.5em">찾을 수 없음으로 표시</span><p class="h" style="font-size:1.5em;margin:1.05em 0 .1em">직원별 빠진 서류</p><div class="row"><span>조이</span><span>계약서</span></div><div class="row"><span>엘라</span><span>계약서</span></div><div class="row" style="border:0"><span>라몬 <em>12월 8일</em></span><span>보건증</span></div></div></div><div class="fl mv up bar"><p class="t">다가오는 만료</p><p><b>라몬 보건증</b> 12월 8일 · <b>영업허가</b> 1월 20일 · <b>대표님 취업허가</b> 3월 14일</p></div><i class="pin" data-n="1" style="left:2.7em;top:3.2em"></i><i class="pin" data-n="2" style="left:2.7em;top:50.1em"></i><i class="pin" data-n="3" style="left:69.7em;top:8em"></i></div></div><ol class="g cm"><li class="ok"><p class="k"><i>1</i><u>즉시 적용 가능</u></p><h3>감독 서류함</h3><p>계약서, 근무 기록, 급여대장의 있고 없음을 직원별로 정리합니다.</p></li><li class="ok"><p class="k"><i>2</i><u>즉시 적용 가능</u></p><h3>만료일 관리</h3><p>보건증, 영업허가, 취업허가의 만료일을 한 장에 모읍니다.</p></li><li class="ok"><p class="k"><i>3</i><u>즉시 적용 가능</u></p><h3>종이 기록 보관</h3><p>종이 타임카드를 촬영해 날짜순으로 보관하고, 빠진 기간을 표시합니다.</p></li><li><p class="k">준비해 주실 자료</p><h3>직원 명단, 보관 중인 계약서와 타임카드</h3></li></ol></div></section>
+<section class="step" id="t1"><div class="mom" style="background-image:url(photo/clock.jpg);background-position:50% 40%"><div class="w"><div><p class="pr"><span>근무 기록과 급여</span><b class="n">250만 원</b><span>월 관리 15만 원 별도</span></p><h2><span>퇴사 뒤의 청구도,</span> <span>하루 단위 서명으로 확인합니다.</span></h2></div><a class="per" href="#ask" data-ask="1"><small>제작 일정</small>담당자 문의</a></div></div><div class="w">
+<div class="sc s1 " aria-hidden="true"><canvas></canvas><div class="st"><div class="bd mv up"><header><b>퇴사 직원 청구 대조</b><span>마리아 · 2023년 11월 ~ 2026년 10월</span></header><div class="tb d"><div class="th"><span>날짜</span><span>청구 내용</span><span>서명된 기록</span><span class="hm">계산</span><span>확인</span></div><div class=""><span>8월 31일 월</span><span>공휴일 12시간</span><span>10:00 ~ 19:00</span><span class="hm">공휴일 8시간</span><span><b class="gr">지급함</b></span></div><div class=""><span>9월 5일 토</span><span>연장 4시간</span><span>10:00 ~ 20:00</span><span class="hm">연장 1시간</span><span><b class="gr">지급함</b></span></div><div class=""><span>9월 13일 일</span><span>휴무일 근무</span><span>휴무 서명</span><span class="hm">근무 없음</span><span><b class="gr">휴무</b></span></div><div class=""><span>9월 19일 토</span><span>연장 2시간</span><span>10:00 ~ 21:00</span><span class="hm">연장 2시간</span><span><b class="r">지급 필요 ₱225</b></span></div><div class=""><span>9월 24일 목</span><span>연장 3시간</span><span><b class="r">서명 없음</b></span><span class="hm">확인 전</span><span><b class="r">기록 보완</b></span></div></div></div>
+<div class="ph a mv lf"><div><p class="t">임금 기준 변경 · 9월 26일 시작</p><p class="big r">₱4,368</p><p class="t" style="margin-top:.2em">직원 3명의 기본급이 기준보다 적습니다</p><div style="margin-top:.7em"><div class="row"><span>조이 <em>₱28 × 52일</em></span><span><b class="r">₱1,456</b></span></div><div class="row"><span>라몬 <em>₱18 × 52일</em></span><span><b class="r">₱936</b></span></div><div class="row"><span>엘라 <em>₱38 × 52일</em></span><span><b class="r">₱1,976</b></span></div></div><p class="h" style="font-size:1.5em;margin:1.05em 0 .1em">기준표</p><div class="row"><span>9월 25일까지</span><span>₱658</span></div><div class="row"><span>9월 26일부터</span><span><b>₱718</b></span></div><div class="row"><span>직원 수 <em>15명 이하</em></span><span>12명</span></div><div class="row"><span>회계사 확인</span><span><b class="gr">완료</b></span></div><span class="btn" style="margin-top:1em">다음 급여에 반영</span></div></div><div class="fl mv up bar"><p class="t">3년 기록 묶음</p><p><b>근무 864일</b> · <b>급여 명세 72장</b> · <b>13월 급여 3회</b> · 서명 없는 날 <b class="r">4일</b></p></div><i class="pin" data-n="1" style="left:2.7em;top:3.2em"></i><i class="pin" data-n="2" style="left:2.7em;top:50.4em"></i><i class="pin" data-n="3" style="left:69.7em;top:8em"></i></div></div><ol class="g cm"><li class="ok"><p class="k"><i>1</i><u>즉시 적용 가능</u></p><h3>하루 단위 서명 기록</h3><p>지문 대신 매장 QR로 출퇴근을 남기고, 직원이 시간을 확인해 서명합니다.</p></li><li class="if"><p class="k"><i>2</i><u>협의 후 적용</u></p><h3>급여 계산과 3년 보관</h3><p>휴일, 연장, 야간, 13월 급여를 기준표로 계산합니다. 덜 지급한 금액도 그대로 표시합니다.</p></li><li class="if"><p class="k"><i>3</i><u>협의 후 적용</u></p><h3>임금 변경 알림</h3><p>기준이 바뀐 날부터 직원별 부족분을 계산합니다. 기준표는 회계사 확인 뒤 적용합니다.</p></li><li><p class="k">준비해 주실 자료</p><h3>직원별 일급과 근무 형태, 최근 급여대장</h3></li></ol></div></section>
+<section class="step" id="t2"><div class="mom" style="background-image:url(photo/fridge.jpg);background-position:50% 50%"><div class="w"><div><p class="pr"><span>재고와 원가</span><b class="n">180만 원</b></p><h2><span>한 그릇을 팔 때마다</span> <span>재료와 남는 돈을 계산합니다.</span></h2></div><a class="per" href="#ask" data-ask="2"><small>제작 일정</small>담당자 문의</a></div></div><div class="w">
+<div class="sc s2 " aria-hidden="true"><canvas></canvas><div class="st"><div class="bd mv up"><header><b>한 그릇에 남는 돈</b><span>재료비와 앱 수수료를 뺀 금액</span></header><div class="tb e"><div class="th"><span>메뉴</span><span>재료비</span><span>매장</span><span>배달K</span><span>그랩</span></div><div class=""><span><b>삼겹살 200g</b></span><span>₱171</span><span>₱279</span><span>₱261</span><span>₱245</span></div><div class=""><span><b>김치찌개</b></span><span>₱118</span><span>₱202</span><span>₱188</span><span>₱178</span></div><div class=""><span><b>제육볶음</b></span><span>₱126</span><span>₱224</span><span>₱207</span><span>₱194</span></div><div class=""><span><b>순두부찌개</b></span><span>₱96</span><span>₱204</span><span>₱192</span><span>₱176</span></div><div class=""><span><b>해물파전</b></span><span>₱190</span><span>₱190</span><span>₱152</span><span><b class="r">₱114</b></span></div></div></div>
+<div class="ph a mv lf"><div><p class="t">삼겹살 · 냉장 1번</p><p class="big">6.5kg</p><p class="t" style="margin:.2em 0 .6em">레시피로 계산한 재고</p><div class="row"><span>아침 재고</span><span>14.0kg</span></div><div class="row"><span>매장 <em>22인분</em></span><span>−4.4</span></div><div class="row"><span>배달K <em>8인분</em></span><span>−1.6</span></div><div class="row"><span>그랩 <em>6인분</em></span><span>−1.2</span></div><div class="row"><span>폐기</span><span>−0.3</span></div><div class="row"><span><b>남아야 할 양</b></span><span><b>6.5kg</b></span></div><div class="row"><span>저울에 잰 양</span><span>6.1kg</span></div><div class="row r" style="background:#FDF0EE;margin:0 -1.15em;padding:.75em 1.15em;border:0"><span><b>차이</b></span><span><b>0.4kg · 2인분</b></span></div><span class="btn" style="margin-top:1em">차이 이유 남기기</span></div></div><div class="fl mv up bar"><p class="t">오늘 재료비</p><p>매출 ₱48,600 가운데 <b>₱17,100</b> · 재료비율 <b>35.2%</b> · 대표님 기준 35%</p></div><i class="pin" data-n="1" style="left:69.7em;top:8em"></i><i class="pin" data-n="2" style="left:2.7em;top:3.2em"></i><i class="pin" data-n="3" style="left:69.7em;top:39.6em"></i></div></div><ol class="g cm"><li class="ok"><p class="k"><i>1</i><u>즉시 적용 가능</u></p><h3>레시피 차감</h3><p>팔린 메뉴의 재료를 레시피대로 재고에서 뺍니다. 포스와 앱의 판매 자료를 올려 반영합니다.</p></li><li class="ok"><p class="k"><i>2</i><u>즉시 적용 가능</u></p><h3>메뉴별 남는 돈</h3><p>매장, 배달K, 그랩에서 남는 금액을 나란히 비교합니다.</p></li><li class="ok"><p class="k"><i>3</i><u>즉시 적용 가능</u></p><h3>실사 차이</h3><p>계산한 양과 저울에 잰 양을 비교하고 차이 이유를 남깁니다.</p></li><li><p class="k">준비해 주실 자료</p><h3>메뉴와 레시피, 매입 단가, 포스 판매 파일</h3></li></ol></div></section>
+<section class="step" id="t3"><div class="mom" style="background-image:url(photo/bags.jpg);background-position:50% 60%"><div class="w"><div><p class="pr"><span>주문과 정산</span><b class="n">180만 원</b><span>월 관리 15만 원 별도</span></p><h2><span>앱 주문과 통장 입금액을</span> <span>주문 한 건까지 맞춥니다.</span></h2></div><a class="per" href="#ask" data-ask="3"><small>제작 일정</small>담당자 문의</a></div></div><div class="w">
+<div class="sc s3 " aria-hidden="true"><canvas></canvas><div class="st"><div class="bd mv up"><header><b>앱 정산 대조</b><span>11월 16일 ~ 22일</span></header><div class="tb b"><div class="th"><span></span><span>배달K</span><span>그랩</span><span>합계</span></div><div class=""><span><b>주문 합계</b></span><span>₱65,800</span><span>₱78,400</span><span>₱144,200</span></div><div class=""><span>수수료</span><span>−₱6,580</span><span>−₱15,680</span><span>−₱22,260</span></div><div class=""><span>할인 · 환불</span><span>−₱920</span><span>−₱2,640</span><span>−₱3,560</span></div><div class=""><span><b>받을 돈</b></span><span><b>₱58,300</b></span><span><b>₱60,080</b></span><span><b>₱118,380</b></span></div><div class=""><span>통장 입금</span><span>₱58,300</span><span>₱58,420</span><span>₱116,720</span></div><div class=""><span><b>차액</b></span><span><b class="gr">0</b></span><span><b class="r">−₱1,660</b></span><span><b class="r">−₱1,660</b></span></div></div></div>
+<div class="ph a mv lf"><div><p class="t">통합 주문함 · 목요일 12:18</p><p class="h" style="margin:.1em 0 .3em">조리할 주문 5건</p><div class="row"><span><b>배달K #2217</b></span><span>김치찌개 2</span></div><div class="row"><span><b>그랩 #7804</b></span><span>제육 1, 파전 1</span></div><div class="row"><span><b>배달K #2218</b></span><span>삼겹살 3</span></div><div class="row"><span><b>매장 4번</b></span><span>순두부 2</span></div><div class="row"><span><b>그랩 #7805</b></span><span><b class="r">옵션 확인</b></span></div><p class="h" style="font-size:1.5em;margin:1.05em 0 .1em">품절 표시</p><div class="row"><span>해물파전</span><span><b class="r">오징어 2인분</b></span></div><span class="btn off" style="margin:.8em 0 0">배달K · 그랩 품절 표시</span><p class="t" style="text-align:center;margin-top:.8em">앱에서 끈 뒤 완료로 남깁니다</p></div></div><div class="fl mv up bar"><p class="t">그랩 · 확인할 주문 2건</p><p><b>#7731</b> 환불 두 번 <b class="r">₱1,120</b> · <b>#7758</b> 할인 부담 주체 <b class="r">₱540</b> · 문의 글 준비됨</p></div><i class="pin" data-n="1" style="left:69.7em;top:8em"></i><i class="pin" data-n="2" style="left:2.7em;top:3.2em"></i><i class="pin" data-n="3" style="left:2.7em;top:50.4em"></i></div></div><ol class="g cm"><li class="if"><p class="k"><i>1</i><u>협의 후 적용</u></p><h3>통합 주문함</h3><p>배달K와 그랩 주문을 화면 캡처나 글로 올려 한 화면에 모읍니다.</p></li><li class="if"><p class="k"><i>2</i><u>협의 후 적용</u></p><h3>받을 돈 계산</h3><p>수수료, 할인, 환불을 나누어 입금액과 대조합니다. 받을 수 있는 내역을 먼저 확인합니다.</p></li><li class="ok"><p class="k"><i>3</i><u>즉시 적용 가능</u></p><h3>차액 주문 찾기</h3><p>어긋난 주문과 앱에 보낼 문의 글을 준비합니다.</p></li><li><p class="k">준비해 주실 자료</p><h3>최근 한 달 앱 내역, 통장 입금 내역</h3></li></ol></div></section>
+<section class="step" id="t4"><div class="mom" style="background-image:url(photo/hall.jpg);background-position:50% 55%"><div class="w"><div><p class="pr"><span>토탈 운영</span><b class="n">580만~750만 원</b><span>월 관리 25만 원 별도</span></p><h2><span>문을 닫기 전에,</span> <span>오늘 남은 돈을 확인합니다.</span></h2></div><a class="per" href="#ask" data-ask="4"><small>제작 일정</small>담당자 문의</a></div></div><div class="w">
+<div class="sc s4 " aria-hidden="true"><canvas></canvas><div class="st"><div class="bd mv up"><header><b>대표 화면</b><span>11월 26일 목 22:10</span></header>
+<div class="kp"><div><small>오늘 매출</small><b>₱48,600</b></div><div><small>재료 · 수수료 · 인건비</small><b>₱29,580</b></div><div><small>임대료 전 남은 돈</small><b class="gr">₱19,020</b></div></div>
+<div class="two"><div><h4>자동 확인</h4><div class="row"><span>서명 없는 근무</span><span><b class="r">1건</b></span></div><div class="row"><span>정산 차액</span><span><b class="r">1건</b></span></div><div class="row"><span>만료 임박 서류</span><span>2건</span></div></div><div><h4>대표님 결정</h4><div class="row"><span>조이 <em>1시간</em></span><span>연장 승인</span></div><div class="row"><span>해물파전 <em>₱114</em></span><span>그랩 값 조정</span></div><div class="row"><span>15시 ~ 17시 <em>4명</em></span><span>근무 조정</span></div></div></div><div class="bars"><i data-d="11시" style="height:46%"></i><i data-d="12시" style="height:100%"></i><i data-d="13시" style="height:78%"></i><i data-d="14시" style="height:34%"></i><i data-d="15시" style="height:12%" class="hi"></i><i data-d="16시" style="height:14%" class="hi"></i><i data-d="17시" style="height:48%"></i><i data-d="18시" style="height:92%"></i><i data-d="19시" style="height:98%"></i><i data-d="20시" style="height:70%"></i><i data-d="21시" style="height:30%"></i></div></div>
+<div class="ph a mv lf"><div><p class="t">오늘 마감</p><p class="h" style="margin:.1em 0 .2em">매출 ₱48,600</p><div class="row"><span>매장</span><span>₱28,000</span></div><div class="row"><span>배달K</span><span>₱9,400</span></div><div class="row"><span>그랩</span><span>₱11,200</span></div><p class="h" style="font-size:1.5em;margin:1.05em 0 .1em">나간 돈</p><div class="row"><span>재료비 <em>35.2%</em></span><span>₱17,100</span></div><div class="row"><span>인건비 <em>19.1%</em></span><span>₱9,300</span></div><div class="row"><span>앱 수수료</span><span>₱3,180</span></div><p class="h" style="font-size:1.5em;margin:1.05em 0 .1em">들어올 돈</p><div class="row"><span>그랩 <em>내일</em></span><span>₱8,960</span></div><div class="row"><span>배달K <em>금요일</em></span><span>₱33,840</span></div><span class="btn" style="margin-top:.8em">마감하기</span></div></div><div class="fl mv up bar"><p class="t">변경 기록</p><p><b>마크 매니저</b> 21:42 · 조이 퇴근 시각 21:00 → 22:00 · 직원 서명 대기</p></div><i class="pin" data-n="1" style="left:2.7em;top:10em"></i><i class="pin" data-n="2" style="left:2.7em;top:50.4em"></i><i class="pin" data-n="3" style="left:69.7em;top:20em"></i></div></div><ol class="g cm"><li class="ok"><p class="k"><i>1</i><u>즉시 적용 가능</u></p><h3>오늘 남은 돈</h3><p>매출에서 재료비, 인건비, 앱 수수료를 뺍니다. 포스와 회계는 쓰시던 대로 두시면 됩니다.</p></li><li class="ok"><p class="k"><i>2</i><u>즉시 적용 가능</u></p><h3>권한과 변경 이력</h3><p>누가 언제 근무 시간과 금액을 바꾸었는지 남깁니다.</p></li><li class="ask"><p class="k"><i>3</i><u>사전 검토 필요</u></p><h3>그랩 자동 연동</h3><p>그랩의 제휴 승인 뒤 별도 견적입니다. 배달K는 연동 가능 여부를 먼저 문의합니다.</p></li><li><p class="k">준비해 주실 자료</p><h3>직원별 담당 업무, 최근 3개월 매출과 매입</h3></li></ol></div></section>
+<section class="step" id="t5"><div class="mom" style="background-image:url(photo/stock.jpg);background-position:50% 60%"><div class="w"><div><p class="pr"><span>확장 구상</span><b class="n">검토 후 제안</b></p><h2><span>다음 주 근무표가</span> <span>주문량에 맞춰 준비됩니다.</span></h2></div><a class="per" href="#ask" data-ask="5"><small>제작 일정</small>담당자 문의</a></div></div><div class="w">
+<div class="sc s5 " aria-hidden="true"><canvas></canvas><div class="st"><svg class="map" viewBox="0 0 100 62" aria-hidden="true"><g stroke="#22405F" stroke-width=".15"><path d="M0 8H100"/><path d="M0 16H100"/><path d="M0 24H100"/><path d="M0 32H100"/><path d="M0 40H100"/><path d="M0 48H100"/><path d="M0 56H100"/></g><g fill="#1B3350"><rect x="2" y="10.3" width="18" height="3.4" rx=".6"/><rect x="26" y="10.3" width="24" height="3.4" rx=".6"/><rect x="70" y="10.3" width="22" height="3.4" rx=".6"/><rect x="8" y="18.3" width="24" height="3.4" rx=".6"/><rect x="50" y="18.3" width="18" height="3.4" rx=".6"/><rect x="78" y="18.3" width="18" height="3.4" rx=".6"/><rect x="2" y="26.3" width="16" height="3.4" rx=".6"/><rect x="30" y="26.3" width="30" height="3.4" rx=".6"/><rect x="72" y="26.3" width="16" height="3.4" rx=".6"/><rect x="14" y="34.3" width="22" height="3.4" rx=".6"/><rect x="44" y="34.3" width="22" height="3.4" rx=".6"/><rect x="80" y="34.3" width="18" height="3.4" rx=".6"/><rect x="4" y="42.3" width="26" height="3.4" rx=".6"/><rect x="52" y="42.3" width="22" height="3.4" rx=".6"/><rect x="82" y="42.3" width="14" height="3.4" rx=".6"/><rect x="10" y="50.3" width="18" height="3.4" rx=".6"/><rect x="36" y="50.3" width="26" height="3.4" rx=".6"/><rect x="70" y="50.3" width="24" height="3.4" rx=".6"/></g><path id="ln" d="M0 46C10 44 12 20 22 20S34 42 42 42 52 12 62 12 74 38 82 38 92 24 100 24" fill="none" stroke="#8CD9D2" stroke-width=".35" stroke-dasharray="1 .8"/><circle r=".9" fill="#fff"><animateMotion dur="16s" repeatCount="indefinite"><mpath href="#ln"/></animateMotion></circle></svg>
+<div class="ph a mv up"><div><p class="t">22:40 · 대표님 휴대폰</p><p class="h" style="margin:.1em 0 .2em">다음 주 근무표 제안</p><p class="t">월요일 ~ 일요일 · 직원 12명</p><div style="margin-top:1em"><div class="row"><span>예상 주문</span><span>412건</span></div><div class="row"><span>필요한 시간</span><span>428시간</span></div><div class="row"><span>지금 근무표</span><span>452시간</span></div><div class="row"><span><b>남는 시간</b> <em>15시 ~ 17시</em></span><span><b class="r">24시간</b></span></div><div class="row"><span>인건비 차이</span><span><b class="gr">₱2,160</b></span></div></div><p class="t" style="margin:1.4em 0 .5em">직원에게 보낼 근무표 12건</p><span class="btn">승인하고 보내기</span><p class="t" style="text-align:center;margin-top:.8em">직접 고치기</p></div></div>
+<div class="fl mv lf f5a" style="left:68em;top:4.5em;width:28em"><p class="t">직원 · English</p><p>Joy, your shifts next week: Tue to Sun, 10:00 to 19:00. Please confirm.</p></div>
+<div class="fl mv lf f5b" style="left:68em;top:17em;width:28em"><p class="t">임금 변경 미리 계산</p><p>기준이 ₱42 오르면 12명, 26일 기준으로 한 달 <b>₱13,104</b>이 늘어납니다.</p></div>
+<div class="fl mv lf f5c" style="left:68em;top:31em;width:28em"><p class="t">거래처 · English</p><p>15 kg of pork belly for Saturday, delivery 08:00 please.</p></div>
+<div class="fl mv up f5d" style="left:4em;bottom:4.5em;width:29em"><p class="t">운영 제안</p><p>토요일 저녁 예약이 12석 늘었습니다. 18시 근무를 한 명 더 두시겠습니까?</p></div><i class="pin" data-n="1" style="left:36.2em;top:8em"></i><i class="pin" data-n="2" style="left:66.7em;top:15.7em"></i><i class="pin" data-n="3" style="left:66.7em;top:29.7em"></i></div></div><ol class="g cm"><li class="ask"><p class="k"><i>1</i><u>사전 검토 필요</u></p><h3>근무표 제안</h3><p>쌓인 주문과 근무 기록으로 먼저 시험한 뒤 적용합니다.</p></li><li class="if"><p class="k"><i>2</i><u>협의 후 적용</u></p><h3>임금 변경 미리 계산</h3><p>기준이 오를 때 한 달 인건비가 얼마나 늘어나는지 보여 드립니다.</p></li><li class="if"><p class="k"><i>3</i><u>협의 후 적용</u></p><h3>발주서 준비</h3><p>대표님이 승인하신 발주서만 거래처에 발송합니다.</p></li><li><p class="k">준비해 주실 자료</p><h3>토탈 운영 단계의 주문과 근무 기록</h3></li></ol></div></section>
+
+<section class="end"><div class="w"><h2>진행 방식</h2><ol class="g way"><li><b>업무 진단</b><p>현재 사용하시는 타임카드, 급여 장부, 배달 앱, 포스를 그대로 검토합니다. 필요하면 현장 상담도 가능합니다. 담당자에게 문의해 주십시오(비용이 발생할 수 있습니다).</p></li><li><b>맞춤 시안</b><p>식당 상호와 메뉴, 색상을 적용한 화면을 먼저 보여 드립니다.</p></li><li><b>계약과 제작</b><p>시안을 확정하신 뒤 선금 50%로 제작을 시작합니다.</p></li><li><b>납품과 보완</b><p>납품 후 2주까지 문구와 배치 수정은 횟수를 제한하지 않습니다. 모든 자료는 대표님의 소유입니다.</p></li></ol></div></section>
+<section class="cus" id="ask"><div class="cusimg"><div class="w"><h2><span>대표님의 취향과 운영 방식을 담아</span> <span>먼저 보여 드립니다.</span></h2></div></div>
+<div class="w cusg"><form class="opt" autocomplete="off" onsubmit="return false">
+<label class="fld"><span>상호</span><input id="co" type="text" maxlength="14" placeholder="상호를 입력해 주십시오"></label>
+<fieldset><legend>대표 색상</legend><div class="sw"><button type="button" data-c="#8F2A1C" data-n="고추장빛" style="--c:#8F2A1C" aria-label="고추장빛" aria-pressed="true"></button><button type="button" data-c="#17497A" data-n="쪽빛" style="--c:#17497A" aria-label="쪽빛" aria-pressed="false"></button><button type="button" data-c="#0A6B49" data-n="짙은 녹색" style="--c:#0A6B49" aria-label="짙은 녹색" aria-pressed="false"></button><button type="button" data-c="#23282B" data-n="먹색" style="--c:#23282B" aria-label="먹색" aria-pressed="false"></button><button type="button" data-c="#86652A" data-n="황동" style="--c:#86652A" aria-label="황동" aria-pressed="false"></button><button type="button" data-c="#4A2C5A" data-n="가지색" style="--c:#4A2C5A" aria-label="가지색" aria-pressed="false"></button></div></fieldset>
+<fieldset><legend>분위기</legend><div class="seg" data-k="mood"><button type="button" data-v="0" aria-pressed="true">단정하게</button><button type="button" data-v="1" aria-pressed="false">품격 있게</button><button type="button" data-v="2" aria-pressed="false">친근하게</button></div></fieldset>
+<fieldset><legend>화면</legend><div class="seg" data-k="dark"><button type="button" data-v="0" aria-pressed="true">밝은 화면</button><button type="button" data-v="1" aria-pressed="false">어두운 화면</button></div></fieldset>
+<fieldset><legend>직원 안내 언어</legend><div class="seg" data-k="lang"><button type="button" data-v="0" aria-pressed="true">한국어</button><button type="button" data-v="1" aria-pressed="false">영어 추가</button><button type="button" data-v="2" aria-pressed="false">따갈로그어까지</button></div></fieldset>
+<fieldset><legend>관심 단계</legend><div class="seg pick"><button type="button" data-k="0" aria-pressed="false">서류 정비</button><button type="button" data-k="1" aria-pressed="false">근무 기록과 급여</button><button type="button" data-k="2" aria-pressed="false">재고와 원가</button><button type="button" data-k="3" aria-pressed="false">주문과 정산</button><button type="button" data-k="4" aria-pressed="false">토탈 운영</button><button type="button" data-k="5" aria-pressed="false">확장 구상</button></div></fieldset>
+</form><div class="pvw"><div class="sc pv on" id="pv" aria-hidden="true"><div class="st"><div class="bd site"><div class="ph2"><header><b data-co>대표님 식당</b><span>근무</span><span>급여</span><span>재고</span><span>정산</span><em data-lang>한국어</em></header><h4>오늘 근무 9명,<br>확인할 일 3건이 있습니다.</h4></div><div class="kp"><div><small>오늘 매출</small><b>₱48,600</b></div><div><small>인건비</small><b>₱9,300</b></div><div><small>임대료 전 남은 돈</small><b class="ac">₱19,020</b></div></div><div class="two"><div><h4>근무 중</h4><div class="row"><span>조이 · 홀</span><span>10:00</span></div><div class="row"><span>라몬 · 주방</span><span>09:30</span></div><div class="row"><span>엘라 · 홀</span><span>11:00</span></div></div><div><h4>확인할 일</h4><div class="row"><span>서명 없는 근무</span><span>1건</span></div><div class="row"><span>정산 차액</span><span>1건</span></div><div class="row"><span>만료 임박 서류</span><span>1건</span></div></div></div></div><div class="ph a"><div><p class="t" data-co>대표님 식당</p><p class="h" style="margin:.1em 0 .6em" data-slip>급여 확인서</p><p class="t">Joy · 11월 1일 ~ 15일</p><p class="big">₱8,330</p><div style="margin-top:.6em"><div class="row"><span>기본급 <em>12일</em></span><span>₱8,640</span></div><div class="row"><span>연장 <em>4시간</em></span><span>₱450</span></div><div class="row"><span>공제</span><span>−₱760</span></div><div class="row"><span><b>받는 금액</b></span><span><b>₱8,330</b></span></div></div><span class="btn" style="margin-top:1em">확인하고 서명하기</span><span class="btn b2" style="margin-top:.6em">시간이 다릅니다</span></div></div></div></div><p class="note">선택하신 내용이 바로 반영되는 예시 화면입니다.</p></div></div>
+<div class="w msgw"><label for="msg">문의 내용</label><textarea id="msg"></textarea><button type="button" class="cta" id="copy">맞춤 시안 문의하기</button><p class="note">문의 내용이 복사됩니다. 이 주소를 받으신 카카오톡 대화방에 붙여 넣어 보내 주십시오.</p></div></section>
+<section class="end"><div class="w"><h2>내부 검토용 이미지</h2><div class="cards" tabindex="0" aria-label="카톡 이미지 묶음"><img src="cards/0.jpg" width="1080" height="1440" alt="카톡 이미지 1: 표지"><img src="cards/1.jpg" width="1080" height="1440" alt="카톡 이미지 2: 서류 정비"><img src="cards/2.jpg" width="1080" height="1440" alt="카톡 이미지 3: 근무 기록과 급여"><img src="cards/3.jpg" width="1080" height="1440" alt="카톡 이미지 4: 재고와 원가"><img src="cards/4.jpg" width="1080" height="1440" alt="카톡 이미지 5: 주문과 정산"><img src="cards/5.jpg" width="1080" height="1440" alt="카톡 이미지 6: 토탈 운영"><img src="cards/6.jpg" width="1080" height="1440" alt="카톡 이미지 7: 확장 구상"></div><p class="note">이미지를 길게 누르면 저장하실 수 있습니다.</p></div></section></main>
+<footer><div class="w">화면의 이름, 임금 기준, 금액, 수수료와 사진은 모두 예시입니다. 임금 기준과 공제 요율은 제작 전에 공식 원문과 회계사 확인을 거쳐 적용합니다. 본 제안은 법률 자문이 아닙니다. 배달K와 그랩은 각 회사의 서비스이며 당사와 제휴 관계가 아닙니다. 표시된 금액은 제작비이며 서버, 도메인, 외부 서비스와 AI 이용 비용은 계약 전에 별도로 안내해 드립니다.</div></footer>
+<script>
+(() => {
+  const TIERS = [["서류 정비","30만 원"],["근무 기록과 급여","250만 원"],["재고와 원가","180만 원"],["주문과 정산","180만 원"],["토탈 운영","580만~750만 원"],["확장 구상","검토 후 제안"]];
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+
+  // punched time-card rows behind every scene
+  function contour(sc) {
+    const cv = sc.querySelector('canvas'); if (!cv) return; const w = sc.clientWidth, h = sc.clientHeight;
+    if (!w || !h) return;
+    const d = Math.min(devicePixelRatio || 1, 2), k = +(sc.className.match(/s(\d)/) || [0, 0])[1];
+    cv.width = w * d; cv.height = h * d;
+    const c = cv.getContext('2d'); let seed = 71 + k * 37;
+    const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+    c.fillStyle = getComputedStyle(sc).getPropertyValue('--ct');
+    const u = cv.width / 100, M = 100 * h / w;
+    for (let y = 1.4; y < M; y += 3.6) {
+      c.fillRect(0, (y + 2.6) * u, cv.width, 0.12 * u);
+      for (let x = 1 + rnd() * 4; x < 100; x += 4 + rnd() * 12) { const l = 3 + rnd() * 11; if (rnd() > 0.35) c.fillRect(x * u, y * u, l * u, 1.5 * u); x += l; }
+    }
+  }
+  const all = $$('.sc'); all.forEach(contour);
+  let rt; addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(() => all.forEach(contour), 200); });
+
+  const steps = $$('.step'); if (!steps.length) return;
+  const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) e.target.classList.add('on'); }), { rootMargin: '0px 0px -15% 0px' });
+  $$('.step .sc').forEach((s) => io.observe(s));
+
+  // price rail
+  const links = $$('.rail a'), bar = document.querySelector('.rail i');
+  let cur = -1;
+  function mark() {
+    let k = -1; steps.forEach((s, i) => { if (s.getBoundingClientRect().top < innerHeight * 0.45) k = i; });
+    const end = document.querySelector('.end').getBoundingClientRect().top < 120; if (end) k = -1;
+    if (k === cur) return; cur = k;
+    links.forEach((a, i) => (i === k ? a.setAttribute('aria-current', 'true') : a.removeAttribute('aria-current')));
+    if (k < 0) { bar.style.width = '0'; return; }
+    bar.style.width = links[k].offsetWidth + 'px'; bar.style.transform = `translateX(${links[k].offsetLeft}px)`;
+  }
+  addEventListener('scroll', mark, { passive: true }); mark();
+
+  // pick a pain -> jump to the scene that stops it, and pre-fill the message
+  const pains = $$('.pain button'), picks = $$('.pick button'), msg = document.getElementById('msg'), pv = document.getElementById('pv'), co = document.getElementById('co');
+  const MOOD = ['단정하게', '품격 있게', '친근하게'], DARK = ['밝은 화면', '어두운 화면'], LANG = ['한국어', '한국어, 영어', '한국어, 영어, 따갈로그어'];
+  const FONT = ['var(--sans)', '"Nanum Myeongjo",serif', '"Gowun Dodum",sans-serif'], RAD = ['.9em', '.15em', '2em'];
+  const S = { tier: 1, why: '', color: '고추장빛', hex: '#8F2A1C', mood: 0, dark: 0, lang: 0, touched: false };
+  function paint() {
+    picks.forEach((b) => b.setAttribute('aria-pressed', String(+b.dataset.k === S.tier)));
+    pv.style.setProperty('--ac', S.hex); pv.style.setProperty('--pf', FONT[S.mood]); pv.style.setProperty('--pr', RAD[S.mood]);
+    pv.classList.toggle('dk', !!S.dark);
+    $$('[data-co]', pv).forEach((e) => { e.textContent = co.value.trim() || '대표님 식당'; });
+    $$('[data-lang]', pv).forEach((e) => { e.textContent = ['한국어', '한국어 · EN', '한국어 · EN · TL'][S.lang]; });
+    msg.value = `안녕하십니까. 업무 제안을 보고 문의드립니다.\n\n상호: ${co.value.trim()}\n관심 단계: ${TIERS[S.tier][0]} (${TIERS[S.tier][1]})\n먼저 해결할 업무: ${S.why}\n희망 색상: ${S.color}\n희망 분위기: ${MOOD[S.mood]}, ${DARK[S.dark]}\n안내 언어: ${LANG[S.lang]}\n직원 수:\n사용하시는 배달 앱과 포스:\n희망 일정:\n연락 가능한 시간:`;
+  }
+  pains.forEach((b) => b.addEventListener('click', () => {
+    pains.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+    steps.forEach((s) => s.classList.toggle('hit', s.id === b.dataset.go));
+    S.tier = +b.dataset.go.slice(1); S.why = b.textContent; paint();
+    document.getElementById(b.dataset.go).scrollIntoView();
+  }));
+  picks.forEach((b) => b.addEventListener('click', () => { S.tier = +b.dataset.k; paint(); }));
+  $$('[data-ask]').forEach((x) => x.addEventListener('click', () => { S.tier = +x.dataset.ask; paint(); }));
+  $$('.sw button').forEach((b) => b.addEventListener('click', () => { $$('.sw button').forEach((x) => x.setAttribute('aria-pressed', String(x === b))); S.color = b.dataset.n; S.hex = b.dataset.c; paint(); }));
+  $$('.seg[data-k]').forEach((g) => $$('button', g).forEach((b) => b.addEventListener('click', () => { $$('button', g).forEach((x) => x.setAttribute('aria-pressed', String(x === b))); S[g.dataset.k] = +b.dataset.v; paint(); })));
+  co.addEventListener('input', paint);
+  paint();
+  const btn = document.getElementById('copy');
+  btn.addEventListener('click', async () => {
+    let ok = false;
+    try { await navigator.clipboard.writeText(msg.value); ok = true; } catch { msg.focus(); msg.select(); try { ok = document.execCommand('copy'); } catch {} }
+    btn.textContent = ok ? '복사되었습니다' : '문의 내용을 길게 눌러 복사해 주십시오';
+    setTimeout(() => { btn.textContent = '맞춤 시안 문의하기'; }, 2600);
+  });
+})();
+</script>
+</body></html>
