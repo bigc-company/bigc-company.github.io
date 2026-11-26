@@ -1,0 +1,706 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="업종과 지금 겪는 일을 번호로만 고르시면, 맞는 프로그램 단계와 값을 바로 보여 드립니다."><meta property="og:type" content="website"><meta property="og:site_name" content="bigC company"><meta property="og:url" content="https://bigc-company.github.io/bot/"><link rel="canonical" href="https://bigc-company.github.io/bot/"><meta property="og:title" content="bigC company · 1분 질문"><meta property="og:description" content="업종과 지금 겪는 일을 번호로만 고르시면, 맞는 프로그램 단계와 값을 바로 보여 드립니다."><meta property="og:image" content="https://bigc-company.github.io/og.jpg?v=1"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="600"><meta name="twitter:card" content="summary_large_image"><title>bigC company · 1분 질문</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&family=Gowun+Batang:wght@700&display=swap">
+<style>
+
+:root{
+  --bg:#f4f6f4; --surface:#ffffff; --fg:#17211b; --muted:#56635b; --line:#d6ddd8;
+  --accent:#1b6b45; --accent-soft:#e2f0e8; --cell:#fbfcfb; --hot:#b5441c; --hot-soft:#fbe9e1; --hl:#fff1a8;
+  --brand:#1b6b45; --on-brand:#ffffff;
+  --f-body:"IBM Plex Sans KR",system-ui,"Malgun Gothic",sans-serif;
+  --f-display:"Gowun Batang","Noto Serif KR",Georgia,serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#111613; --surface:#18201b; --fg:#e6ece8; --muted:#97a69d; --line:#2b3630;
+  --accent:#6fcf9c; --accent-soft:#1a3326; --cell:#141b17; --hot:#f19a76; --hot-soft:#3a2219; --hl:#5b5122; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#111613; --surface:#18201b; --fg:#e6ece8; --muted:#97a69d; --line:#2b3630;
+  --accent:#6fcf9c; --accent-soft:#1a3326; --cell:#141b17; --hot:#f19a76; --hot-soft:#3a2219; --hl:#5b5122; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:15px;line-height:1.65;word-break:keep-all;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:24px 64px}
+.wrap{max-width:1060px;margin:0 auto;display:grid;grid-template-columns:minmax(0,1fr) 400px;gap:44px;align-items:start}
+.wrap>*{min-width:0}
+h1,h2,h3{margin:0;text-wrap:balance}
+p{margin:0}
+button{font:inherit;color:inherit}
+button:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+
+.notes{display:flex;flex-direction:column;gap:22px;padding-top:8px}
+.eyebrow{font-size:12px;letter-spacing:.08em;color:var(--muted);font-weight:600}
+.notes h1{font-family:var(--f-display);font-size:clamp(28px,4vw,40px);line-height:1.22}
+.notes h1 em{font-style:normal;background:linear-gradient(transparent 62%,var(--hl) 62%)}
+.notes .sub{max-width:52ch;color:var(--muted)}
+.chk{display:flex;flex-direction:column;gap:10px;margin:0;padding:0;list-style:none}
+.chk li{display:grid;grid-template-columns:22px minmax(0,1fr);gap:8px;font-size:14.5px}
+.chk li b.n{font-family:var(--f-mono);font-weight:500;font-size:12px;color:var(--accent);padding-top:3px}
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:13.5px;min-width:460px}
+th,td{text-align:left;vertical-align:top;padding:8px 11px;border-bottom:1px solid var(--line)}
+th{font-size:12px;color:var(--muted);font-weight:600;background:var(--cell)}
+tr:last-child td{border-bottom:0}
+td.v{font-variant-numeric:tabular-nums;white-space:nowrap;font-weight:600}
+.src{font-size:12.5px;color:var(--muted);max-width:66ch}
+details summary{list-style-position:outside}
+
+
+.bot{position:sticky;top:calc(env(safe-area-inset-top,0px) + 16px);background:var(--surface);border:1px solid var(--line);border-radius:28px;
+  box-shadow:0 18px 40px -26px rgba(0,0,0,.45);display:flex;flex-direction:column;height:min(780px,calc(100vh - 48px));min-height:560px;overflow:hidden}
+.top{display:flex;justify-content:space-between;align-items:center;padding:14px 16px 10px;font-size:12.5px;border-bottom:1px solid var(--line);gap:8px}
+.top .who{display:flex;align-items:center;gap:8px;min-width:0}
+.top .dot{width:26px;height:26px;border-radius:50%;background:var(--brand);color:var(--on-brand);display:grid;place-items:center;font-weight:700;font-size:11px;flex:none}
+.top .who b{font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.top .who span{color:var(--muted);font-size:11.5px;display:block}
+.prog{height:3px;background:var(--line)}
+.prog i{display:block;height:100%;background:var(--accent);transition:width .35s ease}
+.thread>*{flex-shrink:0}
+.thread{flex:1;overflow-y:auto;padding:16px 14px 20px;display:flex;flex-direction:column;gap:10px;scroll-behavior:smooth}
+.foot{border-top:1px dashed var(--line);padding:9px 14px calc(11px + env(safe-area-inset-bottom,0px));text-align:center}
+.foot button{background:none;border:0;color:var(--accent);font-size:13px;text-decoration:underline;cursor:pointer}
+
+.b{background:var(--accent-soft);border-radius:14px 14px 14px 4px;padding:9px 12px;font-size:14px;line-height:1.55;max-width:92%;align-self:flex-start;animation:in .25s ease both}
+.me{align-self:flex-end;display:flex;flex-direction:column;align-items:flex-end;gap:2px;max-width:88%}
+.me span{background:var(--cell);border:1px solid var(--line);border-radius:14px 14px 4px 14px;padding:8px 12px;font-size:14px}
+.me button{background:none;border:0;padding:0 2px;font-size:11.5px;color:var(--muted);text-decoration:underline;cursor:pointer}
+.why{font-size:12px;color:var(--muted);padding:0 2px}
+@keyframes in{from{opacity:.001;transform:translateY(6px)}}
+@media (prefers-reduced-motion:reduce){.b,.card{animation:none}.prog i{transition:none}.thread{scroll-behavior:auto}}
+
+.opts{display:flex;flex-direction:column;gap:6px}
+.opt{display:flex;gap:9px;align-items:flex-start;text-align:left;width:100%;border:1px solid var(--line);border-radius:11px;padding:9px 12px;font-size:14px;background:var(--cell);cursor:pointer}
+.opt:hover{border-color:var(--accent)}
+.opt b{font-family:var(--f-mono);font-weight:500;color:var(--accent);font-size:12px;padding-top:2px;min-width:12px}
+.opt small{display:block;color:var(--muted);font-size:12px;line-height:1.4}
+.opt.idk{color:var(--muted)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.entry{border:1px solid var(--line);border-radius:12px;padding:11px;display:flex;flex-direction:column;gap:4px;background:var(--cell);text-align:left;cursor:pointer}
+.entry:hover{border-color:var(--accent)}
+.entry b{font-size:14px}
+.entry span{font-size:12px;color:var(--muted);line-height:1.45}
+
+
+.card{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--surface);animation:in .3s ease both}
+.card .hd{background:var(--brand);color:var(--on-brand);display:flex;justify-content:space-between;align-items:center;padding:8px 12px;font-size:12.5px;gap:8px}
+.card .hd b{font-size:13px}
+.card .bd{padding:10px 12px;display:flex;flex-direction:column;gap:6px}
+.row{display:flex;justify-content:space-between;gap:10px;font-size:13px;border-bottom:1px solid var(--line);padding-bottom:5px;font-variant-numeric:tabular-nums}
+.row:last-child{border-bottom:0;padding-bottom:0}
+.row em{font-style:normal;color:var(--muted);font-size:11.5px;margin-left:4px}
+.r{color:var(--hot);font-weight:700}
+.g{color:var(--accent);font-weight:700}
+.big{font-size:26px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1.2}
+.alert{background:var(--hot-soft);color:var(--hot);font-size:12px;font-weight:700;border-radius:6px;padding:4px 8px}
+.quote{font-size:12.5px;border-left:3px solid var(--line);padding-left:8px;color:var(--muted)}
+.draft{font-size:12.5px;background:var(--accent-soft);border-radius:8px;padding:7px 9px}
+.kp{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.kp div{background:var(--cell);border:1px solid var(--line);border-radius:8px;padding:6px 7px;display:flex;flex-direction:column}
+.kp small{font-size:10.5px;color:var(--muted)}
+.kp b{font-size:13.5px;font-variant-numeric:tabular-nums}
+.before{font-size:12.5px;color:var(--muted);display:flex;gap:6px;align-items:baseline}
+.before b{color:var(--fg);font-weight:600}
+.price{border-top:2px solid var(--fg);padding-top:8px;display:flex;flex-direction:column;gap:3px}
+.price .l{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.price .l span{font-size:12.5px;color:var(--muted)}
+.price .l b{font-size:18px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.price small{font-size:12px;color:var(--muted);line-height:1.5}
+.price small.cus{color:var(--fg);font-weight:600}
+.tag{font-size:10.5px;color:var(--hot);font-weight:700;background:var(--hot-soft);padding:1px 7px;border-radius:4px;align-self:flex-start}
+
+.btn{display:block;width:100%;background:var(--accent);color:var(--bg);border:0;border-radius:11px;padding:10px;font-size:14px;font-weight:600;cursor:pointer;text-align:center}
+.btn.ghost{background:transparent;color:var(--accent);border:1px solid var(--accent)}
+.btn[disabled]{background:var(--line);color:var(--muted);cursor:not-allowed}
+.acts{display:flex;flex-direction:column;gap:7px}
+
+.field{display:flex;flex-direction:column;gap:6px}
+.field input,.field textarea{width:100%;border:1px solid var(--line);background:var(--cell);border-radius:10px;padding:9px 11px;font:inherit;font-size:14px;color:var(--fg)}
+.field textarea{min-height:96px;resize:vertical;line-height:1.55}
+.sw{display:flex;gap:8px;flex-wrap:wrap}
+.sw button{width:34px;height:34px;border-radius:50%;border:2px solid var(--surface);box-shadow:0 0 0 1px var(--line);cursor:pointer}
+.sw button[aria-pressed="true"]{box-shadow:0 0 0 2px var(--fg)}
+.sum{border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--cell);font-size:13px;line-height:1.6;display:flex;flex-direction:column;gap:4px}
+.sum .k{font-size:11.5px;color:var(--muted);font-weight:600}
+.toast{font-size:12.5px;color:var(--accent);text-align:center;min-height:1.2em}
+
+@media (max-width:900px){
+  .wrap{grid-template-columns:1fr;gap:28px}
+  .bot{position:relative;top:0;order:-1;height:auto;min-height:620px;max-height:none;max-width:440px;width:100%;margin:0 auto}
+  .thread{max-height:none;overflow:visible}
+}
+.opt[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
+.opt.multi[aria-pressed="true"] b::before{content:"✓ "}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chips button{border:1px solid var(--line);background:var(--cell);border-radius:999px;padding:4px 11px;font-size:12.5px;cursor:pointer}
+.chips button[aria-pressed="true"]{background:var(--brand);border-color:var(--brand);color:var(--on-brand);font-weight:600}
+.fixl{font-size:13px;font-weight:600;line-height:1.5}
+.en{border:1px dashed var(--line);border-radius:8px;padding:6px 9px;display:flex;flex-direction:column;gap:1px;font-family:var(--f-body)}
+.en .k{font-size:10.5px;color:var(--muted);font-weight:600;letter-spacing:.04em}
+.en b{font-size:12.5px}
+.en span:last-child{font-size:12.5px}
+.price .l.li span{font-size:12.5px;color:var(--fg)}
+.price .l.li span:last-child{font-variant-numeric:tabular-nums;white-space:nowrap}
+.deal{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 9px}
+.deal b{font-size:24px;font-variant-numeric:tabular-nums;line-height:1.25}
+.deal s{color:var(--muted);font-size:13.5px;font-variant-numeric:tabular-nums}
+.off{font-size:11.5px;font-weight:700;color:var(--hot);background:var(--hot-soft);border-radius:4px;padding:1px 7px;white-space:nowrap}
+.more{display:flex;flex-direction:column;gap:4px}
+.more summary{font-size:12.5px;color:var(--accent);cursor:pointer;text-decoration:underline;padding:2px 0;list-style-position:inside}
+.pl{display:flex;flex-direction:column;gap:4px;margin:4px 0 2px}
+.pl .row{font-size:12.5px;color:var(--muted)}
+.pl .row s{font-size:11.5px}
+.pl .row.on{color:var(--fg);font-weight:700}
+</style><style>body{margin:0}.wrap{grid-template-columns:minmax(0,400px);justify-content:center}</style><meta name="robots" content="noindex,nofollow,noarchive"></head><body>
+
+<div class="wrap">
+
+<section class="bot" aria-label="bigC company 1분 질문">
+  <div class="top">
+    <div class="who"><span class="dot" id="dot">bC</span><div><b id="brandName">bigC company</b><span>1분 · 번호만 누르시면 됩니다</span></div></div>
+  </div>
+  <div class="prog"><i id="bar" style="width:0%"></i></div>
+  <div class="thread" id="thread" aria-live="polite"></div>
+  <div class="foot" id="foot"><button type="button" id="early">여기까지로 물어보기</button></div>
+</section>
+
+</div>
+
+<script>
+(function(){
+const COLORS=[['#1b6b45','초록'],['#b8322a','빨강'],['#1f4e8c','파랑'],['#c46a12','주황'],['#2b2b2b','검정']];
+const INDS=[['mart','한인 마트·배달'],['food','식당'],['golf','여행·골프'],['realty','부동산·비자'],['factory','공장'],['web','홈페이지·이미지만']];
+
+const FROM={kakao:'카톡 1:1',market:'장터 방 글',qr:'QR 카드',google:'구글 프로필',fb:'페이스북·인스타'};
+const lab=(arr,k)=>(arr.find(a=>a[0]===k)||[,''])[1];
+const R=(a,b,em,cls)=>`<div class="row"><span>${a}${em?`<em>${em}</em>`:''}</span><span class="${cls||''}">${b}</span></div>`;
+const BEFORE0={excel:['엑셀에 손으로 옮기던 숫자','휴대폰에서 저절로 맞춰집니다'],kakao:['카톡 방에 흩어진 글','한 목록으로 모입니다'],paper:['종이 장부와 기억','휴대폰 한 화면에 남습니다'],pos:['쓰시던 포스','그대로 두고 빠진 부분만 붙입니다'],none:['처음 시작','휴대폰 한 화면으로 바로 갑니다']};
+
+
+const MART={
+ who:'한인 마트를 하십니다', ph:'예: 그린마트', ask:'매장에서 이런 일이 있으십니까?',
+ pains:[
+  ['stock','앱으로 주문이 들어왔는데 창고에 물건이 없어 취소한 적이 있다','재고'],
+  ['deliv','배달K·그랩 주문을 태블릿 보고 손으로 옮기고, 기사는 콘도 타워·호수를 헤맨다','배달 주문·기사'],
+  ['exp','두부·우유 유통기한을 버릴 때가 돼서야 안다','유통기한'],
+  ['settle','그랩·배달K 입금이 주문 합계와 맞는지 모르겠다','정산'],
+  ['staff','누가 몇 시에 왔는지, 지각·결근이 말로만 남는다','직원 근무'],
+  ['review','앱마다 상품·가격이 다르고, 나쁜 리뷰에 회신할 틈이 없다','리뷰·상품'],
+ ],
+ tools:[['excel','엑셀'],['kakao','카톡'],['paper','종이 장부·눈으로'],['pos','포스·다른 프로그램'],['none','따로 안 함']],
+ before:BEFORE0,
+ fix:{
+  stock:'앱 주문이 들어오면 재고가 바로 줄고, 모자라기 전에 먼저 알려 드립니다.',
+  deliv:'배달K·그랩·카톡 주문이 한 목록에 모이고, 기사에게 타워·호수가 함께 갑니다.',
+  exp:'입고할 때 날짜를 넣어 두면 임박한 품목이 아침마다 목록으로 뜹니다.',
+  settle:'주문 합계와 통장 입금을 주문 한 건까지 맞추고, 빠진 주문을 집어 드립니다.',
+  staff:'출근할 때 휴대폰으로 서명하고, 한 주 근무 시간이 사람마다 쌓입니다.',
+  review:'앱마다 다른 상품·가격을 한 장에 맞추고, 리뷰를 붙여 넣으면 회신 초안이 나옵니다.',
+  idk:'대표님들이 가장 많이 고르시는 재고와 정산을 한 화면에서 봅니다.',
+ },
+ en:{
+  stock:['Stock count · Chiller 2','Tofu 18 · Bean sprouts 11 · Fish cake: 3 bags short'],
+  deliv:['Rider John · 11 stops','Stop 4: Green Bay Tower 2, Unit 1508 · ID at lobby'],
+  exp:['Opening check · 07:30','Tofu 6 packs expire tomorrow → move to front shelf'],
+  settle:['Cashier · today','GCash ₱1,120 · screenshot attached · Order #4471'],
+  staff:['Clock in · Joy','09:12 · 12 min late · Sign here'],
+  review:['Product list · Grab','Spring onion is missing on Grab → Add item'],
+  idk:['Cashier · closing','Store ₱11,200 · Cash counted ✓'],
+ },
+ mini(p){switch(p){
+  case 'stock': return {h:'오늘 재고',r:'모자람 1',b:`<p class="big">대파 <span class="r">2단</span></p><span class="alert">기준 3단보다 적습니다 · 배달K·그랩 품절 표시 준비</span>`+R('아침 재고','24단')+R('매장','−9')+R('배달K','−8')+R('그랩','−4')+R('카톡','−1')+R('<b>남은 재고</b>','<b>2단</b>','','r')};
+  case 'deliv': return {h:'통합 주문함',r:'10:54',b:R('10:42 · 배달K #1182','담는 중')+R('10:45 · 그랩 #4531','담는 중')+R('10:48 · 카톡 이 대표님','호수 확인','','r')+R('10:51 · 매장','완료','','g')+R('10:53 · 그랩 #4532','대파 부족','','r')+`<p class="quote">그린베이 콘도는 타워가 3곳입니다. 타워와 호수를 묻는 글이 준비됐습니다.</p>`};
+  case 'exp': return {h:'유통기한 임박',r:'3품목',b:R('두부','<b>6모</b>','내일','r')+R('콩나물','4봉','모레')+R('어묵','5봉','3일 뒤')+`<span class="alert">두부는 오늘 앞줄로 옮기거나 할인 표시</span>`};
+  case 'settle': return {h:'그랩 · 11월 16일~22일',r:'확인할 주문 2',b:`<p class="big r">−₱2,280</p>`+R('대조한 주문','214건')+R('맞은 주문','212건','','g')+R('#4471','₱1,480','품절 환불 두 번','r')+R('#4502','₱800','할인 부담 주체','r')};
+  case 'staff': return {h:'오늘 근무',r:'목',b:R('마크 · 계산','08:58 출근 · 서명','','g')+R('조이 · 계산','09:12 출근 · 12분 늦음','','r')+R('존 · 기사','10:30 출근 · 서명','','g')+R('이번 주 합계','3명 · 118시간')+`<p class="quote">서명한 기록과 서류가 사람마다 한 폴더에 모입니다.</p>`};
+  case 'review': return {h:'그랩 리뷰 · ★★',r:'오늘',b:`<p class="quote">"Kimchi container was leaking a little."</p><div class="draft"><b>회신 초안</b><br>Sorry about the leak. We now seal kimchi twice before packing. Next order, a free side dish is on us.</div>`+R('대파','그랩에 없음','','r')+R('계란 30구','배달K ₱20 낮음','','r')};
+  default: return {h:'대표 화면',r:'19:10',b:`<div class="kp"><div><small>오늘 매출</small><b>₱33,340</b></div><div><small>매입·수수료</small><b>₱27,180</b></div><div><small>남는 돈</small><b class="g">₱6,160</b></div></div>`+R('재고 차이','1건','','r')+R('정산 차액','1건','','r')+R('유통기한 임박','2건')};
+ }},
+ 
+ quote(pains){
+  const has=k=>pains.includes(k),idk=!pains.length;
+  const inv=idk||has('stock')||has('exp')||has('deliv'),order=has('deliv'),settle=idk||has('settle');
+  const items=[];let mo=0,base=null;
+  if(order&&settle){base=['통합 운영(주문·재고·정산)',380];mo=15;}
+  else if(inv&&settle){base=['재고 + 정산 대조 묶음 — 쓰던 포스는 그대로',250];mo=15;}
+  else if(order){base=['재고 관리 + 주문 모으기',260];mo=15;}
+  else if(inv){base=['재고 관리(유통기한 임박 목록 포함)',180];}
+  else if(settle){base=['정산 대조',100];mo=15;}
+  if(base)items.push(base);
+  if(has('staff'))items.push(['근무 기록과 서명',base&&order&&settle?70:100]);
+  if(has('review')){items.push(['리뷰 답글 도우미 + 품목 정비',50]);if(!mo)mo=5;}
+  const sum=items.reduce((a,b)=>a+b[1],0);let bund=0;
+  if(base&&base[1]===250)bund+=30;
+  if(has('staff')&&base&&order&&settle)bund+=30;
+  return {items,sum,full:sum,pay:Math.round(sum*.7),bund,mo,tong:order&&settle,dl:'첫 다섯 곳 30%'};
+ },
+ notes(q,st){const o=['시범가는 첫 다섯 곳에 사용 후기를 부탁드리는 조건입니다.'];
+  if(q.bund)o.push(`묶음이라 따로 하실 때(${q.sum+q.bund}만 원)보다 ${q.bund}만 원 적습니다.`);
+  if(st.pains.includes('review')&&q.mo===15)o.push('리뷰 도우미 월 값은 월 관리에 포함');
+  if(st.pains.includes('exp'))o.push('입고 묶음(로트)마다 따로 보려면 +50만 원');
+  if(q.tong)o.push('통합 운영은 380만~490만 원. 채널·품목 수를 듣고 정합니다.');
+  if(st.a1===2)o.push('<span class="r">입력하는 사람이 5명 이상이면 권한 화면이 늘어 값이 조금 오를 수 있습니다. 상담에서 확인해 드립니다.</span>');
+  return o;},
+ list:[['품목 정비 (300품목까지)',30,21],['정산 대조',100,70,15],['재고 관리(유통기한 임박 목록 포함)',180,126],['재고 관리 + 주문 모으기',260,182,15],['재고 + 정산 대조 묶음 — 쓰던 포스는 그대로',250,175,15],['통합 운영(주문·재고·정산)','380~490','266~343',15],['근무 기록과 서명 (통합에 더하면 70 → 49)',100,70],['리뷰 답글 도우미 + 품목 정비',50,35,5]],
+ more:[['하루 주문은 몇 건쯤 됩니까? (매장·배달 합쳐서)',['20건 이하','20~80건','80건 넘게'],'하루 주문'],
+       ['주문·재고를 입력하는 사람은 몇 명입니까?',['1명','2~4명','5명 이상'],'입력하는 사람'],
+       ['손님에게 보이는 말은 무엇이 좋겠습니까?',['한국어','영어','둘 다'],'손님에게 보이는 말']],
+ tail(st){const O=this.more;const o=st.a0!=null&&st.a0>=0?` 하루 주문은 ${O[0][1][st.a0]}`:'';
+  return st.a1!=null&&st.a1>=0?`${o}, 입력은 ${O[1][1][st.a1]}이 합니다.`:(o?o+'입니다.':'');},
+};
+
+
+const FOOD={
+ who:'한인 식당을 하십니다', ph:'예: 서울식당', ask:'식당에서 이런 일이 있으십니까?', place:'식당', paperTW:'종이 타임카드와 장부로',
+ pains:[
+  ['claim','그만둔 직원이 노동청에 신고하면, 몇 년 전 근무 기록을 꺼낼 수가 없다','퇴사 직원 신고'],
+  ['timecard','출퇴근은 종이 타임카드라, 지각·연장 시간이 말로만 남는다','출퇴근 기록'],
+  ['wage','최저임금이 바뀌면 공휴일·13월 급여까지 손으로 다시 계산한다','급여 계산'],
+  ['papers','보건증·영업허가 만료를 지나서야 알고, 계약서 없는 직원도 있다','서류·허가'],
+  ['cost','고기가 장부보다 빨리 떨어지고, 배달로 팔면 남는지 모르겠다','재료·원가'],
+  ['settle','배달K·그랩 태블릿을 따로 보고, 입금이 주문 합계와 맞는지 모르겠다','배달 정산'],
+ ],
+ tools:[['paper','종이 타임카드·장부'],['excel','엑셀'],['kakao','카톡'],['pos','포스·다른 프로그램'],['none','따로 안 함']],
+ before:Object.assign({},BEFORE0,{paper:['종이 타임카드와 장부','휴대폰 한 화면에 남습니다']}),
+ fix:{
+  claim:'출퇴근마다 직원이 자기 시간을 확인해 서명하고, 3년 치 기록을 사람별로 바로 꺼냅니다.',
+  timecard:'매장 QR로 출퇴근을 남기고, 지각·연장이 그날 기록으로 남습니다.',
+  wage:'기준이 바뀐 날부터 공휴일·연장·13월 급여까지 직원별로 다시 계산합니다.',
+  papers:'계약서·보건증·허가증의 있고 없음과 만료일을 직원별로 한 장에 모읍니다.',
+  cost:'팔린 메뉴만큼 재료를 빼고, 매장·배달K·그랩에서 남는 돈을 나란히 봅니다.',
+  settle:'배달K·그랩 주문을 한 화면에 모으고, 통장 입금과 주문 한 건까지 맞춥니다.',
+  idk:'대표님들이 가장 먼저 고르시는 근무 기록과 급여부터 보여 드립니다.',
+ },
+ en:{
+  claim:['Time record · Maria','Sep 19 · 10:00–21:00 · Signed by Maria ✓'],
+  timecard:['Clock in · Ella','10:14 · 14 min late · Sign here'],
+  wage:['Pay update · Joy','Daily rate ₱718 from Sep 26 · Back pay ₱1,456'],
+  papers:['Reminder · Ramon','Health certificate expires Dec 8 · Please renew'],
+  cost:['Closing count · Chiller 1','Pork belly 6.1 kg on scale · 6.5 kg expected'],
+  settle:['Kitchen · 12:18','Grab #7805 · Check the option before cooking'],
+  idk:['Time record · Maria','Sep 19 · 10:00–21:00 · Signed by Maria ✓'],
+ },
+ mini(p){switch(p){
+  case 'timecard': return {h:'오늘 출퇴근 · QR 서명',r:'목',b:R('마크 · 매니저','09:40 · 서명','','g')+R('라몬 · 주방','09:58 · 서명','','g')+R('조이 · 홀','10:02 · 서명','','g')+R('엘라 · 홀','10:14 · 14분 늦음','','r')+R('이번 주','12명 · 서명 없는 근무 1건','','r')+`<p class="quote">서명한 기록은 사람마다 3년 동안 보관합니다.</p>`};
+  case 'wage': return {h:'임금 기준 변경',r:'9월 26일부터',b:`<p class="big r">₱4,368</p><span class="alert">직원 3명의 기본급이 기준보다 적습니다</span>`+R('조이','₱1,456','₱28 × 52일','r')+R('라몬','₱936','₱18 × 52일','r')+R('엘라','₱1,976','₱38 × 52일','r')+R('하루 기준','₱658 → <b>₱718</b>')+`<p class="quote">기준표는 예시입니다. 회계사 확인 뒤 적용합니다.</p>`};
+  case 'papers': return {h:'감독 서류함',r:'직원 12명',b:R('근로계약서','10 / 12명 · 2명 없음','','r')+R('근무 기록 3년','28 / 36개월','8개월 없음','r')+R('급여대장','36 / 36개월','','g')+R('13월 급여 증빙','2 / 3년','','r')+R('보건증','12 / 12명','만료 임박 1')+`<span class="alert">라몬 보건증 12월 8일 · 영업허가 1월 20일</span>`};
+  case 'cost': return {h:'한 그릇에 남는 돈',r:'재료비·수수료 뺀 값',b:R('삼겹살 200g','매장 ₱279 · 그랩 ₱245')+R('김치찌개','매장 ₱202 · 그랩 ₱178')+R('해물파전','매장 ₱190 · 그랩 ₱114','','r')+R('삼겹살 냉장 1번','계산 6.5kg · 저울 6.1kg')+`<span class="alert">차이 0.4kg · 2인분 — 이유를 남겨 주십시오</span>`};
+  case 'settle': return {h:'앱 정산 대조',r:'11월 16일~22일',b:`<p class="big r">−₱1,660</p>`+R('주문 합계','₱144,200')+R('받을 돈','₱118,380','수수료·환불 뺀 값')+R('통장 입금','₱116,720')+R('그랩 #7731','₱1,120','환불 두 번','r')+R('그랩 #7758','₱540','할인 부담 주체','r')};
+  default: return {h:'퇴사 직원 청구 대조',r:'마리아 · 3년',b:R('8월 31일 공휴일 12시간','8시간 · 지급함','','g')+R('9월 5일 연장 4시간','1시간 · 지급함','','g')+R('9월 13일 휴무일 근무','휴무 서명','','g')+R('9월 19일 연장 2시간','지급 필요 ₱225','','r')+R('9월 24일 연장 3시간','서명 없음','','r')+`<p class="quote">근무 864일 · 급여 명세 72장 · 서명 없는 날 4일</p>`};
+ }},
+ 
+ quote(pains,st){
+  const has=k=>pains.includes(k),none=!pains.length;
+  const wage=none||has('claim')||has('wage'),cost=has('cost'),settle=has('settle');
+  let items=[],mo=0,n15=0,tong=false;
+  if(wage&&cost&&settle){items.push(['토탈 운영 — 근무·급여·원가·정산·서류',580,'tot']);mo=25;tong=true;}
+  else{
+   if(wage){items.push(['근무 기록과 급여',250,'wage']);mo=15;n15++;}
+   else if(has('timecard')){items.push(['근무 기록과 서명',100,'tc']);mo=5;}
+   if(cost)items.push(['재고와 원가',180,'cost']);
+   if(settle){items.push(['주문과 정산',180,'settle']);mo=15;n15++;}
+   if(has('papers'))items.push(['서류 정비',30,'doc']);
+  }
+  const s=st.a0,b=st.a1,ap=st.a2,ADD={1:{wage:50,tot:70,doc:10},2:{wage:100,tot:140,doc:20}};let adj=false;
+  items=items.map(([n,v,t])=>{let x=v;
+   if(s>0&&ADD[s][t]){x+=ADD[s][t];adj=true;}
+   if(ap===1&&(t==='settle'||t==='tot')){x+=40;adj=true;}
+   if(b===1){x=Math.round(x*1.3);adj=true;}
+   return [n,x,t];});
+  if(b===1&&mo)mo=Math.round(mo*1.3);
+  const sum=items.reduce((a,c)=>a+c[1],0);let bund=0;
+  if(tong){let f=640+(s>0?[0,60,120][s]:0)+(ap===1?40:0);if(b===1)f=Math.round(f*1.3);bund=f-sum;}
+  return {items,sum,full:sum,pay:Math.round(sum*.7),bund,mo,moFrom:n15>1,tong,adj,ask:b===2,dl:'첫 다섯 곳 30%'};
+ },
+ notes(q,st){const o=['시범가는 첫 다섯 곳에 사용 후기를 부탁드리는 조건입니다.'];
+  if(q.bund>0)o.push(`토탈은 네 단계를 따로 하실 때(${q.sum+q.bund}만 원)보다 ${q.bund}만 원 적습니다.`);
+  if(st.pains.includes('claim'))o.push('지난 기록(종이 타임카드·장부)을 넣어 드리려면 1년 +40만 원 · 3년 +100만 원');
+  if(q.items.some(i=>i[2]==='wage'||i[2]==='tot'))o.push('급여 계산식은 계약 뒤 현지 회계사 확인을 받고 적용합니다.');
+  if(q.tong)o.push(q.adj?'토탈 운영은 메뉴 수·근무 형태를 듣고 정합니다.':'토탈 운영은 580만~750만 원. 메뉴 수·근무 형태를 듣고 정합니다.');
+  if(q.adj){const w=[];if(st.a0>0)w.push('직원 '+this.more[0][1][st.a0]);if(st.a1===1)w.push('지점 2~3곳');if(st.a2===1)w.push('배달 앱 3개 이상');o.push(w.join(' · ')+'을 반영한 값입니다.');}
+  if(q.ask)o.push('<span class="r">지점이 4곳 이상이면 상담 견적입니다. 위 값은 한 지점 기준입니다.</span>');
+  return o;},
+ list:[['근무 기록과 서명',100,70,5],['서류 정비',30,21],['근무 기록과 급여',250,175,15],['재고와 원가',180,126],['주문과 정산',180,126,15],['토탈 운영 — 근무·급여·원가·정산·서류','580~750','406~525',25]],
+ more:[['직원은 모두 몇 명입니까? (홀·주방·배달 합쳐서)',['15명 이하','16~40명','41명 이상'],'직원'],
+       ['지점은 몇 곳입니까?',['1곳','2~3곳','4곳 이상'],'지점'],
+       ['배달 앱은 몇 개 쓰십니까? (배달K·그랩·푸드판다 등)',['2개 이하','3개 이상'],'배달 앱']],
+ tail(st){const O=this.more,w=[];
+  if(st.a0!=null&&st.a0>=0)w.push(`직원은 ${O[0][1][st.a0]}`);
+  if(st.a1!=null&&st.a1>=0)w.push(`지점은 ${O[1][1][st.a1]}`);
+  if(st.a2!=null&&st.a2>=0)w.push(`배달 앱은 ${O[2][1][st.a2]}`);
+  return w.length?' '+w.join(', ')+'입니다.':'';},
+};
+
+const GOLF={
+ who:'골프 여행사를 하십니다', ph:'예: 마닐라골프투어', ask:'여행사 일에서 이런 일이 있으십니까?', place:'회사', paperTW:'종이와 화이트보드로', enLabel:'기사·가이드·골프장 연락 · English',
+ pains:[
+  ['quote','견적을 보내고 입금받은 뒤에, 캐디팁·초과 시간 같은 빠진 항목을 다시 말씀드린다','견적 누락'],
+  ['rate','골프장마다 요금표 모양이 달라, 카트·캐디 포함인지 매번 다시 확인한다','골프장 요금표'],
+  ['inquiry','카톡 문의마다 날짜·인원·항공편을 다시 여쭙느라 회신이 늦어진다','문의 응대'],
+  ['dispatch','같은 시간에 밴 한 대를 두 팀에 잡은 적이 있다','배차 겹침'],
+  ['deposit','입금이 다 들어왔는지, 기사가 일정을 확인했는지 카톡을 뒤져서 본다','입금·기사 확인'],
+  ['profit','한 팀을 보내고 골프장·차량에 줄 돈을 빼면 얼마가 남는지 모른다','팀별 남는 돈'],
+ ],
+ tools:[['kakao','카톡'],['excel','엑셀'],['paper','종이·화이트보드'],['pos','다른 프로그램'],['none','따로 안 함']],
+ before:Object.assign({},BEFORE0,{kakao:['카톡 방에 흩어진 문의와 일정','한 달력에 모입니다'],paper:['종이와 화이트보드','휴대폰 한 화면에 남습니다'],pos:['쓰시던 프로그램','그대로 두고 빠진 부분만 붙입니다']}),
+ fix:{
+  quote:'요금표에서 항목이 저절로 붙고, 빠진 항목이 있으면 견적이 나가지 않습니다.',
+  rate:'골프장마다 다른 요금표를 한 장에 맞추고, 카트·캐디·캐디팁 포함 여부를 표시합니다.',
+  inquiry:'문의가 오면 날짜·인원·항공편을 먼저 여쭙고, 정리해서 담당자에게 넘깁니다.',
+  dispatch:'같은 시간에 두 팀이 잡히면 막고, 비어 있는 차를 보여 드립니다.',
+  deposit:'받을 돈과 들어온 돈을 나란히 두고, 기사가 확인한 시각이 남습니다.',
+  profit:'받은 돈에서 골프장·차량에 줄 돈을 빼고, 팀마다 남는 돈을 보여 드립니다.',
+  idk:'대표님들이 가장 먼저 고르시는 견적 누락 점검부터 보여 드립니다.',
+ },
+ en:{
+  quote:['Golf course · Blue Hill','Caddie tip for 4 players: please confirm the rate'],
+  rate:['Golf course · Sun Valley','Weekend 18 holes ₱6,800 · cart and caddie included?'],
+  inquiry:['Guide · Mina','Dec 12 · 10:00 city tour, 1 guest · Please confirm'],
+  dispatch:['Driver · Rodel','Sat 05:40 Bay Hotel lobby · 4 golf bags · Blue Hill 07:30'],
+  deposit:['Driver · Rodel','Schedule received · Confirmed 14:02 ✓'],
+  profit:['Driver · Rodel','Today: toll ₱420 · parking ₱100 · photo the receipt'],
+  idk:['Golf course · Blue Hill','Caddie tip for 4 players: please confirm the rate'],
+ },
+ mini(p){switch(p){
+  case 'rate': return {h:'골프장 요금표 한 장',r:'주말 18홀',b:R('블루힐','₱5,200','카트·캐디·캐디팁 따로','r')+R('선밸리','₱6,800','카트·캐디 포함','g')+`<p class="quote">견적을 만들 때 「따로」인 항목이 저절로 붙습니다. 골프장마다 항목별 또는 1인 합산 중 고르실 수 있습니다.</p>`};
+  case 'inquiry': return {h:'우리 여행사 채널 · 빠른 회신',r:'12월',b:`<p class="quote">“12월 골프 4명 견적 부탁드립니다”</p><div class="draft"><b>바로 가는 안내</b><br>안녕하십니까. 아래 세 가지를 알려 주시면 견적을 준비해 드립니다. ① 날짜 ② 인원 ③ 항공편</div><p class="quote">“11일 도착, 14일 출발입니다”</p>`+R('날짜','12월 11일 ~ 14일','','g')+R('인원','골프 4 · 동반 1','','g')+R('항공편','확인 필요','','r')};
+  case 'dispatch': return {h:'배정 · 12월 12일 토',r:'겹침 1',b:R('밴 A','05:40 ~ 20:15','박 대표님','g')+R('밴 A','11:00 두 번째 배정','최 대표님','r')+R('밴 B','비어 있음','','g')+R('가이드 미나','10:00 동반 1명 관광')+`<span class="alert">겹친 배정은 저장되지 않습니다 · 밴 B로 바꿀 수 있습니다</span>`};
+  case 'deposit': return {h:'박 대표님 일행 · 입금 확인',r:'12월 11일~14일',b:R('받을 돈','₩4,194,000')+R('들어온 돈','₩4,000,000')+R('<b>모자란 돈</b>','<b>₩194,000</b>','','r')+`<span class="alert">전액 입금 뒤에 예약이 확정됩니다</span>`+R('밴 A · 로델','14:02 확인','','g')+R('가이드 · 미나','확인 대기','','r')};
+  case 'profit': return {h:'대표 화면',r:'12월 12일 토',b:`<div class="kp"><div><small>받은 돈</small><b>₩12,480,000</b></div><div><small>줄 돈</small><b>₩9,960,000</b></div><div><small>남을 돈</small><b class="g">₩2,520,000</b></div></div>`+R('미수금','0건','','g')+R('기사 미확인','1건','','r')+R('선밸리 상품','남는 돈 3%','요금 조정 검토','r')};
+  default: return {h:'박 대표님 일행 · 3박 4일',r:'확인 1건',b:`<p class="big">₩4,146,000</p>`+R('그린피','₱20,800','4명')+R('카트','₱2,600','2대')+R('캐디','₱2,400','4명')+R('<b>캐디팁</b>','<b>값 없음</b>','4명','r')+R('밴','₱8,500','05:40 ~ 20:15')+R('초과 3시간','₱2,040')+`<span class="alert">빠진 항목을 넣어야 견적이 나갑니다</span>`};
+ }},
+ 
+ quote(pains){
+  const has=k=>pains.includes(k),none=!pains.length,S={prep:['업무 정비',30,0],quote:['견적',60,10],book:['예약과 배차',150,10]},need=[];
+  if(has('rate')||has('inquiry'))need.push('prep');
+  if(none||has('quote'))need.push('quote');
+  if(has('dispatch')||has('deposit'))need.push('book');
+  const parts=need.map(k=>S[k]),s=parts.reduce((a,p)=>a+p[1],0);
+  let items,mo,tong=false,n10=0;
+  if(has('profit')||s>=240){items=[['통합 운영 — 문의·견적·예약·배차·손익',240]];mo=15;tong=true;}
+  else{items=parts.map(p=>[p[0],p[1]]);mo=Math.max(0,...parts.map(p=>p[2]));n10=parts.filter(p=>p[2]).length;}
+  const sum=items.reduce((a,c)=>a+c[1],0);
+  return {items,sum,full:sum,pay:sum/2,mo,moFrom:n10>1,tong,dl:'첫 다섯 곳 50%'};
+ },
+ notes(q,st){const o=['시범가는 첫 다섯 곳에 사용 후기를 부탁드리는 조건입니다.'];
+  if(q.tong)o.push('통합 운영은 차량·골프장 수를 듣고 정합니다.');
+  const big=[st.a0,st.a1,st.a2];
+  if(big.includes(2))o.push('<span class="r">차량 11대 · 골프장 16곳 · 직원 6명 가운데 하나라도 넘으면 상담 견적입니다.</span>');
+  else if(big.includes(1))o.push('차량 3대 · 골프장 6곳 · 직원 3명 이상이면 연결하는 일이 늘어 값이 조금 오릅니다. 상담에서 정해 드립니다.');
+  return o;},
+ list:[['업무 정비',30,15],['견적',60,30,10],['예약과 배차',150,75,10],['통합 운영 — 문의·견적·예약·배차·손익','240~500','120~250',15]],
+ more:[['차량은 몇 대 쓰십니까? (직접·협력 업체 합쳐서)',['2대 이하','3~10대','11대 이상'],'차량'],
+       ['거래하는 골프장·업체는 몇 곳입니까?',['5곳 이하','6~15곳','16곳 이상'],'골프장·업체'],
+       ['예약·배차를 입력하는 직원은 몇 명입니까?',['1~2명','3~5명','6명 이상'],'직원']],
+ tail(st){const O=this.more,w=[];
+  if(st.a0!=null&&st.a0>=0)w.push(`차량은 ${O[0][1][st.a0]}`);
+  if(st.a1!=null&&st.a1>=0)w.push(`골프장·업체는 ${O[1][1][st.a1]}`);
+  if(st.a2!=null&&st.a2>=0)w.push(`직원은 ${O[2][1][st.a2]}`);
+  return w.length?' '+w.join(', ')+'입니다.':'';},
+};
+
+const WEB={
+ who:'가게·사무실 홈페이지를 생각하고 계십니다', ph:'예: 파사이 한식당', ask:'가게 홍보에서 이런 일이 있으십니까?', place:'가게', enLabel:'필리핀·외국인 손님 · English',
+ pains:[
+  ['ask','위치·영업시간·메뉴를 묻는 카톡에 매일 같은 설명을 보낸다','같은 설명 반복'],
+  ['price','페이스북·전단에 남은 옛 가격을 보고 온 손님에게 사과한 적이 있다','옛 가격 안내'],
+  ['map','구글 지도에 가게 사진·전화번호가 없거나 옛날 것이다','지도 정보'],
+  ['english','필리핀·외국인 손님에게 영어로 보여 드릴 소개가 없다','영어 소개'],
+  ['old','예전에 만든 홈페이지를 고칠 사람이 없어 그대로 둔다','예전 홈페이지'],
+  ['img','메뉴판·행사 안내 이미지를 만들 사람이 없어 글로만 올린다','메뉴판·이미지'],
+ ],
+ tools:[['nohp','홈페이지 없음'],['fb','페이스북 페이지'],['blog','네이버 블로그·카톡 채널'],['old','예전 홈페이지'],['kakao','카톡으로 사진 보내기']],
+ before:{nohp:['처음 시작','주소 한 줄로 시작합니다'],fb:['게시물마다 흩어진 메뉴와 가격','한 장에 모이고, 페이스북에는 주소만 붙입니다'],blog:['글 여러 개에 나뉜 안내','한 장으로 모입니다'],old:['고칠 사람이 없던 홈페이지','대표님 명의 주소로 옮깁니다'],kakao:['카톡으로 보내던 사진 여러 장','주소 한 줄로 바뀝니다']},
+ twS:{nohp:'지금은 홈페이지가 없으십니다.',fb:'지금은 페이스북 페이지로 안내하십니다.',blog:'지금은 블로그나 카톡 채널로 안내하십니다.',old:'예전에 만든 홈페이지가 있습니다.',kakao:'지금은 카톡으로 사진을 보내 안내하십니다.'},
+ fix:{
+  ask:'위치·영업시간·대표 메뉴를 한 장에 두고, 카톡에는 주소 한 줄만 보내시면 됩니다.',
+  price:'가격을 한 곳에서 고치면 홈페이지에 바로 바뀌고, 페이스북에는 그 주소만 붙입니다.',
+  map:'구글 지도와 페이스북에 붙일 홈페이지 주소와 바뀐 정보를 정리해 드립니다.',
+  english:'한국어와 영어를 같은 페이지에 두고, 손님이 눌러서 바꿔 봅니다.',
+  old:'예전 홈페이지의 내용을 옮기고, 주소(도메인)는 대표님 명의로 둡니다.',
+  img:'받으신 사진으로 메뉴판·행사 이미지를 만들고, 가격이 바뀌면 글자만 바꿔 다시 뽑습니다.',
+  idk:'대표님들이 가장 먼저 고르시는 한 장 홈페이지부터 보여 드립니다.',
+ },
+ en:{
+  ask:['Our shop · Open today','9:00 – 21:00 · Bay Plaza, Unit 3 · Directions'],
+  price:['Menu · updated Nov 27','Kimchi stew ₱380 · Bibimbap ₱420'],
+  map:['Google Maps · Our shop','Website · Call · Directions'],
+  english:['About us','Korean home cooking · Delivery in Pasay'],
+  old:['Your website','Same address · Domain in your name'],
+  img:['Weekend promo','Sat–Sun · Samgyeopsal set ₱1,290'],
+  idk:['Our shop · Open today','9:00 – 21:00 · Bay Plaza, Unit 3 · Directions'],
+ },
+ mini(p){switch(p){
+  case 'price': return {h:'메뉴·가격 고치기',r:'11월 27일',b:R('김치찌개','₱350 → ₱380','고침','g')+R('비빔밥','₱420')+R('삼겹살 세트','₱1,290')+R('페이스북 메뉴 사진','9월 가격 · 내리기','','r')+R('홈페이지에 반영','10:12 · 바로','','g')};
+  case 'map': return {h:'구글 지도에 붙일 정보',r:'확인 2건',b:R('웹사이트','없음 → 홈페이지 주소','','r')+R('전화번호','옛 번호','','r')+R('영업시간','맞음','','g')+R('사진','2019년 3장')+`<p class="quote">수정 요청은 대표님 계정으로 합니다. 검색 순위는 약속드리지 않습니다.</p>`};
+  case 'english': return {h:'한 장 홈페이지',r:'한국어 · English',b:R('김치찌개','₱380','한국어')+R('Kimchi stew','₱380','English')+R('배달','파사이 · 마카티','한국어')+R('Delivery','Pasay · Makati','English')+`<p class="quote">번역은 사람이 다듬고, 대표님이 확인하신 뒤 올립니다.</p>`};
+  case 'old': return {h:'예전 홈페이지 점검',r:'확인 3건',b:R('주소(도메인) 명의','확인 필요','','r')+R('마지막 수정','2022년 3월','','r')+R('휴대폰 화면','글자가 잘림','','r')+R('옮긴 뒤','대표님 명의 · 1년 약 2만 원','','g')};
+  case 'img': return {h:'메뉴판 · 행사 이미지',r:'1080 × 1440',b:R('주말 삼겹살 세트','₱1,290','토·일')+R('들어갈 사진','받으신 사진 2장')+R('문구','같이 다듬음','','g')+R('크기','카톡 · 페이스북 두 가지')};
+  default: return {h:'한 장 홈페이지',r:'휴대폰 화면',b:R('영업시간','오늘 9:00 ~ 21:00','','g')+R('위치','베이 플라자 1층 3호','지도 열기')+R('대표 메뉴','김치찌개 ₱380')+R('문의','카톡 · 전화')+`<p class="quote">“몇 시까지 하세요?” “어디예요?”</p>`};
+ }},
+ quote(pains){
+  const has=k=>pains.includes(k),page=!pains.length||['ask','price','map','english','old'].some(has),items=[];
+  if(page)items.push([has('old')?'한 장 홈페이지 · 예전 내용 옮기기':'한 장 홈페이지 (한국어+영어)',30]);
+  if(has('img'))items.push(['메뉴판·이미지',10]);
+  const sum=items.reduce((a,c)=>a+c[1],0);
+  
+  return {items,sum,full:sum,consult:true,page};
+ },
+ notes(q,st){const o=[];
+  if(q.items.some(i=>i[0].startsWith('메뉴판')))o.push('사진은 받으신 것으로 만들고, 촬영이 필요하면 따로 말씀드립니다.');
+  if(st.a0===2||st.a1===2)o.push('메뉴·상품이 많거나 다른 언어를 더하시면, 상담에서 범위를 함께 정합니다.');
+  if(st.a2===0)o.push('주소(도메인)는 대표님 명의로 사시고, 1년에 약 2만 원입니다.');
+  if(st.a2===2)o.push('지금 주소의 명의를 먼저 함께 확인합니다.');
+  return o;},
+ list:[['한 장 홈페이지 (한국어+영어)','30~60','27~54',5],['메뉴판·홍보 이미지 (장당)','10~30','9~27']],
+ more:[['홈페이지에 넣을 메뉴·상품은 몇 가지입니까?',['20가지 이하','20~50가지','50가지 넘음'],'메뉴·상품'],
+       ['손님에게 보일 말은 무엇입니까?',['한국어 + 영어','한국어만','다른 언어도'],'손님에게 보일 말'],
+       ['지금 쓰는 주소(도메인)가 있습니까?',['없음','있음 · 내 명의','있음 · 명의를 모름'],'주소(도메인)']],
+ tail(st){const O=this.more,w=[];
+  if(st.a0!=null&&st.a0>=0)w.push(['메뉴·상품은 20가지 이하입니다.','메뉴·상품은 20~50가지입니다.','메뉴·상품은 50가지가 넘습니다.'][st.a0]);
+  if(st.a1!=null&&st.a1>=0)w.push(['손님에게는 한국어와 영어로 보이면 됩니다.','손님에게는 한국어로만 보이면 됩니다.','영어 말고 다른 언어도 필요합니다.'][st.a1]);
+  if(st.a2!=null&&st.a2>=0)w.push(['주소(도메인)는 아직 없습니다.','주소(도메인)는 대표님 명의로 있습니다.','주소(도메인)는 있지만 명의를 모르십니다.'][st.a2]);
+  return w.length?' '+w.join(' '):'';},
+};
+
+const REALTY={
+ who:'부동산·비자 사무실을 하십니다', ph:'예: 마카티 하우스', ask:'사무실 일에서 이런 일이 있으십니까?', place:'사무실', paperTW:'수첩과 종이로', enLabel:'외국인 고객·집주인 · English',
+ pains:[
+  ['ask','「보증금은 몇 달 치예요?」 같은 질문에 하루에도 몇 번씩 같은 설명을 다시 쓴다','같은 설명 반복'],
+  ['prep','상담 전에 손님의 체류 기간·예산을 몰라 첫 통화가 길어진다','상담 전 정보'],
+  ['stale','이민국 규정이 바뀌었는데, 예전 안내를 받은 손님이 누구인지 모른다','바뀐 규정'],
+  ['docs','손님마다 빠진 서류(여권 사본·선일자 수표)를 카톡을 뒤져서 확인한다','빠진 서류'],
+  ['expiry','손님 비자·체류 만료일을 놓쳐 급하게 연락한 적이 있다','만료일'],
+  ['fee','이번 달 수수료 중 받을 돈이 얼마 남았는지 바로 모른다','수수료'],
+ ],
+ tools:[['kakao','카톡'],['excel','엑셀'],['paper','수첩·종이'],['pos','다른 프로그램'],['none','따로 안 함']],
+ before:Object.assign({},BEFORE0,{kakao:['카톡 방마다 다시 쓰던 설명','안내 링크 하나로 모입니다'],paper:['수첩에 적던 손님과 서류','휴대폰 한 화면에 남습니다'],pos:['쓰시던 프로그램','그대로 두고 빠진 부분만 붙입니다']}),
+ fix:{
+  ask:'자주 오는 질문을 안내 하나씩으로 정리하고, 카톡에는 링크 한 줄만 보내시면 됩니다.',
+  prep:'상담 전에 손님이 체류 기간·예산·지역을 고르고, 고른 내용이 대표님께 정리돼 옵니다.',
+  stale:'안내를 고치면 예전 안내를 읽은 손님이 표시되고, 이미 보낸 링크도 새 내용으로 열립니다.',
+  docs:'업무마다 필요한 서류를 정해 두고, 손님마다 남은 서류만 보여 드립니다.',
+  expiry:'비자·체류·여권 만료일을 미리 알려 드리고, 사본은 보관 기한이 지나면 지웁니다.',
+  fee:'건별로 받은 돈과 받을 돈, 들어올 날을 남깁니다. 통장과 카톡은 쓰시던 대로 두시면 됩니다.',
+  idk:'대표님들이 가장 먼저 고르시는 답변 정비부터 보여 드립니다.',
+ },
+ en:{
+  ask:['Guide · Visa extension','Where to apply, month by month · Checked Nov 26'],
+  prep:['Before your consultation','How long have you been in Manila? · 2–5 months'],
+  stale:['Updated guide','Tourist visa extension changed on Nov 20 · Please read again'],
+  docs:['Lease · Unit 12B','Remaining: 11 post-dated checks · Upload a photo'],
+  expiry:['Reminder','Your stay expires Dec 6 · Book a time to extend'],
+  fee:['Landlord · Unit 12B','Commission ₱45,000 · Due Dec 1'],
+  idk:['Guide · Visa extension','Where to apply, month by month · Checked Nov 26'],
+ },
+ mini(p){switch(p){
+  case 'prep': return {h:'상담 전 질문 · 비자 연장',r:'예약 1건',b:`<p class="quote">“마닐라에 오신 지 몇 개월째이십니까?”</p>`+R('체류','2개월 ~ 5개월','손님이 고름','g')+R('예산','월 ₱45,000 안팎')+R('원하는 지역','BGC · 마카티')+R('상담 예약','12월 2일 10:00','15분','g')+`<p class="quote">고른 내용이 상담 전에 대표님께 정리돼 옵니다.</p>`};
+  case 'stale': return {h:'예전 안내를 읽은 손님',r:'관광비자 연장',b:R('김지훈','10월 2일 읽음','','g')+R('이수민','10월 14일 읽음','아직 모름','r')+R('최은영','11월 3일 읽음','아직 모름','r')+R('한도윤','11월 11일 읽음','','g')+`<span class="alert">11월 20일에 안내가 바뀜 · 모르는 두 분께 다시 보냅니다</span>`};
+  case 'docs': return {h:'이수민 님 · 콘도 임대',r:'1건 남음',b:`<p class="big">₱138,500</p>`+R('보증금','₱90,000','2개월')+R('선납 월세','₱45,000','1개월')+R('여권 사본','확인','','g')+R('계약서 서명','확인','','g')+R('<b>선일자 수표</b>','<b>11장 남음</b>','','r')+`<span class="alert">남은 서류는 사진으로 올리시면 됩니다</span>`};
+  case 'expiry': return {h:'다가오는 만료',r:'30일 안 2건',b:R('김지훈 · 체류','12월 6일','9일 남음','r')+R('최은영 · 비자','12월 18일','21일 남음','r')+R('박정우 · 여권','2월 20일','','g')+`<p class="quote">만료 30일 전에 먼저 알려 드립니다. 사본은 계약이 끝나고 30일 뒤 지웁니다.</p>`};
+  case 'fee': return {h:'11월 수수료',r:'받을 돈 2건',b:`<p class="big">₱97,000</p>`+R('임대 중개','₱45,000','1건')+R('임대 연장','₱20,000','1건')+R('비자 대행','₱32,000','4건')+R('입금 확인','₱62,000','','g')+R('<b>받을 돈</b>','<b>₱35,000</b>','이수민 12월 1일 · 박정우 12월 10일','r')};
+  default: return {h:'반복된 질문',r:'최근 30일',b:R('비자 연장, 어디서 합니까','23번','설명 4가지','r')+R('입주할 때 처음 내는 돈','19번','설명 3가지','r')+R('보증금은 언제 돌려받습니까','9번','설명 2가지','r')+R('주차가 포함됩니까','11번','설명 1가지','g')+`<span class="alert">정리할 질문 20개 · 확인이 필요한 안내 12개</span>`};
+ }},
+ 
+ quote(pains){
+  const has=k=>pains.includes(k),none=!pains.length,S={ans:['답변 정비',50,25,0],page:['개인 페이지',80,60,0],keep:['답변 관리',220,110,5],doc:['고객과 서류',260,130,5]},need=[];
+  if(none||has('ask'))need.push('ans');
+  if(has('prep'))need.push('page');
+  if(has('stale'))need.push('keep');
+  if(has('docs')||has('expiry'))need.push('doc');
+  const parts=need.map(k=>S[k]);
+  let items,pay,mo,tong=false,n5=0;
+  if(has('fee')||need.length===4){items=[['통합 운영 — 안내·상담·서류·만료·수수료',640]];pay=320;mo=10;tong=true;}
+  else{items=parts.map(p=>[p[0],p[1]]);pay=parts.reduce((a,p)=>a+p[2],0);mo=Math.max(0,...parts.map(p=>p[3]));n5=parts.filter(p=>p[3]).length;}
+  const sum=items.reduce((a,c)=>a+c[1],0);
+  return {items,sum,full:sum,pay,mo,moFrom:n5>1,tong,dl:'첫 다섯 곳 시범가'};
+ },
+ notes(q,st){const o=['시범가는 첫 다섯 곳에 사용 후기를 부탁드리는 조건입니다.'];
+  if(q.items.some(i=>i[0]==='답변 정비'))o.push('답변 정비는 정리한 안내를 카카오 톡채널에 그대로 넣어 드리는 것까지입니다.');
+  if(q.tong)o.push('통합 운영은 손님 수와 업무 종류를 듣고 정합니다.');
+  if(st.a0===2||st.a1===1)o.push('<span class="r">직원 4명 이상이거나 사무실이 두 곳 이상이면 상담 견적입니다.</span>');
+  return o;},
+ list:[['답변 정비',50,25],['개인 페이지',80,60],['답변 관리',220,110,5],['고객과 서류',260,130,5],['통합 운영 — 안내·상담·서류·만료·수수료','640~800','320~400',10]],
+ more:[['손님 응대를 하는 사람은 몇 명입니까? (대표님 포함)',['혼자','2~3명','4명 이상'],'직원'],
+       ['사무실은 몇 곳입니까?',['한 곳','두 곳 이상'],'사무실'],
+       ['주로 어떤 일을 하십니까?',['임대·매매','비자','둘 다'],'주 업무']],
+ tail(st){const O=this.more,w=[];
+  if(st.a0!=null&&st.a0>=0)w.push(['혼자 응대하십니다.','응대하는 사람은 2~3명입니다.','응대하는 사람은 4명 이상입니다.'][st.a0]);
+  if(st.a1!=null&&st.a1>=0)w.push(['사무실은 한 곳입니다.','사무실은 두 곳 이상입니다.'][st.a1]);
+  if(st.a2!=null&&st.a2>=0)w.push(['주로 임대·매매를 하십니다.','주로 비자 일을 하십니다.','임대·매매와 비자를 함께 하십니다.'][st.a2]);
+  return w.length?' '+w.join(' '):'';},
+};
+const T={mart:MART,food:FOOD,golf:GOLF,web:WEB,realty:REALTY};
+const C=()=>T[st.ind];
+const short=k=>{const c=C();return (c&&c.pains.find(p=>p[0]===k)||[,,'모르겠어요'])[2];};
+const firstPains=()=>st.first?[st.first]:st.pains.filter(p=>p!=='idk');
+const restPains=()=>st.first?st.pains.filter(p=>p!=='idk'&&p!==st.first):[];
+const mo=q=>q.mo?`월 관리 ${q.mo}만 원${q.moFrom?'부터':''}(선택)`:'';
+
+const st={step:'start',entry:null,ind:null,pains:[],pick:[],first:null,view:null,tool:null,a0:null,a1:null,a2:null,name:'',color:COLORS[0][0],moreDone:false,summary:''};
+const $=id=>document.getElementById(id);
+const thread=$('thread');
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+$('early').onclick=()=>{st.summary='';st.step='summary';render(true);};
+const MORE=['a0','a1','a2'];
+function resetFrom(k){const order=['entry','ind','pains','first','tool',...MORE];order.slice(order.indexOf(k)).forEach(x=>st[x]=x==='pains'?[]:null);st.moreDone=false;st.summary='';}
+
+function bot(t){return `<div class="b">${t}</div>`;}
+let fixes=[];
+function me(t,step,from){const id='f'+fixes.length;fixes.push({id,step,from});return `<div class="me"><span>${t}</span><button type="button" data-fix="${id}">고치기</button></div>`;}
+function opts(list,key,next,idk){let h='<div class="opts">';list.forEach((o,i)=>h+=`<button type="button" class="opt" data-k="${key}" data-v="${o[0]}" data-n="${next}"><b>${i+1}</b><span>${o[1]}</span></button>`);
+ if(idk)h+=`<button type="button" class="opt idk" data-k="${key}" data-v="idk" data-n="${next}"><b>${list.length+1}</b><span>모르겠어요</span></button>`;return h+'</div>';}
+
+function resultCard(){
+ const c=C();const ps=st.pains.length?st.pains:['idk'];const v=st.view&&ps.includes(st.view)?st.view:ps[0];const m=c.mini(v);
+ const brand=st.name||'bigC company';const q=c.quote(firstPains(),st);const rest=restPains();
+ let h='';
+ if(ps.length>1)h+=`<div class="chips" role="group" aria-label="고르신 고충">${[...ps].sort((a,b)=>(b===st.first)-(a===st.first)).map(p=>`<button type="button" data-view="${p}" aria-pressed="${p===v}">${short(p)}</button>`).join('')}</div>`;
+ h+=`<div class="card"><div class="hd"><b>${esc(brand)} · ${m.h}</b><span>${m.r}</span></div><div class="bd">${m.b}<p class="fixl">${c.fix[v]}</p>`;
+ const bf=st.tool&&st.tool!=='idk'?c.before[st.tool]:null;
+ if(bf)h+=`<p class="before"><b>${bf[0]}</b><span>→ ${bf[1]}</span></p>`;
+ h+=`<div class="en"><span class="k">${c.enLabel||'직원·기사 휴대폰 · English'}</span><b>${c.en[v][0]}</b><span>${c.en[v][1]}</span></div>`;
+ if(q.consult){h+=`<div class="price"><div class="l"><span>맞는 것 · ${q.items.map(i=>i[0]).join(' + ')}</span></div><div class="deal"><b>가격은 상담 문의</b></div><small>대표님이 원하시는 기능만 골라 맞춤으로 개발해 드립니다.</small>${rest.length?`<small>나머지 ${rest.length}가지(${rest.map(short).join(' · ')})는 쓰시면서 하나씩 더하실 수 있습니다.</small>`:''}${c.notes(q,st).map(n=>`<small>${n}</small>`).join('')}</div><span class="tag">가상 자료</span></div></div>`;return h;}
+ const restL=rest.length?`<small>나머지 ${rest.length}가지(${rest.map(short).join(' · ')})는 쓰시면서 하나씩 더하실 수 있습니다.</small>`:'';
+ const lst=`<details class="more"><summary>다른 단계 값 보기</summary><div class="pl">${c.list.map(([n,v,pv,m])=>`<div class="row"><span>${n}${m?`<em>월 ${m}만</em>`:''}</span><span>${pv?`<s>${v}만</s> ${pv}만 원`:`${v}만 원`}</span></div>`).join('')}</div></details>`;
+ 
+ if(q.tong){h+=`<div class="price"><div class="l"><span>가장 먼저 · ${short(st.first||firstPains()[0])}</span></div><div class="deal"><b>상담에서 맞춰 드립니다</b></div><small>이 일은 여러 기능을 잇는 일이라, 상담에서 범위를 줄여 맞춰 드립니다.</small><small class="cus">대표님이 원하시는 기능만 골라 맞춤으로 개발해 드립니다.</small>${restL}${lst}</div><span class="tag">가상 자료 · 값은 상품표 그대로</span></div></div>`;return h;}
+ const pay=q.pay!=null?q.pay:q.sum,tl=q.tong?'~':'',disc=q.full-pay;
+ h+=`<div class="price">`;
+ if(q.items.length>1)q.items.forEach(it=>h+=`<div class="l li"><span>${it[0]}</span><span>${it[1]}만 원</span></div>`);
+ else h+=`<div class="l"><span>${st.first&&rest.length?'가장 먼저 · ':'맞는 첫 단계 · '}${q.items[0][0]}</span></div>`;
+ h+=`<div class="deal"><b>${pay}만 원${tl}</b>${disc>0?`<s>${q.full}만 원${tl}</s><span class="off">${q.dl}</span>`:''}</div>`;
+ h+=`<small class="cus">대표님이 원하시는 기능만 골라 맞춤으로 개발해 드립니다.</small>`;
+ if(q.mo)h+=`<small>${mo(q)}</small>`;
+ h+=restL;
+ const ns=c.notes(q,st),hot=ns.filter(n=>n.startsWith('<span class="r">')),restN=ns.filter(n=>!hot.includes(n));
+ hot.forEach(n=>h+=`<small>${n}</small>`);
+ const on=q.items.map(i=>i[0]);
+ h+=`<details class="more"><summary>다른 단계 값 보기</summary><div class="pl">${c.list.map(([n,v,pv,m])=>`<div class="row${on.includes(n)?' on':''}"><span>${n}${m?`<em>월 ${m}만</em>`:''}</span><span>${pv?`<s>${v}만</s> ${pv}만 원`:`${v}만 원`}</span></div>`).join('')}</div>${restN.map(n=>`<small>${n}</small>`).join('')}</details>`;
+ h+=`</div><span class="tag">가상 자료 · 값은 상품표 그대로</span></div></div>`;
+ return h;
+}
+
+function buildSummary(){
+ const c=C();const lines=['[bigC company 인터뷰봇 정리]'];
+ const fr=FROM[new URLSearchParams(location.search).get('from')];if(fr)lines.push('들어온 곳: '+fr);
+ if(st.entry==='photo'&&!st.ind)lines.push('입구: 사진 한 장으로 하겠다고 고름');
+ if(st.ind)lines.push('업종: '+lab(INDS,st.ind));
+ if(c&&st.pains.length)lines.push('고충: '+st.pains.map(p=>p==='idk'?'모르겠어요':lab(c.pains,p)).join(' / '));
+ if(c&&st.tool)lines.push('지금 쓰는 것: '+(st.tool==='idk'?'모르겠어요':lab(c.tools,st.tool)));
+ if(c)c.more.forEach((m,i)=>{const a=st['a'+i];if(a!=null)lines.push(m[2]+': '+(a<0?'모르겠어요':m[1][a]));});
+ if(st.name)lines.push('상호: '+st.name+' · 색: '+COLORS.find(x=>x[0]===st.color)[1]);
+ if(c&&st.first&&restPains().length)lines.push('가장 먼저: '+lab(c.pains,st.first));
+ if(c&&restPains().length)lines.push('나머지: '+restPains().map(short).join(' · ')+' (쓰시면서 하나씩)');
+ if(c&&st.pains.length){const q=c.quote(firstPains(),st);if(q.tong)lines.push('맞는 것: 「'+short(st.first||firstPains()[0])+'」 — 여러 기능을 잇는 일 · 상담에서 범위를 줄여 맞춤');else if(q.consult)lines.push('맞는 것: '+q.items.map(i=>i[0]).join(' + ')+' · 원하시는 기능만 맞춤 개발 · 가격은 상담 문의');else lines.push('맞는 단계: '+(q.items.length>1?q.items.map(i=>`${i[0]} ${i[1]}만`).join(' + ')+' = ':q.items[0][0]+' ')+`${q.sum}만 원${q.tong?'~':''}`+(q.pay!=null?` → ${q.dlS||'첫 다섯 곳'} ${q.pay}만 원${q.tong?'~':''}`:q.full>q.sum?` (따로 하면 ${q.full}만 원)`:'')+`${q.mo?` · ${mo(q)}`:''}`);}
+ if(lines.length===1)lines.push('아직 고른 것 없음');
+ return lines.join('\n');
+}
+function understood(){
+ const c=C();
+ if(!c||!st.pains.length)return st.ind?`${lab(INDS,st.ind)}을(를) 하십니다. 자세한 상황은 채팅으로 여쭙겠습니다.`:'사진 한 장으로 상황을 알려 주시겠다고 하셨습니다.';
+ const ps=st.pains.filter(p=>p!=='idk');
+ const p=(ps.length?`${ps.map(short).join(', ')} 일이 번거로우십니다`:'어떤 일이 가장 번거로운지는 아직 정하지 못하셨습니다')+(st.first&&ps.length>1?`. 가장 먼저 ${short(st.first)}부터 덜고 싶으십니다`:'');
+ const TW={excel:'엑셀로',kakao:'카톡으로',paper:c.paperTW||'종이 장부와 눈으로',pos:'포스나 다른 프로그램으로'};const t=c.twS&&c.twS[st.tool]?' '+c.twS[st.tool]:st.tool==='none'?' 지금은 따로 적어 두지 않으십니다.':TW[st.tool]?` 지금은 ${TW[st.tool]} 하십니다.`:'';
+ return `${c.who}. ${p}.${t}${c.tail(st)}`;
+}
+
+function render(scroll){
+ fixes=[];const c=C();
+ $('brandName').textContent=st.name||'bigC company';
+ $('dot').textContent=(st.name||'bC').slice(0,2);
+ document.documentElement.style.setProperty('--brand',st.color);
+ $('bar').style.width=({start:5,photo:10,q1:20,other:60,q2:45,q2b:60,q3:75}[st.step]||100)+'%';
+ $('foot').hidden=st.step==='summary';
+ let h=bot('안녕하십니까. 매장 상황을 몇 가지 여쭙겠습니다. 번호만 누르시면 1분이면 끝납니다. 모르시면 「모르겠어요」를 누르십시오.')+bot('어떻게 시작하시겠습니까?');
+ if(st.step==='start')h+=`<div class="grid2"><button type="button" class="entry" data-entry="photo"><b>사진 한 장</b><span>쓰시는 엑셀·장부·카톡 주문 화면. 이름과 금액은 가려도 됩니다</span></button><button type="button" class="entry" data-entry="q"><b>질문 3개</b><span>번호만 고르시면 바로 화면이 나옵니다</span></button></div>`;
+ else if(st.entry)h+=me(st.entry==='photo'?'사진으로 할게요':'질문 3개','start','entry');
+ if(st.entry==='photo'){h+=bot('사진은 이 글을 올린 bigC company 1:1 채팅으로 보내 주십시오. 어느 숫자가 맞지 않는지 진단 카드 한 장으로 보여 드립니다. 진단 카드는 무료이고, 받으셨다고 맡기실 필요는 없습니다.');
+  if(st.step==='photo')h+=`<div class="acts"><button type="button" class="btn ghost" data-entry="q">질문으로 할게요</button></div>`;}
+ if(st.entry==='q'){
+  h+=bot('어떤 일을 하시는 곳입니까?');
+  if(st.step==='q1')h+=opts(INDS,'ind','q2');
+  else if(st.ind)h+=me(lab(INDS,st.ind),'q1','ind');
+ }
+ if(st.ind&&!c){h+=bot('이 업종은 눌러 보는 화면을 준비하고 있습니다. 고르신 내용으로 바로 물어보실 수 있습니다.');if(st.step==='other')h+=`<div class="acts"><button type="button" class="btn" data-go="summary">이 정리로 물어보기</button></div>`;}
+ if(c){
+  h+=bot(c.ask)+`<p class="why">해당하는 것을 모두 골라 주십시오.</p>`;
+  if(st.step==='q2'){h+='<div class="opts" role="group" aria-label="매장 고충">';c.pains.forEach((p,i)=>h+=`<button type="button" class="opt multi" data-pick="${p[0]}" aria-pressed="${st.pick.includes(p[0])}"><b>${i+1}</b><span>${p[1]}</span></button>`);
+   h+=`<button type="button" class="opt idk multi" data-pick="idk" aria-pressed="${st.pick.includes('idk')}"><b>${c.pains.length+1}</b><span>잘 모르겠어요</span></button></div>`;
+   h+=`<div class="acts"><button type="button" class="btn" id="next2" ${st.pick.length?'':'disabled'}>${st.pick.length?`${st.pick.includes('idk')?'':st.pick.length+'개 '}골랐습니다 · 다음`:'하나 이상 골라 주십시오'}</button></div>`;}
+  else if(st.pains.length)h+=me(st.pains.map(p=>p==='idk'?'잘 모르겠어요':short(p)).join(' · '),'q2','pains');
+ }
+ 
+ if(c&&st.step!=='q2'&&st.pains.filter(p=>p!=='idk').length>1){
+  h+=bot('이 가운데 가장 먼저 덜고 싶은 것 하나는 무엇입니까?')+`<p class="why">나머지는 쓰시면서 하나씩 더하실 수 있습니다.</p>`;
+  if(st.step==='q2b'){h+='<div class="opts">';st.pains.forEach((k,i)=>h+=`<button type="button" class="opt" data-first="${k}"><b>${i+1}</b><span>${lab(c.pains,k)}</span></button>`);h+='</div>';}
+  else if(st.first)h+=me(short(st.first),'q2b','first');
+ }
+ if(c&&st.pains.length&&st.step!=='q2'&&st.step!=='q2b'){
+  h+=bot(st.pains.length>1?'그 일들을 지금 주로 무엇으로 하십니까?':'그 일을 지금 무엇으로 하십니까?');
+  if(st.step==='q3')h+=opts(c.tools,'tool','result',true);
+  else if(st.tool)h+=me(st.tool==='idk'?'모르겠어요':lab(c.tools,st.tool),'q3','tool');
+ }
+ if(c&&st.tool&&st.step!=='q2b'){
+  const n=st.pains.filter(p=>p!=='idk').length;
+  h+=bot(n>1?`고르신 고충 ${n}가지가 이렇게 바뀝니다. 위 단추로 하나씩 보실 수 있습니다.`:n?'이렇게 바뀝니다.':'대표님들이 가장 많이 고르시는 묶음으로 보여 드립니다.');
+  h+=resultCard();
+  if(st.step==='result')h+=`<div class="acts"><button type="button" class="btn" data-go="summary">이 정리로 물어보기</button><button type="button" class="btn ghost" data-go="m4">더 정확하게 (4문항 · 상호를 넣으면 ${c.place||'매장'} 이름으로)</button></div>`;
+ }
+ const seq=['m4','m5','m6','m7','result2'];const cur=seq.indexOf(st.step);
+ if(c)c.more.forEach(([q,list],i)=>{
+  const s=seq[i],key='a'+i,next=seq[i+1];
+  const show=cur>=i||(st.step==='summary'&&st[key]!=null);if(!show)return;
+  h+=bot(q);
+  if(st.step===s){h+='<div class="opts">';list.forEach((x,j)=>h+=`<button type="button" class="opt" data-k="${key}" data-v="${j}" data-n="${next}"><b>${j+1}</b><span>${x}</span></button>`);h+=`<button type="button" class="opt idk" data-k="${key}" data-v="-1" data-n="${next}"><b>${list.length+1}</b><span>모르겠어요</span></button></div>`;}
+  else if(st[key]!=null)h+=me(st[key]<0?'모르겠어요':list[st[key]],s,key);
+ });
+ if(c&&(cur>=3||(st.step==='summary'&&st.moreDone))){
+  h+=bot(`상호와 좋아하시는 색을 알려 주십시오. 시안에 ${c.place||'매장'} 이름을 넣어 드립니다.`)+`<p class="why">가명도 됩니다. 비워 두셔도 됩니다.</p>`;
+  if(st.step==='m7')h+=`<div class="field"><input id="storeName" type="text" maxlength="24" placeholder="${c.ph}" value="${esc(st.name)}" aria-label="상호"><div class="sw" role="group" aria-label="색">${COLORS.map(x=>`<button type="button" data-color="${x[0]}" style="background:${x[0]}" aria-label="${x[1]}" aria-pressed="${st.color===x[0]}"></button>`).join('')}</div><button type="button" class="btn" id="redraw">다시 그리기</button></div>`;
+  else if(st.moreDone){h+=me(st.name?esc(st.name):'—','m7','name');h+=bot('알려 주신 상황으로 다시 그렸습니다.')+resultCard();
+   if(st.step==='result2')h+=`<div class="acts"><button type="button" class="btn" data-go="summary">이 정리로 물어보기</button></div>`;}
+ }
+ if(st.step==='summary'){
+  if(!st.summary)st.summary=understood();
+  h+=bot('제가 이해한 것을 정리했습니다. 틀린 곳은 고쳐 주십시오. 고치신 문장이 그대로 대표님께 갑니다.');
+  h+=`<div class="field"><label class="why" for="und">제가 이해한 것</label><textarea id="und">${esc(st.summary)}</textarea></div>`;
+  h+=`<div class="sum"><span class="k">대표님께 가는 정리</span><span id="sumText" style="white-space:pre-line">${esc(buildSummary())}</span></div>`;
+  h+=`<div class="acts"><button type="button" class="btn" id="copy">정리 복사하기</button><button type="button" class="btn" disabled>bigC company에 바로 보내기</button><p class="why" style="text-align:center">텔레그램을 잇고 나면 켜집니다 (B3)</p></div><p class="toast" id="toast" role="status"></p>`;
+  h+=bot('복사한 글을 bigC company 1:1 채팅에 붙여 넣어 주십시오. 진단 카드는 무료이고, 받으셨다고 맡기실 필요는 없습니다.');
+  h+=`<div class="acts"><button type="button" class="btn ghost" id="restart">처음부터 다시</button></div>`;
+ }
+ thread.innerHTML=h;
+
+ thread.querySelectorAll('[data-entry]').forEach(b=>b.onclick=()=>{if(b.dataset.entry==='photo')Object.assign(st,{entry:'photo',step:'photo'});else Object.assign(st,{entry:'q',step:'q1'});render(true);});
+ thread.querySelectorAll('.opt[data-k]').forEach(b=>b.onclick=()=>{const k=b.dataset.k,raw=b.dataset.v;st[k]=MORE.includes(k)?+raw:raw;st.step=b.dataset.n;
+   if(k==='ind'){st.pick=[];if(!T[raw])st.step='other';}render(true);});
+ thread.querySelectorAll('[data-pick]').forEach(b=>b.onclick=()=>{const v=b.dataset.pick;
+   if(v==='idk')st.pick=st.pick.includes('idk')?[]:['idk'];else{st.pick=st.pick.filter(x=>x!=='idk');st.pick=st.pick.includes(v)?st.pick.filter(x=>x!==v):[...st.pick,v];}
+   render();});
+ const n2=$('next2');if(n2)n2.onclick=()=>{st.pains=C().pains.map(p=>p[0]).filter(k=>st.pick.includes(k));if(st.pick.includes('idk'))st.pains=['idk'];const real=st.pains.filter(p=>p!=='idk');st.first=real.length===1?real[0]:null;st.view=st.pains[0];st.step=real.length>1?'q2b':st.tool?'result':'q3';render(true);};
+ thread.querySelectorAll('[data-first]').forEach(b=>b.onclick=()=>{st.first=b.dataset.first;st.view=st.first;st.step=st.tool?'result':'q3';render(true);});
+ thread.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>{st.view=b.dataset.view;render();});
+ thread.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>{if(b.dataset.go==='summary')st.summary='';st.step=b.dataset.go;render(true);});
+ fixes.forEach(f=>{const b=thread.querySelector(`[data-fix="${f.id}"]`);if(!b)return;b.onclick=()=>{
+   if(f.from==='name'){st.moreDone=false;st.step='m7';render(true);return;}
+   if(f.from==='first'){st.first=null;st.step='q2b';render(true);return;}
+   if(f.from==='pains'){st.pick=[...st.pains];st.pains=[];st.first=null;st.tool=null;MORE.forEach(k=>st[k]=null);st.moreDone=false;st.summary='';st.step='q2';render(true);return;}
+   resetFrom(f.from);if(f.from==='entry')st.step='start';else st.step=f.step;render(true);};});
+ thread.querySelectorAll('[data-color]').forEach(b=>b.onclick=()=>{st.color=b.dataset.color;const n=$('storeName');if(n)st.name=n.value.trim();render();});
+ const rd=$('redraw');if(rd)rd.onclick=()=>{st.name=$('storeName').value.trim();st.moreDone=true;st.step='result2';render(true);};
+ const und=$('und');if(und)und.oninput=()=>{st.summary=und.value;};
+ const cp=$('copy');if(cp)cp.onclick=()=>{const txt=buildSummary()+'\n제가 이해한 것: '+(st.summary||'');const t=$('toast');
+   const sel=()=>{const r=document.createRange();r.selectNodeContents($('sumText'));const s=getSelection();s.removeAllRanges();s.addRange(r);t.textContent='복사가 막혀 글을 선택해 두었습니다. 길게 눌러 복사해 주십시오.';};
+   try{navigator.clipboard.writeText(txt).then(()=>t.textContent='복사했습니다. 1:1 채팅에 붙여 넣어 주십시오.',sel);}catch(e){sel();}};
+ const rs=$('restart');if(rs)rs.onclick=()=>{Object.assign(st,{step:'start',entry:null,ind:null,pains:[],pick:[],first:null,view:null,tool:null,a0:null,a1:null,a2:null,name:'',color:COLORS[0][0],moreDone:false,summary:''});render(true);};
+ if(scroll)requestAnimationFrame(()=>{const last=thread.lastElementChild;if(!last)return;
+   if(thread.scrollHeight>thread.clientHeight+4)thread.scrollTop=thread.scrollHeight;else if(innerWidth<=900)last.scrollIntoView({block:'nearest',behavior:'smooth'});});
+}
+
+{const hk=location.hash.slice(1);if(hk==='mart'||hk==='food'||hk==='golf'||hk==='web'||hk==='realty')Object.assign(st,{entry:'q',ind:hk,step:'q2'});}
+render();
+window.__bot={st,render,T};
+})();
+</script>
+<p style="margin:0;padding:18px 16px calc(18px + env(safe-area-inset-bottom,0px));text-align:center;font:12px/1.5 system-ui,sans-serif;opacity:.6">© 2026 bigC company · 화면·문구·구성의 무단 복제와 배포를 금합니다.</p></body></html>
