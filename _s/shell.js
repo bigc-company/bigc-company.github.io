@@ -217,8 +217,14 @@ summary:before{content:"+ "}details[open] summary:before{content:"− "}
 
   // ---------- catch the page's own copy (approved drafts, bot, MES) and continue into the sheet
   const FROM = { bot: '1분 질문 결과', mes: '고르신 진단 내용' };
+  // only right after the customer presses the page's own copy button — never for text they select and copy themselves
+  let copyBtnAt = 0;
+  document.addEventListener('click', (e) => {
+    const b = e.target.closest && e.target.closest('#copy,#f-copy,[data-copy],button');
+    if (b && (b.matches('#copy,#f-copy,[data-copy]') || /복사|문의하기/.test(b.textContent || ''))) copyBtnAt = Date.now();
+  }, true);
   const caught = (t) => {
-    if (selfCopy || !t || t.trim().length < 12) return;
+    if (selfCopy || !t || t.trim().length < 12 || Date.now() - copyBtnAt > 2000) return;
     setTimeout(() => open({ text: t.trim(), from: FROM[PAGE] || '고르신 단계와 취향' }), 700);
   };
   if (navigator.clipboard && navigator.clipboard.writeText) {
