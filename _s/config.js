@@ -1,0 +1,1 @@
+window.BIGC={"contacts": {"kakao": {"url": ""}, "telegram": {"id": ""}, "viber": {"phone": ""}, "messenger": {"page": ""}, "whatsapp": {"phone": ""}, "zalo": {"phone": ""}, "sms": {"phone": ""}, "tel": {"phone": ""}, "email": {"addr": ""}}, "preview": true};
