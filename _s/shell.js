@@ -1,4 +1,4 @@
-/* bigC showroom shell (173)(174)(182): one inquiry sheet on every page + brand link to the hub.
+/* bigC company showroom shell (173)(174)(182): one inquiry sheet on every page + brand link to the hub.
    (182) H3: no floating 「문의하기」 button any more — each page opens the sheet from its own header / phone bar / step buttons.
    Injected by build_site.py as  <script src="/_s/config.js"></script><script src="/_s/shell.js" data-trade="…" data-region="ph|vn" data-page="hub|golf|…" defer></script>
    - Shadow DOM: the approved drafts' CSS and ours never touch each other.
