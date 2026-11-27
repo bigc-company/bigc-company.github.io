@@ -1,4 +1,5 @@
-/* bigC showroom shell (173)(174): one inquiry sheet on every page + brand link to the hub.
+/* bigC showroom shell (173)(174)(182): one inquiry sheet on every page + brand link to the hub.
+   (182) H3: no floating 「문의하기」 button any more — each page opens the sheet from its own header / phone bar / step buttons.
    Injected by build_site.py as  <script src="/_s/config.js"></script><script src="/_s/shell.js" data-trade="…" data-region="ph|vn" data-page="hub|golf|…" defer></script>
    - Shadow DOM: the approved drafts' CSS and ours never touch each other.
    - Every copy the page makes (its own 「문의 글 복사」, the bot's summary, MES 「글 복사」) opens this sheet with that text,
@@ -28,7 +29,7 @@
   const ORDER = REGION === 'vn'
     ? ['kakao', 'zalo', 'email', 'telegram', 'whatsapp', 'viber', 'tel', 'sms', 'messenger']
     : ['kakao', 'telegram', 'viber', 'messenger', 'whatsapp', 'sms', 'tel', 'email', 'zalo'];
-  const TRADES = ['골프 여행사', '한인 마트 · 배달', '한인식당', '부동산 · 비자 사무실', '공장 생산관리(MES)', '커뮤니티 · 검색 노출', '홈페이지', '그 밖의 업무'];
+  const TRADES = ['골프 여행사', '마트 · 배달', '식당', '부동산 · 비자 사무실', '공장 생산관리(MES)', '커뮤니티 · 검색 노출', '홈페이지', '그 밖의 업무'];  // (177) no 「한인」
   const WANTS = ['단계와 값 상담', '맞춤 시안 요청', '현장 방문 상담'];
 
   const st = { trade: TRADE, want: '', stage: '', price: '', text: '', from: '' };
@@ -45,11 +46,6 @@
   font:15px/1.6 "IBM Plex Sans KR",system-ui,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;color:var(--fg);word-break:keep-all}
 @media (prefers-color-scheme:dark){:host{--bg:#1A1917;--fg:#EEEAE3;--mu:#A69F95;--ln:#36332F;--cd:#23211F;--ac:#5CC2B0;--acf:#0B1F1C;--sh:0 24px 64px rgba(0,0,0,.6)}}
 *{box-sizing:border-box}button,textarea,a{font:inherit;color:inherit}[hidden]{display:none!important}
-.fab{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:2147483000;display:flex;align-items:center;gap:8px;
-  padding:12px 18px 12px 15px;border:0;border-radius:999px;background:var(--fg);color:var(--bg);font-weight:600;font-size:15px;cursor:pointer;box-shadow:0 10px 30px rgba(0,0,0,.25);
-  transition:transform .25s cubic-bezier(.2,.8,.2,1),opacity .2s}
-.fab:hover{transform:translateY(-2px)}.fab:focus-visible{outline:3px solid var(--ac);outline-offset:3px}
-.fab.hide{opacity:0;pointer-events:none;transform:translateY(12px)}
 .scrim{position:fixed;inset:0;z-index:2147483001;background:rgba(15,12,8,.42);opacity:0;pointer-events:none;transition:opacity .25s}
 .sheet{position:fixed;z-index:2147483002;background:var(--bg);color:var(--fg);display:flex;flex-direction:column;box-shadow:var(--sh);
   right:0;top:0;bottom:0;width:min(440px,100%);transform:translateX(104%);transition:transform .32s cubic-bezier(.2,.8,.2,1)}
@@ -88,13 +84,12 @@ summary:before{content:"+ "}details[open] summary:before{content:"− "}
 .toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));z-index:2147483003;transform:translate(-50%,20px);opacity:0;pointer-events:none;
   max-width:min(92vw,420px);padding:12px 16px;border-radius:12px;background:var(--fg);color:var(--bg);font-size:14px;text-align:center;transition:.25s}
 .toast.on{opacity:1;transform:translate(-50%,0)}
-@media (prefers-reduced-motion:reduce){.sheet,.fab,.scrim,.toast,.rt{transition:none}}
+@media (prefers-reduced-motion:reduce){.sheet,.scrim,.toast,.rt{transition:none}}
 `;
 
   const host = document.createElement('bigc-ask');
   const root = host.attachShadow({ mode: 'open' });
   root.innerHTML = `<style>${CSS}</style>
-<button class="fab" type="button" aria-haspopup="dialog">${svg('chat', 19)}<span>문의하기</span></button>
 <div class="scrim" part="scrim"></div>
 <aside class="sheet" role="dialog" aria-modal="true" aria-labelledby="bc-t" aria-hidden="true">
   <div class="hd"><h2 id="bc-t">문의하기</h2><button class="x" type="button" aria-label="닫기">×</button></div>
@@ -116,7 +111,7 @@ summary:before{content:"+ "}details[open] summary:before{content:"− "}
 </aside>
 <div class="toast" role="status" aria-live="polite"></div>`;
   const $ = (s) => root.querySelector(s);
-  const fab = $('.fab'), sheet = $('.sheet'), ta = $('textarea'), toastEl = $('.toast');
+  const sheet = $('.sheet'), ta = $('textarea'), toastEl = $('.toast');
   if (PAGE === 'bot') $('.alt').hidden = true;
 
   // chips
@@ -193,16 +188,15 @@ summary:before{content:"+ "}details[open] summary:before{content:"− "}
       got.innerHTML = `<i>✓</i><span><b>${st.from || '고르신 내용'}</b>이 문의 글에 담겼습니다.</span>`;
     } else { pick.hidden = false; got.hidden = true; syncChips(); ta.value = compose(); }
     last = document.activeElement;
-    host.setAttribute('open', ''); sheet.setAttribute('aria-hidden', 'false'); fab.classList.add('hide');
+    host.setAttribute('open', ''); sheet.setAttribute('aria-hidden', 'false');
     document.documentElement.style.overflow = 'hidden';
     setTimeout(() => $('.x').focus(), 60);
   };
   const close = () => {
-    host.removeAttribute('open'); sheet.setAttribute('aria-hidden', 'true'); fab.classList.remove('hide');
+    host.removeAttribute('open'); sheet.setAttribute('aria-hidden', 'true');
     document.documentElement.style.overflow = '';
     if (last && last.focus) last.focus();
   };
-  fab.addEventListener('click', () => open());
   $('.x').addEventListener('click', close);
   $('.scrim').addEventListener('click', close);
   addEventListener('keydown', (e) => { if (e.key === 'Escape' && host.hasAttribute('open')) close(); });
