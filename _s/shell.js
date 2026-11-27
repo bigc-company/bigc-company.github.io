@@ -170,7 +170,10 @@ summary:before{content:"+ "}details[open] summary:before{content:"− "}
     const r = R[k], x = C.contacts[k] || {}, ok = live.includes(k);
     const badge = r.b ? `<span class="bg" style="background:${r.c};color:${r.f || '#fff'}">${r.b}</span>` : `<span class="bg" style="background:var(--ln)">${svg(r.i, 18)}</span>`;
     const sub = !ok ? '주소 대기' : r.call && !touch ? x.phone : r.fill ? '글이 채워져 열림' : '복사 후 열림';
-    return `<a class="rt" data-k="${k}" href="${ok ? '#' : '#'}" role="button" ${ok ? '' : 'aria-disabled="true"'}>${badge}<span>${r.n}</span><small>${sub}</small></a>`;
+    // (WO-002) a live web route carries its real address in href (long-press / copy link work); the click below still copies the text first
+    const u = ok ? String(r.href(x, '')) : '';
+    const href = /^https:\/\//.test(u) ? u.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;') : '#';
+    return `<a class="rt" data-k="${k}" href="${href}" role="button" ${ok ? '' : 'aria-disabled="true"'}>${badge}<span>${r.n}</span><small>${sub}</small></a>`;
   };
   const TOP = 3;
   $('.big').innerHTML = shown.slice(0, TOP).map(btn).join('');
