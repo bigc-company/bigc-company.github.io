@@ -3,7 +3,9 @@
    Injected by build_site.py as  <script src="/_s/config.js"></script><script src="/_s/shell.js" data-trade="…" data-region="ph|vn" data-page="hub|golf|…" defer></script>
    - Shadow DOM: the approved drafts' CSS and ours never touch each other.
    - Every copy the page makes (its own 「문의 글 복사」, the bot's summary, MES 「글 복사」) opens this sheet with that text,
-     so the customer only has to pick where to send it.  window.bigcAsk.open({...}) opens it from the hub. */
+     so the customer only has to pick where to send it.  window.bigcAsk.open({...}) opens it from the hub.
+   (WO-001) window.BIGC.intake = the intake Worker address -> a 「바로 보내기」 block on top of the sheet (owner's Telegram).
+   Empty -> not one character of the sheet changes. */
 (() => {
   const me = document.currentScript || document.querySelector('script[src*="_s/shell.js"]');
   const C = Object.assign({ contacts: {}, preview: true }, window.BIGC || {});
@@ -13,6 +15,7 @@
   const REGION = (me && me.dataset.region) || 'ph';
   const touch = matchMedia('(pointer:coarse)').matches;
   const digits = (s) => String(s || '').replace(/[^\d]/g, '');
+  const IN = String(C.intake || '').trim();  // (WO-001) self intake; empty = the copy-and-paste sheet exactly as before
 
   // ---------- routes (174): one place for every way in. Empty ones are hidden (or shown as 「주소 대기」 in preview).
   const R = {
@@ -86,15 +89,36 @@ summary:before{content:"+ "}details[open] summary:before{content:"− "}
 .toast.on{opacity:1;transform:translate(-50%,0)}
 @media (prefers-reduced-motion:reduce){.sheet,.scrim,.toast,.rt{transition:none}}
 `;
+  // (WO-001) only added when the intake address is set
+  const CSS_IN = `
+:host{--er:#B3261E}@media (prefers-color-scheme:dark){:host{--er:#F2B8B5}}
+.in{position:relative;margin:0 0 4px;padding:14px;border-radius:14px;background:var(--cd);border:1px solid var(--ln)}
+.in .lb{margin-top:0}.lb small{font-size:13px}
+.in input{display:block;width:100%;height:48px;padding:0 14px;border:1px solid var(--ln);border-radius:12px;background:var(--bg);font:inherit;font-size:16px;color:inherit}
+.in input:focus{outline:2px solid var(--ac);outline-offset:1px}.in input[aria-invalid="true"]{border-color:var(--er)}
+.go{display:block;width:100%;min-height:52px;margin-top:10px;border:0;border-radius:12px;background:var(--ac);color:var(--acf);font-weight:700;font-size:16px;cursor:pointer;transition:filter .15s}
+.go:hover{filter:brightness(1.08)}.go:disabled{opacity:.7;cursor:progress}.go:focus-visible{outline:3px solid var(--ac);outline-offset:2px}
+.in .msg{margin:10px 0 0;font-size:14px;color:var(--mu)}.in .msg:empty{display:none}.in .msg.err{color:var(--er)}
+.in.done>:not(.msg){display:none}.in.done .msg{margin:0;font-size:15px;font-weight:600;color:var(--fg)}.in.done .msg i{font-style:normal;color:var(--ac);margin-right:6px}
+.hp{position:absolute;top:0;left:0;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);opacity:0;pointer-events:none}
+`;
+  const IN_HTML = `
+    <div class="in">
+      <label class="lb" for="bc-r">답을 받으실 연락처 <small>꼭 적어 주십시오</small></label>
+      <input id="bc-r" type="text" maxlength="120" aria-required="true" placeholder="메신저 ID 또는 전화번호">
+      <input class="hp" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <button class="go" type="button">바로 보내기</button>
+      <p class="msg" role="status" aria-live="polite"></p>
+    </div>`;
 
   const host = document.createElement('bigc-ask');
   const root = host.attachShadow({ mode: 'open' });
-  root.innerHTML = `<style>${CSS}</style>
+  root.innerHTML = `<style>${CSS}${IN ? CSS_IN : ''}</style>
 <div class="scrim" part="scrim"></div>
 <aside class="sheet" role="dialog" aria-modal="true" aria-labelledby="bc-t" aria-hidden="true">
   <div class="hd"><h2 id="bc-t">문의하기</h2><button class="x" type="button" aria-label="닫기">×</button></div>
   <div class="bd">
-    <p class="lead">편하신 방법을 누르시면 아래 문의 글이 함께 복사됩니다. 붙여 넣고 보내 주십시오.</p>
+    <p class="lead">${IN ? '연락처를 적고 「바로 보내기」를 누르시면 아래 문의 글이 담당자에게 갑니다.' : '편하신 방법을 누르시면 아래 문의 글이 함께 복사됩니다. 붙여 넣고 보내 주십시오.'}</p>${IN ? IN_HTML : ''}
     <div class="got" hidden></div>
     <div class="pick">
       <p class="lb">업종</p><div class="chips" data-k="trade"></div>
@@ -102,7 +126,7 @@ summary:before{content:"+ "}details[open] summary:before{content:"− "}
     </div>
     <label class="lb" for="bc-m">문의 글 <small>고치셔도 됩니다</small></label>
     <textarea id="bc-m" spellcheck="false"></textarea>
-    <p class="lb">보낼 곳</p>
+    <p class="lb">${IN ? '메신저로 보내셔도 됩니다' : '보낼 곳'}</p>
     <div class="routes big"></div>
     <details class="more"><summary></summary><div class="routes sm"></div></details>
     <a class="alt" href="${C.hub === './' ? '' : C.hub}bot/">어디서부터 시작할지 모르시겠다면 · <b>1분 질문으로 값 먼저 보기 →</b></a>
@@ -177,11 +201,48 @@ summary:before{content:"+ "}details[open] summary:before{content:"− "}
     if (/^https?:/.test(url)) window.open(url, '_blank', 'noopener'); else location.href = url;
   });
 
+  // ---------- (WO-001) 「바로 보내기」 -> intake Worker -> owner's Telegram. Any failure falls back to the copy routes below.
+  let resetIn = () => {};
+  if (IN) {
+    const box = $('.in'), rIn = $('#bc-r'), hp = $('.hp'), go = $('.go'), msg = $('.in .msg');
+    const say = (m, err) => { msg.textContent = m; msg.classList.toggle('err', !!err); };
+    resetIn = () => { box.classList.remove('done'); go.disabled = false; go.textContent = '바로 보내기'; say(''); rIn.removeAttribute('aria-invalid'); };
+    const send = async () => {
+      if (go.disabled) return;
+      const reply = rIn.value.trim(), text = ta.value.trim();
+      rIn.setAttribute('aria-invalid', reply ? 'false' : 'true');
+      if (!reply) { say('답을 받으실 연락처를 적어 주십시오.', true); rIn.focus(); return; }
+      if (text.length > 2000) { say(`문의 글이 깁니다. 2000자 안으로 줄여 주십시오. 지금 ${text.length}자입니다.`, true); ta.focus(); return; }
+      go.disabled = true; go.textContent = '보내는 중입니다'; say('');
+      let ok = false;
+      try {
+        const ctl = new AbortController(), tm = setTimeout(() => ctl.abort(), 15000);
+        const r = await fetch(IN, { method: 'POST', headers: { 'content-type': 'application/json' }, signal: ctl.signal,
+          body: JSON.stringify({ text, reply, from: st.from, trade: st.trade, stage: st.stage, price: st.price, want: st.want, page: location.pathname, website: hp.value }) });
+        clearTimeout(tm);
+        ok = r.ok && (await r.json().catch(() => ({}))).ok === true;
+      } catch (_) {}
+      go.disabled = false;
+      if (ok) {
+        box.classList.add('done'); msg.classList.remove('err');
+        msg.innerHTML = '<i>✓</i>보냈습니다. 확인 후 연락드리겠습니다.';
+      } else {
+        go.textContent = '다시 보내기';
+        say('보내지 못했습니다. 아래에서 메신저를 고르시면 글이 복사됩니다.', true);
+        toast('보내지 못했습니다. 아래에서 메신저를 고르시면 글이 복사됩니다.');
+        $('.big').scrollIntoView({ block: 'center', behavior: 'smooth' });
+      }
+    };
+    go.addEventListener('click', send);
+    rIn.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); send(); } });
+  }
+
   // open / close
   let last = null;
   const open = (o = {}) => {
     Object.assign(st, { stage: '', price: '', text: '' }, o);
     if (o.trade) st.trade = o.trade;
+    resetIn();
     const got = $('.got'), pick = $('.pick');
     if (st.text) {
       ta.value = st.text; pick.hidden = true; got.hidden = false;
@@ -202,7 +263,7 @@ summary:before{content:"+ "}details[open] summary:before{content:"− "}
   addEventListener('keydown', (e) => { if (e.key === 'Escape' && host.hasAttribute('open')) close(); });
   sheet.addEventListener('keydown', (e) => { // keep Tab inside the sheet
     if (e.key !== 'Tab') return;
-    const f = [...sheet.querySelectorAll('button,a,textarea,summary')].filter((n) => !n.closest('[hidden]') && n.offsetParent !== null);
+    const f = [...sheet.querySelectorAll('button,a,textarea,summary,input:not(.hp)')].filter((n) => !n.closest('[hidden]') && n.offsetParent !== null);
     if (!f.length) return;
     const i = f.indexOf(root.activeElement);
     if (e.shiftKey && i <= 0) { e.preventDefault(); f[f.length - 1].focus(); }

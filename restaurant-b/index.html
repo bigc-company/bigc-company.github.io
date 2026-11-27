@@ -8,7 +8,7 @@
 <meta property="og:description" content="근무 기록, 급여, 재료 원가, 배달 앱 정산을 하루 단위로 남깁니다. 매장 조건별 예시 견적.">
 
 <style>:root{color-scheme:light}body{margin:0;font:14px system-ui}img{max-width:100%}[hidden]{display:none!important}</style>
-<link rel="icon" type="image/png" sizes="32x32" href="../_s/favicon-32.png"><link rel="icon" type="image/png" sizes="16x16" href="../_s/favicon-16.png"><link rel="apple-touch-icon" href="../_s/apple-touch-icon-180.png"><meta name="robots" content="noindex,nofollow,noarchive"></head>
+<link rel="icon" type="image/png" sizes="32x32" href="../_s/favicon-32.png"><link rel="icon" type="image/png" sizes="16x16" href="../_s/favicon-16.png"><link rel="apple-touch-icon" href="../_s/apple-touch-icon-180.png"></head>
 <body>
 <title>한인 식당 노무·원가 관리 제안</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -277,7 +277,7 @@ footer{padding-block:28px 40px;font-size:.8em;color:var(--mute);border-top:1px s
 <section class="ask" id="ask"><div class="w ag"><div><h2>대표님 식당 이름으로 먼저 보여 드립니다.</h2><p class="sub2">상호와 색을 넣으시면 위 근무표와 견적 명세서에 바로 반영됩니다. 고르신 조건과 단계는 문의 글에 함께 담깁니다.</p>
 <form class="opt" autocomplete="off" onsubmit="return false"><label class="fld"><span>상호</span><input id="co" type="text" maxlength="14" placeholder="상호를 입력해 주십시오"></label>
 <fieldset><legend>대표 색상</legend><div class="sw"><button type="button" data-col="#23365A" data-n="남색" style="--c:#23365A" aria-label="남색" aria-pressed="true"></button><button type="button" data-col="#8F2A1C" data-n="고추장빛" style="--c:#8F2A1C" aria-label="고추장빛" aria-pressed="false"></button><button type="button" data-col="#1F5C45" data-n="짙은 녹색" style="--c:#1F5C45" aria-label="짙은 녹색" aria-pressed="false"></button><button type="button" data-col="#2B2B2B" data-n="먹색" style="--c:#2B2B2B" aria-label="먹색" aria-pressed="false"></button></div></fieldset></form></div>
-<div class="msgw"><label for="msg">문의 내용</label><textarea id="msg" rows="9"></textarea><button type="button" class="cta" id="copy">문의 내용 복사</button><p class="note" id="copied">문의 내용이 복사됩니다. 이 주소를 받으신 대화방에 붙여 넣어 보내 주십시오.</p></div></div></section>
+<div class="msgw"><label for="msg">문의 내용</label><textarea id="msg" rows="9"></textarea><button type="button" class="cta" id="copy">문의 내용 복사</button><p class="note" id="copied">문의 내용이 복사됩니다. <a href="https://open.kakao.com/o/sb4IQUYi">카카오톡 상담방</a>에 붙여 넣어 보내 주십시오.</p></div></div></section>
 
 </main>
 <footer><div class="w">화면의 이름, 임금 기준, 금액, 수수료는 모두 예시입니다. 임금 기준과 공제 요율은 제작 전에 공식 원문과 회계사 확인을 거쳐 적용합니다. 본 제안은 법률 자문이 아닙니다. 배달K와 그랩은 각 회사의 서비스이며 당사와 제휴 관계가 아닙니다. 표시된 금액은 제작비이며 서버, 도메인, 외부 서비스와 AI 이용 비용은 계약 전에 별도로 안내해 드립니다. 처음 세 곳은 견적에서 10%를 빼 드리고, 사용 후기와 사례 공개(상호 익명 가능)를 부탁드립니다.</div></footer>
@@ -375,7 +375,7 @@ footer{padding-block:28px 40px;font-size:.8em;color:var(--mute);border-top:1px s
   $('#copy').addEventListener('click', async () => {
     const t = $('#msg'); let ok = false;
     try { await navigator.clipboard.writeText(t.value); ok = true; } catch (e) { try { t.select(); ok = document.execCommand('copy'); } catch (e2) {} }
-    $('#copied').textContent = ok ? '복사되었습니다. 이 주소를 받으신 대화방에 붙여 넣어 보내 주십시오.' : '복사가 막혀 있습니다. 문의 내용을 길게 눌러 직접 복사해 주십시오.';
+    $('#copied').textContent = ok ? '복사되었습니다. <a href="https://open.kakao.com/o/sb4IQUYi">카카오톡 상담방</a>에 붙여 넣어 보내 주십시오.' : '복사가 막혀 있습니다. 문의 내용을 길게 눌러 직접 복사해 주십시오.';
   });
   render();
 })();

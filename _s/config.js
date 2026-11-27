@@ -1,1 +1,1 @@
-window.BIGC={"contacts": {"kakao": {"url": ""}, "telegram": {"id": ""}, "viber": {"phone": ""}, "messenger": {"page": ""}, "whatsapp": {"phone": ""}, "zalo": {"phone": ""}, "sms": {"phone": ""}, "tel": {"phone": ""}, "email": {"addr": ""}}, "preview": true};
+window.BIGC={"contacts": {"kakao": {"url": "https://open.kakao.com/o/sb4IQUYi"}, "telegram": {"id": ""}, "viber": {"phone": ""}, "messenger": {"page": ""}, "whatsapp": {"phone": ""}, "zalo": {"phone": ""}, "sms": {"phone": ""}, "tel": {"phone": ""}, "email": {"addr": ""}}, "preview": false};

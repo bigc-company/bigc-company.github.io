@@ -1,2 +1,14 @@
-User-agent: *
+User-agent: GPTBot
+User-agent: ClaudeBot
+User-agent: CCBot
+User-agent: Google-Extended
+User-agent: Applebot-Extended
+User-agent: Bytespider
+User-agent: meta-externalagent
+User-agent: Amazonbot
 Disallow: /
+
+User-agent: *
+Disallow: /golf-b/
+Disallow: /mart-b/
+Disallow: /restaurant-b/
