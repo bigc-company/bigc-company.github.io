@@ -1,4 +1,4 @@
-<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta property="og:type" content="website"><meta property="og:site_name" content="bigC company"><meta property="og:url" content="https://bigc-company.github.io/bot/"><link rel="canonical" href="https://bigc-company.github.io/bot/"><meta property="og:title" content="bigC company · 1분 질문"><meta property="og:description" content="업종과 지금 겪는 일을 번호로만 고르시면, 맞는 프로그램 단계와 값을 바로 보여 드립니다."><meta name="description" content="업종과 지금 겪는 일을 번호로만 고르시면, 맞는 프로그램 단계와 값을 바로 보여 드립니다."><meta property="og:image" content="https://bigc-company.github.io/_s/og.png?v=2"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><title>bigC company · 1분 질문</title>
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta property="og:type" content="website"><meta property="og:site_name" content="bigC company"><meta property="og:url" content="https://bigc-company.github.io/bot/"><link rel="canonical" href="https://bigc-company.github.io/bot/"><meta property="og:title" content="bigC company · 1분 질문"><meta property="og:description" content="업종과 지금 겪는 일을 번호로만 고르시면, 맞는 프로그램 단계와 값을 바로 보여 드립니다."><meta name="description" content="업종과 지금 겪는 일을 번호로만 고르시면, 맞는 프로그램 단계와 값을 바로 보여 드립니다."><meta property="og:image" content="https://bigc-company.github.io/_s/og.png?v=3"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><title>bigC company · 1분 질문</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&family=Gowun+Batang:wght@700&display=swap">
@@ -499,12 +499,16 @@ const WEB={
   const has=k=>pains.includes(k),page=!pains.length||['ask','price','map','english','old'].some(has),items=[];
   if(page)items.push([has('old')?'한 장 홈페이지 · 예전 내용 옮기기':'한 장 홈페이지 (한국어+영어)',30]);
   if(has('img'))items.push(['메뉴판·이미지',10]);
+  
+  if(!page&&has('img'))return {items:[['메뉴판·홍보 이미지',0]],range:'장당 10만~30만 원',k:'img'};
   const sum=items.reduce((a,c)=>a+c[1],0);
   
   return {items,sum,full:sum,consult:true,page};
  },
  notes(q,st){const o=[];
   if(q.items.some(i=>i[0].startsWith('메뉴판')))o.push('사진은 받으신 것으로 만들고, 촬영이 필요하면 따로 말씀드립니다.');
+  if(q.consult&&q.items.some(i=>i[0].startsWith('메뉴판')))o.push('메뉴판·이미지는 장당 10만~30만 원입니다.');
+  if(q.range)o.push('처음 세 곳은 견적에서 10%를 빼 드립니다. 대신 사용 후기와 사례 공개를 부탁드리며, 상호는 가릴 수 있습니다.');
   if(st.a0===2||st.a1===2)o.push('메뉴·상품이 많거나 다른 언어를 더하시면, 상담에서 범위를 함께 정합니다.');
   if(st.a2===0)o.push('주소(도메인)는 대표님 명의로 사시고, 1년에 약 2만 원입니다.');
   if(st.a2===2)o.push('지금 주소의 명의를 먼저 함께 확인합니다.');
@@ -638,7 +642,8 @@ const OTHER={
   if(q.k==='xl2')o.push('시트가 흩어져 있으면 엑셀 단순 정리 7만~10만 원으로 먼저 바로잡습니다.');
   if(q.k!=='home')o.push('값은 일의 양을 듣고 이 범위 안에서 정합니다.');
   return o;},
- list:[['엑셀 단순 정리','7만~10만 원'],['엑셀 자동화','15만~30만 원'],['웹 업무 프로그램','120만~250만 원'],['상세페이지·메뉴판·홍보 이미지','장당 10만~30만 원'],['한 장 홈페이지 (한국어+영어)','상담 문의']],
+ list:[],
+ shelf:[['엑셀 단순 정리','7만~10만 원'],['엑셀 자동화','15만~30만 원'],['웹 업무 프로그램','120만~250만 원'],['상세페이지·메뉴판·홍보 이미지','장당 10만~30만 원'],['한 장 홈페이지 (한국어+영어)','상담 문의']],
  more:[['일하는 사람은 몇 명입니까? (대표님 포함)',['혼자','2~5명','6명 이상'],'일하는 사람'],
        ['손님은 주로 어느 분입니까?',['한국 분','현지·외국 분','둘 다'],'손님'],
        ['하시는 일은 어디에 가깝습니까?',['가게·매장','사무실·서비스','교육·병원·미용'],'일의 종류']],
@@ -682,7 +687,7 @@ function resultCard(){
  const restL=rest.length?`<small>나머지 ${rest.length}가지(${rest.map(short).join(' · ')})는 쓰시면서 하나씩 더하실 수 있습니다.</small>`:'';
  const lst=`<details class="more"><summary>다른 단계 값 보기</summary><div class="pl">${c.list.map(([n,v,pv,m])=>`<div class="row"><span>${n}${m?`<em>월 ${m}만</em>`:''}</span><span>${pv?`<s>${v}만</s> ${pv}만 원`:`${v}만 원`}</span></div>`).join('')}</div></details>`;
  
- if(q.range){const on=q.items.map(i=>i[0]);h+=`<div class="price"><div class="l"><span>${st.first&&rest.length?'가장 먼저 · ':'맞는 첫 단계 · '}${q.items[0][0]}</span></div><div class="deal"><b>${q.range}</b></div><small class="cus">대표님이 원하시는 기능만 골라 맞춤으로 개발해 드립니다.</small>${restL}${c.notes(q,st).map(n=>`<small>${n}</small>`).join('')}<details class="more"><summary>다른 단계 값 보기</summary><div class="pl">${c.list.map(([n,v])=>`<div class="row${on.includes(n)?' on':''}"><span>${n}</span><span>${v}</span></div>`).join('')}</div></details></div><span class="tag">화면은 예시 · 값은 실제 가격</span></div></div>`;return h;}
+ if(q.range){const on=q.items.map(i=>i[0]);h+=`<div class="price"><div class="l"><span>${st.first&&rest.length?'가장 먼저 · ':'맞는 첫 단계 · '}${q.items[0][0]}</span></div><div class="deal"><b>${q.range}</b></div><small class="cus">대표님이 원하시는 기능만 골라 맞춤으로 개발해 드립니다.</small>${restL}${c.notes(q,st).map(n=>`<small>${n}</small>`).join('')}${c.shelf?`<details class="more"><summary>다른 단계 값 보기</summary><div class="pl">${c.shelf.map(([n,v])=>`<div class="row${on.includes(n)?' on':''}"><span>${n}</span><span>${v}</span></div>`).join('')}</div></details>`:''}</div><span class="tag">화면은 예시 · 값은 실제 가격</span></div></div>`;return h;}
  
  if(q.tong){h+=`<div class="price"><div class="l"><span>가장 먼저 · ${short(st.first||firstPains()[0])}</span></div><div class="deal"><b>상담에서 맞춰 드립니다</b></div><small>이 일은 여러 기능을 잇는 일이라, 상담에서 범위를 줄여 맞춰 드립니다.</small><small class="cus">대표님이 원하시는 기능만 골라 맞춤으로 개발해 드립니다.</small>${restL}${lst}</div><span class="tag">화면은 예시 · 값은 실제 가격</span></div></div>`;return h;}
  const pay=q.pay!=null?q.pay:q.sum,tl=q.tong?'~':'',disc=q.full-pay;
