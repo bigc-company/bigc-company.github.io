@@ -1,6 +1,5 @@
-/* bigC company 사장님 앱 · 설치형 7판 · 810c620cd9 · _만들기.mjs 가 만든 파일 */
-/* Layout: 왼쪽 = 오너 점검 안내 + 판 · 업종 · 단계 바꾸기, 가운데 = 눌러 보는 앱(휴대폰 틀, 화면 높이에 맞춰 붙어 있음), 오른쪽 = 지금 화면에서 볼 것.
-   휴대폰 폭에서는 안내 → 앱(틀 없이 화면 폭) → 볼 것 → 만들 수 있는지 표 순서. 움직임은 120~240ms, 줄임 설정이면 끔. */
+/* bigC company 사장님 앱 · 설치형 7판 · 4d1d7d8190 · _만들기.mjs 가 만든 파일 */
+/* 원본: 시안.html 스타일 그대로 (설치형은 맨 아래 덧칠) */
 :root{
   --bg:#eaeeee; --app:#f3f5f5; --surface:#ffffff; --surface2:#f6f8f8; --ink:#0f1416; --sub:#58636a;
   --line:rgba(15,20,22,.09); --line2:rgba(15,20,22,.18);
@@ -440,6 +439,13 @@ button.row:active,.row.tap:active{background:var(--surface2)}
 .chip[aria-pressed="true"] b{color:var(--acc-ink)}
 /* 오늘 머리 · 숫자 굴림 · 다 끝낸 빈 상태 */
 .hdr{display:flex;align-items:center;gap:0;flex:none}
+/* WO-041: 첫 화면 「예시」 표시 · 단추 두 개 줄이 카드 오른쪽 선까지 */
+.hero .lab .ex{display:inline-flex;align-items:center;vertical-align:1px;height:20px;margin-left:6px;padding:0 6px;border-radius:6px;font-size:12px;font-weight:600;color:var(--sub);border:1px solid var(--line2)}
+.acts.fill > .btn{flex:1 1 auto}
+.ki{flex:none;width:28px;height:28px;margin-top:8px;border-radius:8px;display:grid;place-items:center;background:var(--surface2);color:var(--sub)}
+.ki b{font-size:16px;font-weight:800;line-height:1}
+.ki-money{background:var(--wait-soft);color:var(--wait)}
+.ki-stock{background:var(--acc-soft);color:var(--acc)}
 .gear{color:var(--sub)}
 .big span{display:inline-block}
 .big span.roll{animation:roll var(--d-med) var(--spring)}
@@ -600,3 +606,32 @@ body{overscroll-behavior:none;background:var(--bg)}
 /* WO-039: 설정 · 보기(밝기 · 글자 크기 · 움직임) · 돌아가기 */
 .set .sseg{margin:10px 0 2px}
 .set .hd .back{margin-left:-10px;color:var(--ink)}
+
+/* WO-041: 서버 문의 · 기다린 시간 원 · 밀어서 답함 (본부판 손님, 서버 연결일 때만) */
+.irow{position:relative;overflow:hidden;border-top:1px solid var(--line);touch-action:pan-y}
+.grp > .irow:first-child{border-top:0}
+.irow .under{position:absolute;inset:0;display:flex;align-items:center;gap:8px;padding-left:20px;background:var(--acc);color:var(--on-acc);font-size:16px;font-weight:700}
+.irow .fg{background:var(--surface);border-top:0;align-items:center;transition:transform .28s var(--spring)}
+.irow.drag .fg{transition:none}
+.ring{flex:none;width:44px;height:44px;position:relative;display:grid;place-items:center}
+.ring svg{position:absolute;inset:0;transform:rotate(-90deg)}
+.ring .bg{stroke:var(--line2)}
+.ring .fgc{stroke:var(--wait);stroke-linecap:round}
+.ring.late .fgc{stroke:var(--stop)}
+.ring b{position:relative;font-size:12px;font-weight:700;color:var(--ink);letter-spacing:-.02em}
+.ring.ok{color:var(--acc)}
+.ring.ok svg{position:static;transform:none}
+
+
+/* WO-041 (검수 5): 홍보자료 목록 2열 작은 카드 · 누르면 시트에 큰 카드 */
+.pm-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.pm-mini{display:flex;flex-direction:column;width:100%;min-width:0;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden;color:var(--ink);transition:transform .1s}
+.pm-mini:active{transform:scale(.97)}
+.pm-mini .pm-fig img{max-height:128px}
+.pm-mini .pm-play{left:8px;bottom:8px;font-size:12px;padding:3px 7px}
+.pm-mb{display:flex;flex-direction:column;gap:4px;padding:10px 12px 12px;min-width:0}
+.pm-mb .pm-tags{gap:6px}
+.pm-mb .pm-biz{font-size:12px}
+.pm-mb .t{font-size:14px;font-weight:600;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.pm-mb .s{font-size:12px;color:var(--sub)}
+.sheet .pm-card{margin-top:4px}

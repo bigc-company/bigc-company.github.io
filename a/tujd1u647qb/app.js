@@ -1,4 +1,4 @@
-// bigC company 사장님 앱 · 설치형 7판 · 810c620cd9 · _만들기.mjs 가 시안.html 과 _설치층.js 로 만든 파일(직접 고치지 말 것)
+// bigC company 사장님 앱 · 설치형 7판 · 4d1d7d8190 · _만들기.mjs 가 시안.html 과 _설치층.js 로 만든 파일(직접 고치지 말 것)
 // bigC company 사장님 앱 · 「홍보자료」 탭 (WO-034). 본부판에서만 보인다. _설치층.js 가 init 때 이 층을 부른다.
 // 자료는 앱 폴더 안 홍보자료\ 의 사본: 자료목록.json(WO-032 형식) · 미리보기.json(_홍보자료.mjs 가 만듦) · 방목록.json(05_카톡방_목록 사본).
 // 쓴 기록(썼어요)은 이 폰에만(localStorage, 키 앞에 배포 경로). 방목록.json 의 「기록」은 본부 기록 사본으로 함께 읽는다(지우지 못함).
@@ -56,7 +56,9 @@ window.__bigcPromoLayer = function (ctx) {
   // 같은 분에 여러 번 적어도 순서가 맞게: 이 폰 기록은 ms(ts), 본부 기록은 at 을 시각으로
   const tsOf = (r) => r.ts || Date.parse(String(r.at).replace(' ', 'T')) || 0;
   // 기록은 id 로 찾고, 없으면 파일 경로로 찾는다(자료목록.json 을 WO-032 판으로 바꿔 id 가 달라져도 기록이 이어진다)
-  const rx = (r) => item(r.id) || (r.file ? data.items.find((x) => x.file === rel(r.file)) : null);
+  // WO-041: 3판으로 바꾸며 경로가 이미지_2판 → 이미지_3판으로 달라졌다 → 마지막으로 파일 이름(같은 이름)으로도 찾는다
+  const base = (f) => rel(f).split('/').pop();
+  const rx = (r) => item(r.id) || (r.file ? data.items.find((x) => x.file === rel(r.file)) || data.items.find((x) => base(x.file) === base(r.file)) : null);
   const logAll = () => [...data.seed, ...mine.log].filter((r) => rx(r)).sort((a, b) => tsOf(b) - tsOf(a));
   const short = (at) => { const [d, t] = String(at).split(' '); const [, m, dd] = d.split('-'); return `${+m}/${+dd} ${t || ''}`.trim(); };
   // 그 방 · 그 업종의 다음 차례: 마지막으로 쓴 안의 다음 안(A → 지금 → B, 없는 안은 건너뜀). 같은 안 안에서는 그 방에서 가장 오래 안 쓴 것.
@@ -88,6 +90,14 @@ window.__bigcPromoLayer = function (ctx) {
         <div class="s">${x.ch.map((c) => esc(CHL[c] || c)).join(' · ')}</div>
         <div class="acts pm-acts"><button class="btn ${cls.includes('pm-next') ? 'p' : 'q'}" data-a="pmshare" data-id="${esc(x.id)}">공유</button><button class="btn" data-a="pmcopy" data-id="${esc(x.id)}"${x.text ? '' : ' disabled'}>글 복사</button><button class="btn" data-a="pmused" data-id="${esc(x.id)}">썼어요</button></div>
         <div class="s pm-last">${lastLine(x)}</div></div></article>`;
+  }
+  // WO-041 (검수 5): 「다음 차례」 아래 목록은 2열 작은 카드. 누르면 시트에 큰 카드(공유 · 글 복사 · 썼어요)
+  function mini(x) {
+    const meta = [x.kind + (x.sec ? ` ${Math.round(x.sec)}초` : ''), x.w && x.h ? `${x.w}×${x.h}` : ''].filter(Boolean).join(' · ');
+    return `<button class="pm-mini" data-a="pmopen" data-id="${esc(x.id)}" aria-label="${esc(x.biz)} ${esc(AN(x.an))} · ${esc(x.cap)} · 크게 보기">
+      <span class="pm-fig"><img src="${esc(encodeURI(x.thumb))}" width="${x.tw}" height="${x.th}" alt="" loading="lazy" decoding="async">${x.kind !== '사진' ? `<span class="pm-play">${x.kind === '영상' ? '▶ 영상' : '움짤'}</span>` : ''}</span>
+      <span class="pm-mb"><span class="pm-tags"><span class="pill ${x.an === 'A' ? 'acc' : x.an === 'B' ? 'wait' : ''}">${esc(AN(x.an))}</span><span class="pm-biz">${esc(x.biz)}</span></span>
+        <span class="t">${esc(x.cap.replace(/\s*\|\s*bigC company\s*$/, ''))}</span><span class="s num">${esc(meta)}${x.text ? '' : ' · 글 없음'}</span></span></button>`;
   }
   function nextBlock(bizList) {
     const opts = `<option value="">방을 골라 주세요</option><optgroup label="카톡 방">${data.rooms.map((r) => `<option value="${esc(r.id)}"${mine.room === r.id ? ' selected' : ''}>${esc(r.짧게)}${r.상태 && r.상태 !== '올림' ? ` · ${esc(r.상태)}` : ''}</option>`).join('')}</optgroup><optgroup label="그 밖">${data.other.map((r) => `<option value="${esc(r.id)}"${mine.room === r.id ? ' selected' : ''}>${esc(r.이름)}</option>`).join('')}</optgroup>`;
@@ -131,7 +141,7 @@ window.__bigcPromoLayer = function (ctx) {
       <div class="chips" role="group" aria-label="업종">${chip('pmbiz', 'all', '모든 업종', nBz('all'), biz === 'all')}${bizList.map((b) => chip('pmbiz', b, b, nBz(b), biz === b)).join('')}</div>
       ${nextBlock(bizList)}
       <div class="sec"><span>자료${ch !== 'all' ? ' · ' + esc(CHL[ch]) : ''}${biz !== 'all' ? ' · ' + esc(biz) : ''}</span><span class="num">${list.length}</span></div>
-      ${list.length ? `<div class="pm-list">${list.map((x) => card(x)).join('')}</div>` : `<div class="grp"><div class="row"><div class="m"><div class="t">여기에 맞는 자료가 아직 없어요</div><div class="s">${ch === '스토리' ? '스토리 크기(1080×1920) 자료는 아직 만들지 않았어요. ' : ''}다른 채널이나 업종을 눌러 주세요.</div></div></div></div>`}
+      ${list.length ? `<div class="pm-list pm-grid">${list.map((x) => mini(x)).join('')}</div>` : `<div class="grp"><div class="row"><div class="m"><div class="t">여기에 맞는 자료가 아직 없어요</div><div class="s">${ch === '스토리' ? '스토리 크기(1080×1920) 자료는 아직 만들지 않았어요. ' : ''}다른 채널이나 업종을 눌러 주세요.</div></div></div></div>`}
       <div class="sec"><span>쓴 기록</span><span class="num">${all.length}</span></div>
       ${all.length ? `<div class="grp">${all.slice(0, 12).map((r) => { const x = rx(r), mi = mine.log.indexOf(r); return `<div class="row pm-lrow"><div class="m"><div class="t">${esc((place(r.room) || {}).짧게 || r.room)} · ${esc(x.biz)} ${esc(AN(x.an))}</div><div class="s">${esc(short(r.at))}${r.seed ? ` · 본부 기록${r.plan ? '(예약)' : ''}` : ' · 이 폰'} · ${esc(x.cap.replace(/\s*\|\s*bigC company\s*$/, ''))}</div></div>${mi >= 0 ? `<button class="btn pm-del" data-a="pmdel" data-i="${mi}" aria-label="이 기록 지우기">지우기</button>` : ''}</div>`; }).join('')}</div>` : ''}
       <p class="resp">공유는 휴대폰 공유 창으로 파일을 보내요. 공유 창이 없는 브라우저에서는 새 창으로 열어 길게 눌러 저장해 주세요. 쓴 기록은 이 폰에만 남아요. 방 목록과 「본부 기록」은 본부 장부에서 옮겨 온 사본이에요.</p></div>`;
@@ -181,7 +191,7 @@ window.__bigcPromoLayer = function (ctx) {
     const path = typeof x.text === 'object' ? x.text[ch] || x.text.기본 || Object.values(x.text)[0] : x.text;
     let t = texts.get(path);
     if (t === undefined) {
-      try { const r = await fetch(BASE + rel(path)); if (!r.ok) throw new Error(r.status); t = (await r.text()).replace(/^﻿/, '').trim(); texts.set(path, t); }
+      try { const r = await fetch(BASE + rel(path)); if (!r.ok) throw new Error(r.status); t = (await r.text()).replace(/^﻿/, '').replace(/\r\n?/g, '\n').trim(); /* WO-041: 줄 끝 CRLF → LF */ texts.set(path, t); }
       catch (e) { api.toast('글을 받지 못했어요. 인터넷을 확인해 주세요.'); return; }
     }
     const withCap = KAKAO.has(ch) && x.cap;
@@ -216,6 +226,7 @@ window.__bigcPromoLayer = function (ctx) {
     pmshare: (b) => { share(b); },
     pmcopy: (b) => { copy(b); },
     pmused: usedSheet,
+    pmopen: (b) => { const x = item(b.dataset.id); if (x) api.openSheet(card(x, 'pm-sheet')); },
     pmpick: pick,
     pmclose: () => api.closeSheet(),
     pmreload: () => { load(); api.render(); },
@@ -525,14 +536,55 @@ window.__bigcPromoLayer = function (ctx) {
     const head = (n) => `<div class="pad"><div class="hd"><h2 class="title">손님</h2>${live ? `<span class="d">서버 문의 <b class="num" style="color:var(--ink)">${n}</b>건</span>` : livePill()}</div>`;
     if (!live) return head(0) + noLive() + '</div>';
     const its = items(), wait = its.filter((x) => !x.ack);
-    const list = liveFilter === 'wait' ? wait : liveFilter === 'done' ? its.filter((x) => x.ack) : its;
+    // WO-041 (WO-039 Q2 ①): 서버 문의에는 받은 시각이 있으니 기다린 시간 원 · 밀어서 답함을 붙인다. 기다린 것은 오래된 순서로.
+    const byWait = (a, b) => (recvAt(a) || Infinity) - (recvAt(b) || Infinity);
+    const list = (liveFilter === 'wait' ? wait : liveFilter === 'done' ? its.filter((x) => x.ack) : its).slice().sort((a, b) => (!!a.ack - !!b.ack) || byWait(a, b));
     const chip = (v, l, n) => `<button class="chip" data-a="lfilter" data-v="${v}" aria-pressed="${liveFilter === v}">${l} <b>${n}</b></button>`;
     return head(its.length) + `<div class="chips" role="group" aria-label="답 여부">${chip('wait', '답 기다림', wait.length)}${chip('done', '답함', its.length - wait.length)}${chip('all', '전체', its.length)}</div>
-      <div class="grp">${list.length ? list.map((x) => `<button class="row" data-a="lopen" data-id="${api.esc(x.id)}"><div class="m">
-          <div class="t">${api.esc(x.trade || '문의')} <span class="pill ${x.ack ? 'acc' : 'wait'}">${x.ack ? '답함' : '기다림'}</span></div>
-          <div class="s">${api.esc(String(x.at || '').slice(5, 16))} · ${api.esc(snip(x.text, 40))}</div></div>${api.I.chev}</button>`).join('')
+      <div class="grp lin">${list.length ? list.map((x) => { const m = waitMin(x); return `<div class="irow" data-id="${api.esc(x.id)}"><div class="under" aria-hidden="true">${IC_OK}${x.ack ? '다시 기다림' : '답함'}</div>
+        <button class="row fg" data-a="lopen" data-id="${api.esc(x.id)}">${x.ack ? `<span class="ring ok" aria-label="답함">${IC_OK}</span>` : ring(m)}<div class="m">
+          <div class="t">${api.esc(x.trade || '문의')} <span class="pill ${x.ack ? 'acc' : m >= LATE ? 'stop' : 'wait'}">${x.ack ? '답함' : m >= LATE ? '늦음' : '기다림'}</span></div>
+          <div class="s">${api.esc(String(x.at || '').slice(5, 16))} · ${api.esc(snip(x.text, 40))}</div></div>${api.I.chev}</button></div>`; }).join('')
         : `<div class="row"><div class="m"><div class="t">${liveFilter === 'wait' ? '답할 문의가 없어요' : '여기에 들어갈 문의가 없어요'}</div><div class="s">다른 칸을 누르거나 전체로 보세요.</div></div></div>`}</div>
-      <p class="resp">쇼룸 문의 창으로 들어온 문의예요(최근 50건). 상담 다음 단계(상담 · 시안 · 견적 …)는 아직 예시 판에만 있어요.</p></div>`;
+      <p class="resp">쇼룸 문의 창으로 들어온 문의예요(최근 50건). 원 안 숫자는 받은 뒤 지난 시간이고, ${LATE}분이 넘으면 빨강이에요. 줄을 오른쪽으로 밀면 답함으로 옮겨요. 상담 다음 단계(상담 · 시안 · 견적 …)는 아직 예시 판에만 있어요.</p></div>`;
+  }
+  // 받은 시각(마닐라 「YYYY-MM-DD HH:MM」) → ms. 읽을 수 없으면 0 → 원 없이 「기다림」만
+  const recvAt = (x) => { const t = Date.parse(String(x.at || '').trim().replace(' ', 'T')); return Number.isFinite(t) ? t : 0; };
+  const waitMin = (x) => { const t = recvAt(x); return t ? Math.max(0, Math.floor((Date.now() - t) / 60000)) : -1; };
+  const LATE = 15, RING_FULL = 30;
+  const IC_OK = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>';
+  function ring(m) {
+    if (m < 0) return '<span class="ring" aria-hidden="true"></span>';
+    const r = 19, c = 2 * Math.PI * r, off = c * (1 - Math.min(1, m / RING_FULL));
+    const lab = m < 60 ? `${m}분` : m < 1440 ? `${Math.floor(m / 60)}시간` : `${Math.floor(m / 1440)}일`;
+    return `<span class="ring ${m >= LATE ? 'late' : ''}" aria-label="받은 지 ${lab}"><svg viewBox="0 0 44 44" width="44" height="44" aria-hidden="true"><circle class="bg" cx="22" cy="22" r="${r}" fill="none" stroke-width="4"/><circle class="fgc" cx="22" cy="22" r="${r}" fill="none" stroke-width="4" stroke-dasharray="${c.toFixed(1)}" stroke-dashoffset="${off.toFixed(1)}"/></svg><b class="num">${lab}</b></span>`;
+  }
+  // 밀어서 답함: 오른쪽으로 35% 넘게 밀면 답함(답함 줄은 다시 기다림) + 되돌리기. 세로 스크롤은 막지 않는다.
+  function bindSwipe() {
+    const g = document.querySelector('.grp.lin'); if (!g || g.dataset.sw) return; g.dataset.sw = '1';
+    let sw = null;
+    g.addEventListener('pointerdown', (e) => { const r = e.target.closest('.irow'); if (!r || e.button > 0) return; sw = { r, x0: e.clientX, y0: e.clientY, dx: 0, moved: false }; });
+    g.addEventListener('pointermove', (e) => {
+      if (!sw) return; const dx = e.clientX - sw.x0, dy = e.clientY - sw.y0;
+      if (!sw.moved && Math.abs(dx) > 8 && Math.abs(dx) > Math.abs(dy)) { sw.moved = true; sw.r.classList.add('drag'); }
+      if (sw.moved) { sw.dx = Math.max(0, dx); sw.r.querySelector('.fg').style.transform = `translateX(${sw.dx}px)`; }
+    });
+    const end = () => {
+      if (!sw) return; const { r, dx, moved } = sw; sw = null; r.classList.remove('drag');
+      const fg = r.querySelector('.fg');
+      if (moved) { r.dataset.swiped = '1'; setTimeout(() => { delete r.dataset.swiped; }, 60); }
+      if (dx > r.offsetWidth * 0.35) { fg.style.transform = 'translateX(100%)'; setTimeout(() => ackSwipe(r.dataset.id), 160); } else fg.style.transform = '';
+    };
+    g.addEventListener('pointerup', end); g.addEventListener('pointercancel', end);
+  }
+  function ackSwipe(id) {
+    const x = items().find((y) => y.id === id); if (!x || !conn) return;
+    const was = x.ack || null, done = !x.ack;
+    const put = (d) => { queue = queue.filter((q) => q.id !== id); queue.push({ id, done: d, at: stamp(Date.now()) }); saveQueue(); };
+    put(done); api.render(); if (done) api.haptic();
+    api.toast(done ? '답함으로 옮겼어요.' : '다시 기다림으로 옮겼어요.', () => { put(!done); api.render(); sync(); });
+    sync();
+    return was;
   }
   function inqSheet(x) {
     const line = (k, v) => (v ? `<div class="row"><div class="m"><div class="s" style="margin:0">${k}</div><div class="t">${api.esc(v)}</div></div></div>` : '');
@@ -591,7 +643,7 @@ window.__bigcPromoLayer = function (ctx) {
       api.render(); api.toast('연결을 끊었어요. 본부판이 예시로 돌아갔어요.');
     },
     lfilter: (b) => { liveFilter = b.dataset.v; api.render(); },
-    lopen: (b) => { const x = items().find((y) => y.id === b.dataset.id); if (x) api.openSheet(inqSheet(x)); },
+    lopen: (b) => { const r = b.closest('.irow'); if (r && r.dataset.swiped) return; const x = items().find((y) => y.id === b.dataset.id); if (x) api.openSheet(inqSheet(x)); },
     lcopy: (b) => {
       const x = items().find((y) => y.id === b.dataset.id); if (!x) return;
       try { navigator.clipboard && navigator.clipboard.writeText(x.reply).catch(() => {}); } catch (e) { /* 복사 막힌 폰 */ }
@@ -614,7 +666,8 @@ window.__bigcPromoLayer = function (ctx) {
 
   // ---------- 설정 화면 ----------
   const IC_BACK = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m14.5 5.5-6.5 6.5 6.5 6.5"/></svg>';
-  const IC_SET = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 3.5v2.2M12 18.3v2.2M3.5 12h2.2M18.3 12h2.2M6 6l1.6 1.6M16.4 16.4 18 18M6 18l1.6-1.6M16.4 7.6 18 6"/></svg>';
+  // WO-041: 해 모양으로 읽히던 아이콘 → 톱니(이가 달린 바퀴)
+  const IC_SET = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>';
   const BIZ_KEYS = ['mart', 'food', 'golf', 'agent', 'factory', 'community'];
   const standalone = () => matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
   const isIOS = () => /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
@@ -702,7 +755,7 @@ window.__bigcPromoLayer = function (ctx) {
     // 당겨서 새로고침: 본부판이 서버에 이어져 있으면 서버와 맞춘다(약속). 아니면 null → 시안의 예시 맞춤
     refresh: () => (liveOn() ? sync('manual') : null),
     key,
-    after: () => { saveSoon(); liveBand(); if (promoOn() && S.tab === 'promo') promo.after(); },
+    after: () => { saveSoon(); liveBand(); if (liveOn() && S.tab === 'clients') bindSwipe(); if (promoOn() && S.tab === 'promo') promo.after(); },
     onLock: () => { lockStep(!readPin() ? 'set1' : changing ? 'old' : 'enter'); },
     init(a) {
       api = a; S = a.S;
@@ -920,7 +973,7 @@ window.__bigcPromoLayer = function (ctx) {
   const cTodo = (v) => [
     { id: 'c_faq', w: `같은 질문 ${v.faq[0][1]}번째 · 답 있음`, lv: 1, kind: '반복 질문', t: `「${v.askQ}」 ${v.faq[0][1]}번째 질문이에요`, s: `${v.askWho} · ${v.faq[0][3]}에 확인한 정리된 답이 있어요`, act: '정리된 답으로 답하기' },
     { id: 'c_ai', w: 'AI 답에 우리 글 1번', lv: 1, kind: 'AI 답변 진단', t: '질문 10개 · AI 세 곳 · 우리 글이 나온 답 1개', s: 'ChatGPT 0 / 10 · Gemini 1 / 10 · 네이버 AI 0 / 10', act: '진단표 보기' },
-    { id: 'c_vend', w: '흩어진 업체 연락처 29곳', lv: 1, kind: '업체 연락처', t: '받은 명함과 글 37건 → 업체 29곳', s: '겹친 것 8건 · 연락처 없음 3곳', act: '한 목록으로 저장' },
+    { id: 'c_vend', w: '흩어진 업체 연락처 29곳', lv: 1, kind: '업체 연락처', t: '받은 명함과 글 37건 → 업체 29곳', s: '겹친 것 8건 · 연락처 없음 3곳', act: '한 목록으로 저장하기' },
     { id: 'c_bad', w: '선입금을 요구하는 글 1건', lv: 2, kind: '올리기 전 확인', t: `${v.badTab} · 「${v.badShort}」`, s: '금지선에 걸려 아직 올라가지 않았어요 · 운영자 확인 차례', act: '글 확인하기' },
     { id: 'c_tg', w: '새 글 알림 받는 사람', lv: 2, kind: '새 글 알림', t: '새 글 알림 · 텔레그램 운영진 2명', s: '텔레그램은 바로 · 카톡 알림은 대표님 채널을 연 뒤에 연결', act: '알림 받는 사람 보기' },
     { id: 'c_reg', w: '업체 신청 5건 · 확인 3건', lv: 3, kind: '업체 등록 신청', t: '이번 주 업체 신청 5건 · 확인할 것 3건', s: '서류 없음 1 · 등록비 금액 다름 1 · 금지 업종 1', act: '심사하기' },
@@ -950,7 +1003,7 @@ window.__bigcPromoLayer = function (ctx) {
     pin: '', offline: false, queued: 0, stageFilter: 'all', orderSeg: 'talk', fileFilter: 'all', inbox: 54,
     todo: [
       { id: 'q1', w: '새 문의 · 망고마트', kind: '새 문의', t: '망고마트 · 마트', s: '23:35 쇼룸 문의', act: '답 초안 보기' },
-      { id: 'p1', w: '게시 승인 · 부동산방 09:30', kind: '게시 승인', t: '09:30 부동산방', s: '글 1 · 사진 1', act: '승인', post: 'r1' },
+      { id: 'p1', w: '게시 승인 · 부동산방 09:30', kind: '게시 승인', t: '09:30 부동산방', s: '글 1 · 사진 1', act: '승인하기', post: 'r1' },
       { id: 'h1', w: '본부 질문 · 내일 글 12개', kind: '본부 질문', t: '내일 글 12개, 이대로 올릴까요?', s: '권고 · 이대로, 마트방 둘만 저녁', choices: ['권고대로', '보류'] },
     ],
     doneToday: [{ t: '08:05', s: '마트방 글 승인 · 올라간 화면 받음' }],
@@ -995,10 +1048,10 @@ window.__bigcPromoLayer = function (ctx) {
           { q: '2타워요', note: '호수가 없어요', c: ['호수 묻는 글 보내기'], pick: null },
         ],
         todo: [
-          { id: 'm_cnt', w: '어묵 3봉이 맞지 않아요', lv: 1, kind: '재고 실사', t: '냉장 2번 · 어묵이 3봉 맞지 않아요', s: '12개 선반 중 2번째 · 직원 화면은 영어로도', act: '실사 이어서' },
-          { id: 'm_item', w: '앱마다 값이 다른 품목 2개', lv: 1, kind: '품목 확인', t: '앱마다 값이 다른 품목 2개', s: '대파 · 그랩에 없음 · 계란 30구 · 배달K가 ₱20 낮음', act: '품목표 보기' },
+          { id: 'm_cnt', w: '어묵 3봉이 맞지 않아요', lv: 1, kind: '재고 실사', t: '냉장 2번 · 어묵이 3봉 맞지 않아요', s: '12개 선반 중 2번째 · 직원 화면은 영어로도', act: '실사 이어 하기' },
+          { id: 'm_item', w: '손볼 품목 2개', lv: 1, kind: '품목 확인', t: '손볼 품목 2개 · 값 다름 1 · 앱에 없음 1', s: '대파 · 그랩에 없음 · 계란 30구 · 배달K가 ₱20 낮음', act: '품목표 보기' },
           { id: 'm_set', w: '그랩 입금이 ₱2,280 적어요', lv: 2, kind: '정산 차이', t: '그랩 입금이 ₱2,280 모자라요', s: '11월 16일 ~ 22일 · 확인할 주문 2건', act: '대조 보기' },
-          { id: 'm_low', w: '대파가 기준보다 적어요', lv: 3, kind: '품절 위험', t: '대파 2단 · 기준 3단보다 적어요', s: '아침 24단 · 네 경로에서 22단 팔림', act: '배달K · 그랩 품절 표시' },
+          { id: 'm_low', w: '대파가 기준보다 적어요', lv: 3, kind: '품절 위험', t: '대파 2단 · 기준 3단보다 적어요', s: '아침 24단 · 네 경로에서 22단 팔림', act: '배달K · 그랩 품절 표시하기' },
           { id: 'm_match', w: '메신저 주문이 주문판에 없어요', lv: 4, kind: '주문 옮기기', t: '메신저 주문이 18분째 주문판에 없어요', s: '최 사모님 14:02 · 「신라면 5, 두부 2, 지난번 그 김치」', act: '주문으로 옮기기' },
           { id: 'm_close', w: '마감 전 확인 3건', lv: 4, kind: '마감', t: '오늘 매출 ₱33,340 · 마감 전 확인', s: '재고 차이 1건 · 정산 차액 1건 · 유통기한 임박 2건', act: '마감하기' },
           { id: 'm_po', w: '목요일 대파가 모자랄 것 같아요', lv: 6, kind: '발주 제안', t: '목요일 대파 12단이 모자랄 것 같아요', s: '예상 주문 22단 · 지금 재고 10단 · 제안 15단', act: '승인하고 보내기' },
@@ -1010,10 +1063,10 @@ window.__bigcPromoLayer = function (ctx) {
           { id: 'f_card', w: '타임카드 8개월분 없음', lv: 1, kind: '종이 기록', t: '2024년 3월 ~ 10월 타임카드가 없어요', s: '2월 16일 ~ 29일 12장까지 촬영함', choices: ['빠진 카드 촬영', '찾을 수 없음으로 표시'] },
           { id: 'f_claim', w: '퇴사 직원 청구 5건', lv: 2, kind: '퇴사 직원 청구', t: '마리아 님이 연장 · 공휴일 5건을 청구했어요', s: '2023년 11월 ~ 2026년 10월 근무 · 서명 기록과 맞춰 봐요', act: '기록과 맞춰 보기' },
           { id: 'f_pay', w: '급여대장 검토 차례', lv: 2, kind: '급여대장', t: '11월 16일 ~ 30일 급여 · 검토 차례', s: '5명 · 실수령 합계 ₱48,203 · 서명 대기 1', act: '검토하기' },
-          { id: 'f_wage', w: '기본급 3명 ₱4,368 모자람', lv: 2, kind: '임금 기준 변경', t: '직원 3명 기본급이 기준보다 ₱4,368 적어요', s: '9월 26일부터 ₱658 → ₱718 · 회계사 확인 완료', act: '다음 급여에 반영' },
+          { id: 'f_wage', w: '기본급 3명 ₱4,368 모자람', lv: 2, kind: '임금 기준 변경', t: '직원 3명 기본급이 기준보다 ₱4,368 적어요', s: '9월 26일부터 ₱658 → ₱718 · 회계사 확인 완료', act: '다음 급여에 반영하기' },
           { id: 'f_gap', w: '삼겹살 0.4kg 덜 남음', lv: 3, kind: '실사 차이', t: '삼겹살이 0.4kg 덜 남았어요', s: '남아야 할 양 6.5kg · 저울 6.1kg · 2인분', act: '차이 이유 남기기' },
           { id: 'f_set', w: '그랩 입금 ₱1,660 모자람', lv: 4, kind: '정산 차이', t: '그랩 입금이 ₱1,660 모자라요', s: '11월 16일 ~ 22일 · 확인할 주문 2건', act: '대조 보기' },
-          { id: 'f_out', w: '해물파전 2인분 남음', lv: 4, kind: '품절', t: '해물파전 · 오징어 2인분 남음', s: '배달K · 그랩에서는 아직 판매 중', act: '배달K · 그랩 품절 표시' },
+          { id: 'f_out', w: '해물파전 2인분 남음', lv: 4, kind: '품절', t: '해물파전 · 오징어 2인분 남음', s: '배달K · 그랩에서는 아직 판매 중', act: '배달K · 그랩 품절 표시하기' },
           { id: 'f_ot', w: '조이 연장 1시간 승인할까요?', lv: 5, kind: '대표님 결정', t: '조이 연장 1시간을 승인할까요?', s: '퇴근 21:00 → 22:00 · 마크 매니저 21:42 기록', choices: ['승인', '보류'] },
           { id: 'f_close', w: '마감 전 확인 2건', lv: 5, kind: '마감', t: '오늘 매출 ₱48,600 · 마감 전 확인', s: '서명 없는 근무 1건 · 정산 차액 1건', act: '마감하기' },
           { id: 'f_roster', w: '다음 주 근무 24시간 넘침', lv: 6, kind: '근무표 제안', t: '다음 주 넘치는 근무 24시간', s: '15시 ~ 17시 · 인건비 차이 ₱2,160', act: '승인하고 보내기' },
@@ -1026,7 +1079,7 @@ window.__bigcPromoLayer = function (ctx) {
           { id: 'g_rate', w: '캐디팁이 따로인 골프장', lv: 1, kind: '요금표', t: '블루힐은 카트 · 캐디 · 캐디팁이 따로예요', s: '선밸리는 카트 · 캐디 포함 · 같은 주말 18홀', act: '요금표 한 장 보기' },
           { id: 'g_quote', w: '견적 전 문의 1건', lv: 2, kind: '견적', t: '박 대표님 문의가 아직 견적이 아니에요', s: '「11일 도착, 골프 4명 두 번이에요. 한 명은 관광하고 14일 낮에 출발해요.」', act: '견적으로 옮기기' },
           { id: 'g_pay', w: '₩194,000 미입금', lv: 3, kind: '입금 대조', t: '박 대표님 일행 · ₩194,000이 덜 들어왔어요', s: '받을 돈 ₩4,194,000 · 들어온 돈 ₩4,000,000 · 전액 입금 후 확정', act: '입금 대조 보기' },
-          { id: 'g_dup', w: '토요일 밴 A 겹침', lv: 3, kind: '배차 겹침', t: '토요일 밴 A가 11:00에 겹쳐요', s: '박 대표님 05:40 ~ 20:15 배정 중 · 토요일 밴 B 이용 가능', act: '밴 B로 배정' },
+          { id: 'g_dup', w: '토요일 밴 A 겹침', lv: 3, kind: '배차 겹침', t: '토요일 밴 A가 11:00에 겹쳐요', s: '박 대표님 05:40 ~ 20:15 배정 중 · 토요일 밴 B 이용 가능', act: '밴 B로 배정하기' },
           { id: 'g_pl', w: '선밸리 상품 마진 3%', lv: 4, kind: '대표님 결정', t: '선밸리 상품 마진이 3%예요', s: '그린 투어 취소 4번 · 화요일 밴 2대 비어 있음', choices: ['요금 조정', '보류'] },
           { id: 'g_drv', w: '기사 현장 지출 ₱520', lv: 4, kind: '기사 화면', t: '로델 기사 현장 지출 ₱520', s: '톨비 ₱420 · 주차 ₱100 · 영수증 사진', act: '기사 화면 보기' },
           { id: 'g_tee', w: '빈 티업 3팀이 올라왔어요', lv: 5, kind: '협력 골프장', t: '블루힐 CC가 토요일 빈 티업 3팀을 올렸어요', s: '예약 홈페이지에 포함 항목을 밝힌 총액으로 보여요', act: '예약 홈페이지 보기' },
@@ -1036,8 +1089,8 @@ window.__bigcPromoLayer = function (ctx) {
       agent: {
         lv: 3, done: [], merged: false, mergeRun: false, ans: 1, pageLang: 'ko', checks: [false, false, false],
         todo: [
-          { id: 'r_q', w: '같은 질문 23번 · 설명 4가지', lv: 1, kind: '반복 질문', t: '「비자 연장, 어디서 하나요」를 23번 받았어요', s: '지금까지 보낸 설명이 네 가지로 달라요', act: '하나로 정리' },
-          { id: 'r_q2', w: '같은 질문 19번 · 설명 3가지', lv: 1, kind: '반복 질문', t: '「입주할 때 처음 내는 돈」 19번 · 설명 3가지', s: '보증금 · 선납 월세 · 입주 청소를 안내 카드 한 장에', act: '하나로 정리' },
+          { id: 'r_q', w: '같은 질문 23번 · 설명 4가지', lv: 1, kind: '반복 질문', t: '「비자 연장, 어디서 하나요」를 23번 받았어요', s: '지금까지 보낸 설명이 네 가지로 달라요', act: '하나로 정리하기' },
+          { id: 'r_q2', w: '같은 질문 19번 · 설명 3가지', lv: 1, kind: '반복 질문', t: '「입주할 때 처음 내는 돈」 19번 · 설명 3가지', s: '보증금 · 선납 월세 · 입주 청소를 안내 카드 한 장에', act: '하나로 정리하기' },
           { id: 'r_book', w: '15분 상담 예약 1건', lv: 2, kind: '상담 예약', t: '박정우 님이 15분 상담을 예약했어요', s: '페이지에서 고른 조건 · 비자 연장 · 2개월 ~ 5개월', choices: ['예약 확정', '다른 시간 제안'] },
           { id: 'r_lock', w: '확인일 지난 안내 · 보내기 잠김', lv: 3, kind: '확인일 지남', t: '연례 신고 준비물 · 322일 전에 확인한 안내예요', s: '정해 둔 주기 90일 · 보낸 링크 41개 · 보내기 잠김', act: '다시 확인하기' },
           { id: 'r_old', w: '예전 안내를 읽은 고객 2명', lv: 3, kind: '예전 안내', t: '관광비자 연장 안내가 11월 20일에 바뀌었어요', s: '예전 안내를 읽은 고객 5명 · 아직 모름 2명', act: '아직 모르는 2명에게 알리기' },
@@ -1057,7 +1110,7 @@ window.__bigcPromoLayer = function (ctx) {
           { id: 'pl_qty', w: '오더보다 많은 작업지시', lv: 2, kind: '지시량 확인', t: 'PO-2611-21 작업지시가 오더보다 4,000개 많아요', s: '오더 22,000 · 작업지시 26,000 · 고객사 변경 메일 없음 · 생산 지시 잠김', choices: ['고객사 확인', '보류'] },
           { id: 'pl_input', w: '정전 중 입력 도착', lv: 3, kind: '현장 입력', t: '정전 14:00 ~ 16:00 · 휴대폰에 보관한 입력이 들어왔어요', s: '사출 7번 · B조 · 양품 1,240 · 불량 38 · 정지 45분', act: '작업자 입력 보기' },
           { id: 'pl_card', w: '반장 없이 금형 교체', lv: 3, kind: '반장 없는 날', t: 'B조 반장 휴무 · 7번 금형을 교체해요', s: '작업 기준 카드대로 진행 · 첫 제품 사진 확인 뒤 생산 시작', act: '작업 기준 카드 보기' },
-          { id: 'pl_short', w: '포장 박스 B 450개 부족', lv: 4, kind: '자재 부족', t: '포장 박스 B가 450개 모자라요 · 발주 전', s: '다음 2주 오더 기준 · 창고 1,200 · 필요 1,650', act: '450개 발주 승인' },
+          { id: 'pl_short', w: '포장 박스 B 450개 부족', lv: 4, kind: '자재 부족', t: '포장 박스 B가 450개 모자라요 · 발주 전', s: '다음 2주 오더 기준 · 창고 1,200 · 필요 1,650', act: '450개 발주 승인하기' },
           { id: 'pl_lot', w: '반품 120개 · 같은 LOT 찾기', lv: 4, kind: '고객사 반품', t: '배터리 커버 120개가 반품됐어요', s: '11월 24일 생산 · 사출 7번 · B조 · 같은 원자재를 쓴 오더를 찾아요', act: '거슬러 찾기' },
           { id: 'pl_close', w: '오늘 마감 · 본사 보고', lv: 5, kind: '마감', t: '오늘 생산 42,620개 · 마감 전 확인', s: '출고 3건 · 불량 1.8% · 반품 LOT 검사', act: '마감하기' },
           { id: 'pl_plan', w: '다음 주 계획 · 늦어질 오더 0건', lv: 6, kind: '다음 주 계획', t: '다음 주 생산 계획 제안 · 작업지시 9건', s: '필요한 기계 시간 1,480 · 가능 1,610 · 금형 교체 7회', act: '계획 보기' },
@@ -1233,7 +1286,7 @@ window.__bigcPromoLayer = function (ctx) {
   const todayHead = (d) => `<div class="hd"><span class="d">${d}</span><span class="hdr">${pcPill()}${HOOK.gear ? HOOK.gear() : ''}</span></div>`;
   function heroBlock(left, total, doneMsg) {
     const done = total - left;
-    return `<div class="hero" id="hero"><div class="lab"><span>지금 할 일</span><span class="num">${done}/${total}</span></div>
+    return `<div class="hero" id="hero"><div class="lab"><span>지금 할 일<span class="ex" title="승인 시안의 예시 값이에요">예시</span></span><span class="num">${done}/${total}</span></div>
       <span class="big num" id="big"><span>${left}</span></span>
       ${left === 0 ? `<div class="zero"><svg class="ck" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="28"/><path d="m20 33 8 8 16-17"/></svg><span>${esc(doneMsg)}</span></div>` : ''}
       <div class="segs">${Array.from({ length: total }, (_, i) => `<i class="${i < done ? 'done' : ''}"></i>`).join('')}</div></div>`;
@@ -1248,6 +1301,15 @@ window.__bigcPromoLayer = function (ctx) {
   const skelRows = (n = 3) => `<div class="grp" aria-busy="true" aria-label="불러오는 중">${Array.from({ length: n }, () => '<div class="row skrow" aria-hidden="true"><span class="sk a"></span><span class="b"><i class="sk"></i><i class="sk"></i></span></div>').join('')}</div>`;
   // WO-039 (H9): 오늘 첫 화면의 돈 카드. 그 숫자가 생기는 단계부터만(예시 장면의 숫자 그대로)
   const moneyCard = (m) => (m ? `<div class="sec"><span>${esc(m.sec)}</span></div><div class="grp money"><button class="row" data-a="tab" data-t="${m.tab}"><div class="m"><div class="s">${esc(m.k)}</div><div class="mv num" data-cu>${esc(m.v)}</div>${m.sub ? `<div class="s">${esc(m.sub)}</div>` : ''}</div>${I.chev}</button></div>` : '');
+  // WO-041: 할 일 종류를 네 갈래로 — 줄 앞 작은 아이콘(글자 없이도 갈리게, 화면 읽기에는 종류 이름)
+  const KIND_OF = (k) => /정산|입금|임금|급여|받을 돈|청구|견적|요금|마감|매출/.test(k) ? 'money' : /재고|품목|품절|자재|실사|발주|주문|오더|지시량|반품/.test(k) ? 'stock' : /문의|질문|답|회신|글|상담|안내|업체|게시/.test(k) ? 'ask' : 'etc';
+  const KIND_IC = {
+    money: '<b aria-hidden="true">₱</b>',
+    stock: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 7.5 12 3.5l8.5 4v9L12 20.5l-8.5-4z"/><path d="m3.5 7.5 8.5 4 8.5-4M12 11.5v9"/></svg>',
+    ask: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M4 5.5h16v10H10l-4.5 3.5v-3.5H4z"/></svg>',
+    etc: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4M16 3v4M4 10h16"/></svg>',
+  };
+  const kindIcon = (k) => { const c = KIND_OF(String(k || '')); return `<span class="ki ki-${c}" role="img" aria-label="${c === 'money' ? '돈' : c === 'stock' ? '재고' : c === 'ask' ? '문의' : '일'}">${KIND_IC[c]}</span>`; };
   function todoRow(x, first, own, fold) {
     const p = x.post ? S.posts.find((q) => q.id === x.post) : null;
     const running = p && (p.state === 'run' || p.state === 'done');
@@ -1257,7 +1319,8 @@ window.__bigcPromoLayer = function (ctx) {
     // 누를 것이 넷 이상이면 접는다: 「왜」 한 줄(t)은 늘 보이고, 누르면 종류 · 설명 · 단추가 펼쳐진다. 첫 줄의 단추는 접혀도 보인다.
     if (fold) {
       const open = !!S.open[x.id];
-      return `<div class="row ${x.leave ? 'leave' : ''}" id="row-${x.id}"><div class="m">${open ? `<div class="kind">${esc(x.kind)}</div>` : ''}<button class="fh" data-a="fold" data-id="${x.id}" aria-expanded="${open}" aria-label="${esc(x.t)} · ${open ? '접기' : '설명 펼치기'}"><span class="t">${esc(open ? x.t : x.w || (own ? x.t : `${x.kind} · ${x.t}`))}</span>${I.down}</button>${open ? `<div class="s">${esc(x.s)}</div>` : ''}${open || first ? (running ? timeline(p) : acts) : ''}</div></div>`;
+      // WO-041: 줄 앞 종류 아이콘(돈 · 재고 · 문의 · 그 밖) · 첫 줄은 접혀 있어도 맥락 한 줄(s)
+      return `<div class="row ${x.leave ? 'leave' : ''}" id="row-${x.id}">${kindIcon(x.kind)}<div class="m">${open ? `<div class="kind">${esc(x.kind)}</div>` : ''}<button class="fh" data-a="fold" data-id="${x.id}" aria-expanded="${open}" aria-label="${esc(x.t)} · ${open ? '접기' : '설명 펼치기'}"><span class="t">${esc(open ? x.t : x.w || (own ? x.t : `${x.kind} · ${x.t}`))}</span>${I.down}</button>${open || first ? `<div class="s">${esc(x.s)}</div>` : ''}${open || first ? (running ? timeline(p) : acts) : ''}</div></div>`;
     }
     return `<div class="row ${x.leave ? 'leave' : ''}" id="row-${x.id}"><div class="m"><div class="kind">${esc(x.kind)}</div><div class="t">${esc(x.t)}</div><div class="s">${esc(x.s)}</div>${running ? timeline(p) : acts}</div></div>`;
   }
@@ -1354,7 +1417,7 @@ window.__bigcPromoLayer = function (ctx) {
         const pill = p.state === 'wait' ? '<span class="pill wait">승인 대기</span>' : p.state === 'run' ? '<span class="pill acc">올리는 중</span>' : p.state === 'done' ? '<span class="pill acc">올림</span>' : p.state === 'pause' ? '<span class="pill stop">오늘 멈춤</span>' : p.state === 'fix' ? '<span class="pill wait">고치는 중</span>' : '<span class="pill">예약</span>';
         return `<div class="post" id="post-${p.id}"><button class="ph" data-a="popen" data-id="${p.id}" aria-expanded="${open}"><span class="tm num">${p.tm}</span><span class="m"><span class="t" style="display:block">${esc(p.room)}</span></span>${pill}</button>
           ${open ? `<div class="prev"><div>${esc(p.text)}</div><div class="art" aria-hidden="true"></div></div>
-          ${p.state === 'wait' ? `<div class="acts"><button class="btn p" data-a="approve" data-id="${p.id}">승인</button><button class="btn" data-a="pause" data-id="${p.id}">오늘 멈춤</button><button class="btn" data-a="fix" data-id="${p.id}">고쳐 달라</button></div>` : ''}
+          ${p.state === 'wait' ? `<div class="acts"><button class="btn p" data-a="approve" data-id="${p.id}">승인</button><button class="btn" data-a="pause" data-id="${p.id}">오늘 멈추기</button><button class="btn" data-a="fix" data-id="${p.id}">고쳐 달라고 하기</button></div>` : ''}
           ${p.state === 'run' || p.state === 'done' ? timeline(p) : ''}` : ''}</div>`;
       }).join('')}</div>
       <p style="font-size:14px;color:var(--sub);margin:12px 2px 0">글과 사진은 본부가 준비해요. 승인하면 PC 본부가 정해진 시각에 올려요.</p></div>`;
@@ -1457,8 +1520,8 @@ window.__bigcPromoLayer = function (ctx) {
         Object.assign(['<b>차액</b>', okc('0'), dn ? okc('확인 완료') : neg('−₱2,280')], { cls: dn ? '' : 'hi' })])}
       <div class="sec"><span>그랩 · 확인할 주문</span><span>대조 214건 · 맞음 212건</span></div>
       <div class="grp" id="gap"><div class="row"><div class="m"><div class="t num">#4471</div><div class="s">품절 환불 두 번</div></div><span class="num" style="font-weight:700;color:var(--stop)">₱1,480</span></div>
-        <div class="row"><div class="m"><div class="t num">#4502</div><div class="s">할인은 누가 부담했나</div></div><span class="num" style="font-weight:700;color:var(--stop)">₱800</span></div></div>
-      <div class="acts"><button class="btn" data-a="inq">그랩에 보낼 문의 글</button>${dn ? '' : '<button class="btn p" data-a="setdone">확인 완료로 표시</button>'}</div>
+        <div class="row"><div class="m"><div class="t num">#4502</div><div class="s">할인은 누가 부담했나요?</div></div><span class="num" style="font-weight:700;color:var(--stop)">₱800</span></div></div>
+      <div class="acts fill"><button class="btn" data-a="inq">문의 글 만들기</button>${dn ? '' : '<button class="btn p" data-a="setdone">확인 완료로 표시하기</button>'}</div>
       <div class="sec"><span>자료 올리기</span></div>
       <div class="grp"><div class="row"><div class="m"><div class="t">그랩 판매 자료</div></div><span class="d" style="font-size:14px;color:var(--sub)">11월 22일까지</span></div><div class="row"><div class="m"><div class="t">배달K 내역</div></div><span style="font-size:14px;color:var(--sub)">11월 22일까지</span></div><div class="row"><div class="m"><div class="t">통장</div></div><span style="font-size:14px;color:var(--sub)">11월 25일까지</span></div></div>`;
     if (o.lv >= 4) {
@@ -1483,7 +1546,7 @@ window.__bigcPromoLayer = function (ctx) {
         <div class="bars3"><div><span>매장</span><i><b style="width:100%"></b></i><span>₱180</span></div><div><span>배달K</span><i><b style="width:92%"></b></i><span>₱165</span></div><div class="lo"><span>그랩</span><i><b style="width:76%"></b></i><span>₱136</span></div></div></div></div>
       <div class="chips" role="group" aria-label="품목 거르기" style="margin-top:12px">${chips.map(([k, l, n]) => `<button class="chip" data-a="ifilter" data-f="${k}" aria-pressed="${f === k}">${l} <b>${n}</b></button>`).join('')}</div>
       ${atable(['품목', '포스', '배달K', '그랩', ''], list.map((x) => Object.assign([`<b>${x.n}</b>`, x.p, x.f === 'diff' ? neg(x.d) : x.d, x.f === 'miss' ? neg('없음') : x.g, `<span class="pill ${x.s[1]}">${x.s[0]}</span>`], { cls: '' })))}
-      ${dn ? '<p style="font-size:14px;color:var(--sub);margin:12px 2px 0">고칠 목록에 넣었어요 · 앱 값은 목록대로 고쳐요.</p>' : '<div class="acts"><button class="btn p wide" data-a="fixlist">값이 다른 2개 · 고칠 목록 만들기</button></div>'}</div>`;
+      ${dn ? '<p style="font-size:14px;color:var(--sub);margin:12px 2px 0">고칠 목록에 넣었어요 · 앱 값은 목록대로 고쳐요.</p>' : '<div class="acts"><button class="btn p wide" data-a="fixlist">손볼 품목 2개 · 고칠 목록 만들기</button></div>'}</div>`;
   }
   function countSheet() {
     const o = O(), en = o.countLang === 'en', need = o.lv >= 3;
@@ -1609,8 +1672,8 @@ window.__bigcPromoLayer = function (ctx) {
         Object.assign(['<b>차액</b>', okc('0'), dn ? okc('확인 완료') : neg('−₱1,660')], { cls: dn ? '' : 'hi' })])}
       <div class="sec"><span>그랩 · 확인할 주문</span></div>
       <div class="grp" id="gap"><div class="row"><div class="m"><div class="t num">#7731</div><div class="s">환불 두 번</div></div><span class="num" style="font-weight:700;color:var(--stop)">₱1,120</span></div>
-        <div class="row"><div class="m"><div class="t num">#7758</div><div class="s">할인은 누가 부담했나</div></div><span class="num" style="font-weight:700;color:var(--stop)">₱540</span></div></div>
-      <div class="acts"><button class="btn" data-a="inq">그랩에 보낼 문의 글</button>${dn ? '' : '<button class="btn p" data-a="setdone">확인 완료로 표시</button>'}</div>
+        <div class="row"><div class="m"><div class="t num">#7758</div><div class="s">할인은 누가 부담했나요?</div></div><span class="num" style="font-weight:700;color:var(--stop)">₱540</span></div></div>
+      <div class="acts fill"><button class="btn" data-a="inq">문의 글 만들기</button>${dn ? '' : '<button class="btn p" data-a="setdone">확인 완료로 표시하기</button>'}</div>
       <div class="sec"><span>통합 주문함 · 12:18 · 조리할 주문 5건</span></div>
       <div class="grp">${[['배달K #2217', '김치찌개 2'], ['그랩 #7804', '제육 1, 파전 1'], ['배달K #2218', '삼겹살 3'], ['매장 4번', '순두부 2'], ['그랩 #7805', '옵션 확인', 1]].map(([a, b, r]) => `<div class="row"><div class="m"><div class="t num">${a}</div></div><span class="${r ? 'pill stop' : ''}" style="font-size:14px">${b}</span></div>`).join('')}
         <div class="row"><div class="m"><div class="t">품절 표시 · 해물파전</div><div class="s">오징어 2인분</div></div><span class="pill ${od ? 'acc' : 'stop'}">${od ? '앱에서 끔' : '앱 판매 중'}</span></div></div>`;
@@ -1691,7 +1754,7 @@ window.__bigcPromoLayer = function (ctx) {
       ${next ? `<button class="btn q wide" style="margin-top:12px" data-a="gdrvnext">${next}</button>` : '<p class="sub" style="margin:12px 0 0">오늘 3곳 끝 · 도착 시각이 대표님 화면에 남았어요</p>'}
       <p class="sub" style="margin:16px 0 4px">현장에서 나온 돈 · 기사가 영수증을 찍어 올림</p>
       <ul class="inc" style="margin:0 0 14px"><li><span>톨비</span><span class="num">₱420</span></li><li><span>주차</span><span class="num">₱100</span></li><li><span><b>오늘 합계</b></span><span class="num">₱520</span></li></ul>
-      ${isDone('g_drv') ? closeBtn : '<button class="btn p wide" data-a="gdrvok">지출 확인</button>'}`;
+      ${isDone('g_drv') ? closeBtn : '<button class="btn p wide" data-a="gdrvok">지출 확인하기</button>'}`;
   }
   const siteSheet = () => `<h4>예약 홈페이지 · 고객이 보는 화면</h4><p class="sub">포함 항목을 모두 밝힌 금액으로 안내해요 · 한국어 · English</p>
     <div class="gcard"><p class="k">해오름골프 · 골프장 · 일정 · 예약</p><h5>마닐라 골프</h5><p class="sub" style="margin:0 0 4px">블루힐 · 선밸리 · 12.11 ~ 12.14 · 4명</p>
@@ -1753,7 +1816,7 @@ window.__bigcPromoLayer = function (ctx) {
     let h = `<div class="pad"><div class="hd"><h2 class="title">돈</h2><span class="d">입금 대조</span></div>
       <div class="grp" id="payBox"><div class="row" style="display:block"><div class="kind">박 대표님 일행 · 3박 4일</div>
         <ul class="inc" style="margin-top:4px"><li><span>받을 돈</span><span class="num">₩4,194,000</span></li><li><span>들어온 돈</span><span class="num">${o.paid ? '₩4,194,000' : '₩4,000,000'}</span></li>${o.paid ? `<li class="fresh"><span>새 입금 · ${esc(o.paidAt || '')}</span><span class="num">₩194,000</span></li>` : ''}<li><span><b>미입금</b></span><span class="num" style="color:${o.paid ? 'var(--acc)' : 'var(--stop)'}">${o.paid ? '₩0' : '₩194,000'}</span></li></ul>
-        <div class="acts">${pd ? '<span class="pill acc">예약 확정</span>' : o.paid ? '<button class="btn p wide" data-a="gconfirm">예약 확정</button>' : '<button class="btn q wide" data-a="grefresh">통장 입금 내역 다시 맞추기</button><button class="btn wide" disabled>전액 입금 후 확정</button>'}</div></div></div>`;
+        <div class="acts">${pd ? '<span class="pill acc">예약 확정</span>' : o.paid ? '<button class="btn p wide" data-a="gconfirm">예약 확정하기</button>' : '<button class="btn q wide" data-a="grefresh">통장 입금 내역 다시 맞추기</button><button class="btn wide" disabled>전액 입금 후 확정</button>'}</div></div></div>`;
     if (o.lv >= 4) {
       const W = [['월', 62], ['화', 24, 1], ['수', 48], ['목', 56], ['금', 88], ['토', 100], ['일', 94]];
       h += `<div class="sec"><span>대표 화면 · 12월 12일 토 08:10</span></div>
@@ -1788,7 +1851,7 @@ window.__bigcPromoLayer = function (ctx) {
         ${CARD.map(([a, b]) => R(a, b)).join('')}
         <p class="sub rv ${m ? 'on' : ''}" data-c style="margin:12px 0 0">이 안내의 근거</p>${R('확인한 날', '11월 26일', 'color:var(--acc);font-weight:600')}${R('출처', '이민국 공지')}</div>
       <p class="resp" style="margin:12px 0">내용은 대표님이 확인한 것만 써요.</p>
-      ${m ? (isDone('r_q') ? closeBtn : '<button class="btn p wide" data-a="rcopy">안내 링크 복사</button><button class="btn wide" style="margin-top:8px" data-a="rimg">이미지로 저장</button>') : `<button class="btn p wide" data-a="rmerge" id="mRun" ${o.mergeRun ? 'disabled' : ''}>${o.mergeRun ? '정리하는 중' : '하나로 정리'}</button>`}`;
+      ${m ? (isDone('r_q') ? closeBtn : '<button class="btn p wide" data-a="rcopy">안내 링크 복사하기</button><button class="btn wide" style="margin-top:8px" data-a="rimg">이미지로 저장하기</button>') : `<button class="btn p wide" data-a="rmerge" id="mRun" ${o.mergeRun ? 'disabled' : ''}>${o.mergeRun ? '정리하는 중' : '하나로 정리'}</button>`}`;
   }
   const QS5 = [['비자 연장, 어디서 하나요', 23, '서로 다른 설명 4가지', 'r_q'], ['입주할 때 처음 내는 돈', 19, '서로 다른 설명 3가지', 'r_q2'], ['연례 신고 준비물', 14, '작년 안내 그대로', 'r_lock'], ['주차가 포함되나요', 11, '같은 안내 1가지', 'ok'], ['보증금은 언제 돌려받나요', 9, '서로 다른 설명 2가지', '']];
   const OLDR = [['김지훈', '10월 2일', 1], ['이수민', '10월 14일', 0], ['박정우', '10월 21일', 1], ['최은영', '11월 3일', 0], ['한도윤', '11월 11일', 1]];
@@ -1931,7 +1994,7 @@ window.__bigcPromoLayer = function (ctx) {
     <div class="phone"><p class="kind" style="margin:0">Machine 7 · Shift B · English</p><p class="nm">Battery cover</p>
       <ul class="inc" style="margin:0"><li><span>Good</span><span class="num">1,240</span></li><li><span>Reject · short shot</span><span class="num" style="color:var(--stop)">38</span></li><li><span>Stop · mold repair</span><span class="num" style="color:var(--stop)">45 min</span></li><li><span>Resin lot</span><span class="num">R-1108</span></li></ul>
       <p style="font-size:14px;color:var(--sub);margin:10px 0 0;text-align:center">Brownout 14:00 ~ 16:00 · saved on phone</p></div>
-    ${isDone('pl_input') ? closeBtn : '<button class="btn p wide" data-a="pinputok">입력 확인</button>'}`;
+    ${isDone('pl_input') ? closeBtn : '<button class="btn p wide" data-a="pinputok">입력 확인하기</button>'}`;
   const cardSheet = () => `<h4>작업 기준 카드 · 배터리 커버</h4><p class="sub">리노 반장 확인 · 11월 12일 · 반장님이 없는 날에도 같은 조건으로</p>
     <ul class="inc" style="margin:0 0 12px"><li><span>금형 B-02</span><span class="num">275°C</span></li><li><span>사출압</span><span class="num">82 bar</span></li><li><span>냉각</span><span class="num">14초</span></li><li><span>미성형이 나면</span><span>금형 온도 먼저</span></li></ul>
     <p class="quote" style="font-size:14px"><b>반장 없는 날</b><br>B조 반장 휴무 · 7번 금형 교체를 작업 기준 카드대로 진행 · 첫 제품 사진 확인 뒤 생산 시작</p>
@@ -2025,7 +2088,7 @@ window.__bigcPromoLayer = function (ctx) {
   const faqSheet = () => { const v = CV[S.cv]; return `<h4>${v.room} · ${v.size}</h4><p class="sub">대화방 · 같은 질문 ${v.faq[0][1]}번째 · 최근 30일</p>
     <div class="bubble"><small>${v.askWho}</small>${v.ask}</div>
     <div class="me">정리해 둔 답이에요. 서류까지 적어 두었어요.<div class="lkc"><small>${v.room} · 확인일 ${v.faq[0][3]}</small><b>${v.a1}</b></div></div>
-    ${isDone('c_faq') ? closeBtn : '<button class="btn p wide" data-a="cfaqok">답 링크 복사</button>'}`; };
+    ${isDone('c_faq') ? closeBtn : '<button class="btn p wide" data-a="cfaqok">답 링크 복사하기</button>'}`; };
   const aiSheet = () => `<h4>AI 답변 진단표</h4><p class="sub">질문 10개를 AI 세 곳에 물어, 지금 어떤 답이 나오는지 봐요</p>
     <ul class="inc" style="margin:0 0 6px"><li><span>ChatGPT</span><span class="num" style="color:var(--stop)">0 / 10</span></li><li><span>Gemini</span><span class="num" style="color:var(--stop)">1 / 10</span></li><li><span>네이버 AI</span><span class="num" style="color:var(--stop)">0 / 10</span></li></ul>
     <p class="sub" style="margin:0 0 14px">우리 커뮤니티 글이 답에 나온 수</p>
@@ -2066,7 +2129,7 @@ window.__bigcPromoLayer = function (ctx) {
     const rd = isDone('c_reg'), md = isDone('c_match');
     let h = `<div class="pad"><div class="hd"><h2 class="title">업체</h2><span class="d">등록 신청 · 이번 주 5건</span></div>
       <div class="grp" id="vendBox">${v.vendors.map(([n, k, doc, fee, st, c]) => `<div class="row"><div class="m"><div class="t">${n} <span class="pill">${k}</span></div><div class="s">서류 ${doc} · 등록비 영수증 ${fee}</div></div><span class="pill ${rd && VDONE[st] ? 'wait' : c}">${rd && VDONE[st] ? VDONE[st] : st}</span></div>`).join('')}</div>
-      ${rd ? '<p class="resp">심사 결과를 저장했어요 · 게시 2곳 · 금지 업종은 걸러 냈어요.</p>' : '<div class="acts"><button class="btn q wide" data-a="creg">심사 결과 저장</button></div>'}
+      ${rd ? '<p class="resp">심사 결과를 저장했어요 · 게시 2곳 · 금지 업종은 걸러 냈어요.</p>' : '<div class="acts"><button class="btn q wide" data-a="creg">심사 결과 저장하기</button></div>'}
       <div class="sec"><span>질문 글 옆 업체</span></div>
       <div class="grp"><button class="row" data-a="cmatch"><div class="m"><div class="t">${v.q}</div><div class="s">맞는 업체 3곳 · 이 글에서 간 문의 3건</div></div>${md ? '<span class="pill acc">확인</span>' : ''}${I.chev}</button></div>
       <div class="sec"><span>배너 자리</span><span>교체일 12월 1일</span></div>
@@ -2111,7 +2174,7 @@ window.__bigcPromoLayer = function (ctx) {
   }
   const rptSheet = () => { const v = CV[S.cv]; return `<h4>월 보고 한 장 · 12월 1일</h4><p class="sub">${v.room} · 11월</p>
     <ul class="inc" style="margin:0 0 14px"><li><span>새 회원</span><span class="num">${v.rpt[0]}명</span></li><li><span>질문 글</span><span class="num">${v.rpt[1]}건</span></li><li><span>업체 연결</span><span class="num">${v.rpt[2]}건</span></li><li><span>응답 없는 업체</span><span class="num" style="color:var(--stop)">${v.rpt[3]}곳</span></li></ul>
-    ${isDone('c_rpt') ? closeBtn : '<button class="btn p wide" data-a="crptok">보고 확인</button>'}`; };
+    ${isDone('c_rpt') ? closeBtn : '<button class="btn p wide" data-a="crptok">보고 확인하기</button>'}`; };
   const chgSheet = () => { const v = CV[S.cv]; return `<h4>공식 출처 변경 · ${v.chgSrc}</h4><p class="sub">06:00 · 바뀐 문장 2곳 · 운영자 승인 대기</p>
     <ul class="inc" style="margin:0 0 12px">${v.chg.map(([a, b]) => `<li><span>${a}</span><span style="color:var(--acc)">${b}</span></li>`).join('')}<li><span>바뀐 날</span><span>11월 30일</span></li></ul>
     <p class="sub" style="margin:0 0 6px">승인하면 회원 휴대폰에 가는 알림</p>
@@ -2420,7 +2483,7 @@ window.__bigcPromoLayer = function (ctx) {
       finish('m_cnt', `냉장 2번 실사 저장${o.reason ? ' · 어묵 사유 ' + o.reason : ''}`, '저장했어요. 다음 선반은 냉장 3번이에요.', { revert: () => { o.reason = null; } });
     },
     ifilter: (b) => { O().itemFilter = b.dataset.f; render(); },
-    fixlist: () => finish('m_item', '값이 다른 품목 2개 · 고칠 목록', '고칠 목록을 만들었어요. 대파는 그랩 등록, 계란은 배달K 값이에요.'),
+    fixlist: () => finish('m_item', '손볼 품목 2개 · 고칠 목록', '고칠 목록을 만들었어요. 대파는 그랩 등록, 계란은 배달K 값이에요.'),
     setdone: () => finish(S.biz === 'mart' ? 'm_set' : 'f_set', '그랩 정산 차액 · 확인 완료', '확인 완료로 표시했어요.'),
     inq: () => openSheet(S.biz === 'mart'
       ? `<h4>그랩에 보낼 문의 글</h4><p class="sub">그랩 상담 창에 붙여 넣는 영어 글이에요</p><p class="quote">Hello, two orders from Nov 16–22 do not match our payout. #4471 was refunded twice (₱1,480). For #4502, please confirm who covered the discount (₱800). Thank you.</p><button class="btn p wide" data-a="inqcopy">복사</button>`
