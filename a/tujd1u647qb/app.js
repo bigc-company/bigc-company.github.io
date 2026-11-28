@@ -1,4 +1,231 @@
-// bigC company 사장님 앱 · 설치형 6판 · cc82a8caac · _만들기.mjs 가 시안.html 과 _설치층.js 로 만든 파일(직접 고치지 말 것)
+// bigC company 사장님 앱 · 설치형 6판 · 3106535609 · _만들기.mjs 가 시안.html 과 _설치층.js 로 만든 파일(직접 고치지 말 것)
+// bigC company 사장님 앱 · 「홍보자료」 탭 (WO-034). 본부판에서만 보인다. _설치층.js 가 init 때 이 층을 부른다.
+// 자료는 앱 폴더 안 홍보자료\ 의 사본: 자료목록.json(WO-032 형식) · 미리보기.json(_홍보자료.mjs 가 만듦) · 방목록.json(05_카톡방_목록 사본).
+// 쓴 기록(썼어요)은 이 폰에만(localStorage, 키 앞에 배포 경로). 방목록.json 의 「기록」은 본부 기록 사본으로 함께 읽는다(지우지 못함).
+window.__bigcPromoLayer = function (ctx) {
+  const { api, store, key, stamp } = ctx;
+  const BASE = '홍보자료/';
+  const CH = [['카톡그룹', '카톡 그룹방'], ['카톡1:1', '카톡 1:1'], ['인스타', '인스타'], ['스토리', '스토리'], ['페북', '페북'], ['메일', '메일'], ['쇼룸링크', '쇼룸 링크']];
+  const CHL = Object.fromEntries(CH);
+  const KAKAO = new Set(['카톡그룹', '카톡1:1']);
+  const ORDER = ['A', '지금', 'B']; // 돌림 순서 (224)
+  const AN = (a) => (a === '지금' ? '지금 안' : a + '안');
+  const esc = (v) => api.esc(v);
+  let data = null, loading = null, failed = false;
+  let ch = 'all', biz = 'all';
+  const blobs = new Map(), texts = new Map();
+  const readMine = () => { try { const v = JSON.parse(store.get(key)); return v && Array.isArray(v.log) ? v : { room: '', log: [] }; } catch (e) { return { room: '', log: [] }; } };
+  let mine = readMine();
+  const saveMine = () => store.set(key, JSON.stringify(mine));
+
+  // 자료목록.json: 배열 · {자료: []} · {items: []} · 한 줄에 하나(JSON Lines) 모두 받는다
+  function parseList(t) {
+    t = String(t).replace(/^﻿/, '');
+    try { const j = JSON.parse(t); return Array.isArray(j) ? j : j.자료 || j.items || []; } catch (e) {
+      return t.split(/\r?\n/).map((l) => l.trim().replace(/,$/, '')).filter((l) => l.startsWith('{')).map((l) => { try { return JSON.parse(l); } catch (e2) { return null; } }).filter(Boolean);
+    }
+  }
+  const rel = (p) => String(p || '').replace(/\\/g, '/').replace(/^\.?\//, '');
+  function load() {
+    if (loading) return loading;
+    failed = false;
+    const get = (f, kind) => fetch(BASE + f).then((r) => { if (!r.ok) throw new Error(f + ' ' + r.status); return kind === 'text' ? r.text() : r.json(); });
+    loading = Promise.all([get('자료목록.json', 'text'), get('미리보기.json').catch(() => ({ 자료: {} })), get('방목록.json').catch(() => ({ 방: [], 그밖: [], 기록: [] }))])
+      .then(([lt, pv, rm]) => {
+        const meta = (pv && pv.자료) || {};
+        const items = parseList(lt).filter((x) => x && x.id && x.파일).map((x, i) => {
+          const m = meta[x.id] || {}, file = rel(x.파일), ext = (file.split('.').pop() || '').toLowerCase();
+          const [w, h] = String(x.크기 || '').split(/[×x*]/).map((v) => +v);
+          return { id: String(x.id), i, biz: x.업종 || '그 밖', an: x.안 || '지금', ch: Array.isArray(x.채널) ? x.채널 : x.채널 ? [x.채널] : [],
+            file, url: BASE + file, thumb: m.미리 ? BASE + m.미리 : BASE + file, tw: m.미리폭 || m.폭 || w || 4, th: m.미리높이 || m.높이 || h || 3,
+            w: m.폭 || w, h: m.높이 || h, bytes: m.바이트 || 0, type: m.종류 || ({ mp4: 'video/mp4', gif: 'image/gif', png: 'image/png' }[ext] || 'image/jpeg'), sec: m.길이초 || 0,
+            kind: ext === 'mp4' ? '영상' : ext === 'gif' ? '움짤' : '사진', cap: x.캡션 || '', text: x.글파일 || '', made: x.만든날 || '' };
+        });
+        const rooms = (rm.방 || []).map((r) => ({ ...r, ch: '카톡그룹' })), other = (rm.그밖 || []).map((r) => ({ ...r, 짧게: r.이름, ch: r.채널 }));
+        data = { items, rooms, other, places: [...rooms, ...other], seed: (rm.기록 || []).map((r) => ({ at: r.at, room: r.방, id: r.id, file: r.파일, seed: true, plan: !!r.예약 })), src: rm.출처 || '' };
+        if (mine.room && !data.places.find((p) => p.id === mine.room)) mine.room = '';
+      })
+      .catch(() => { failed = true; })
+      .finally(() => { loading = null; if (ctx.S().tab === 'promo' && ctx.S().mode === 'hq') api.render(); });
+    return loading;
+  }
+
+  // ---------- 기록 · 돌림 ----------
+  const place = (id) => data.places.find((p) => p.id === id);
+  const item = (id) => data.items.find((x) => x.id === id);
+  // 같은 분에 여러 번 적어도 순서가 맞게: 이 폰 기록은 ms(ts), 본부 기록은 at 을 시각으로
+  const tsOf = (r) => r.ts || Date.parse(String(r.at).replace(' ', 'T')) || 0;
+  // 기록은 id 로 찾고, 없으면 파일 경로로 찾는다(자료목록.json 을 WO-032 판으로 바꿔 id 가 달라져도 기록이 이어진다)
+  const rx = (r) => item(r.id) || (r.file ? data.items.find((x) => x.file === rel(r.file)) : null);
+  const logAll = () => [...data.seed, ...mine.log].filter((r) => rx(r)).sort((a, b) => tsOf(b) - tsOf(a));
+  const short = (at) => { const [d, t] = String(at).split(' '); const [, m, dd] = d.split('-'); return `${+m}/${+dd} ${t || ''}`.trim(); };
+  // 그 방 · 그 업종의 다음 차례: 마지막으로 쓴 안의 다음 안(A → 지금 → B, 없는 안은 건너뜀). 같은 안 안에서는 그 방에서 가장 오래 안 쓴 것.
+  function nextFor(roomId, bz) {
+    const p = place(roomId); if (!p) return null;
+    const pool = data.items.filter((x) => x.biz === bz && ORDER.includes(x.an) && x.ch.includes(p.ch));
+    const ans = ORDER.filter((a) => pool.some((x) => x.an === a));
+    if (!ans.length) return null;
+    const hist = logAll().filter((r) => r.room === roomId && rx(r).biz === bz && ORDER.includes(rx(r).an));
+    const last = hist[0] || null;
+    const an = last ? ans[(ans.indexOf(rx(last).an) + 1) % ans.length] || ans[0] : ans[0];
+    const lastUse = (x) => { const r = hist.find((h) => rx(h) === x); return r ? tsOf(r) : 0; };
+    const pick = pool.filter((x) => x.an === an).sort((a, b) => lastUse(a) - lastUse(b) || a.i - b.i)[0];
+    const after = ans[(ans.indexOf(an) + 1) % ans.length];
+    return { x: pick, an, last, after: ans.length > 1 ? after : '' };
+  }
+  const todayIn = (roomId) => { const d = stamp(Date.now()).slice(0, 10); return logAll().filter((r) => r.room === roomId && String(r.at).slice(0, 10) === d && !r.plan); };
+
+  // ---------- 화면 ----------
+  const kb = (b) => (!b ? '' : b >= 1048576 ? (b / 1048576).toFixed(1) + 'MB' : Math.round(b / 1024) + 'KB');
+  const lastLine = (x) => { const r = logAll().find((h) => rx(h) === x); return r ? `마지막 사용 · ${short(r.at)} ${esc((place(r.room) || {}).짧게 || r.room)}${r.plan ? ' (예약)' : ''}` : '아직 쓴 기록 없음'; };
+  function card(x, cls = '', head = '') {
+    const meta = [x.w && x.h ? `${x.w}×${x.h}` : '', x.kind + (x.sec ? ` ${Math.round(x.sec)}초` : ''), kb(x.bytes)].filter(Boolean).join(' · ');
+    return `<article class="pm-card ${cls}" id="pm-${esc(x.id)}">${head}
+      <div class="pm-fig"><img src="${esc(encodeURI(x.thumb))}" width="${x.tw}" height="${x.th}" alt="${esc(x.cap)}" loading="lazy" decoding="async">${x.kind !== '사진' ? `<span class="pm-play">${x.kind === '영상' ? '▶ 영상' : '움짤'}</span>` : ''}</div>
+      <div class="pm-body"><div class="pm-tags"><span class="pill ${x.an === 'A' ? 'acc' : x.an === 'B' ? 'wait' : ''}">${esc(AN(x.an))}</span><span class="pm-biz">${esc(x.biz)}</span></div>
+        <div class="t">${esc(x.cap.replace(/\s*\|\s*bigC company\s*$/, ''))}</div>
+        <div class="s num">${esc(meta)}</div>
+        <div class="s">${x.ch.map((c) => esc(CHL[c] || c)).join(' · ')}</div>
+        <div class="acts pm-acts"><button class="btn p" data-a="pmshare" data-id="${esc(x.id)}">공유</button><button class="btn" data-a="pmcopy" data-id="${esc(x.id)}"${x.text ? '' : ' disabled'}>글 복사</button><button class="btn" data-a="pmused" data-id="${esc(x.id)}">썼어요</button></div>
+        <div class="s pm-last">${lastLine(x)}</div></div></article>`;
+  }
+  function nextBlock(bizList) {
+    const opts = `<option value="">방을 고르십시오</option><optgroup label="카톡 방">${data.rooms.map((r) => `<option value="${esc(r.id)}"${mine.room === r.id ? ' selected' : ''}>${esc(r.짧게)}${r.상태 && r.상태 !== '올림' ? ` · ${esc(r.상태)}` : ''}</option>`).join('')}</optgroup><optgroup label="그 밖">${data.other.map((r) => `<option value="${esc(r.id)}"${mine.room === r.id ? ' selected' : ''}>${esc(r.이름)}</option>`).join('')}</optgroup>`;
+    let body = '';
+    const p = mine.room && place(mine.room);
+    if (!p) body = '<p class="resp" style="margin-top:8px">방을 고르면 그 방에 다음으로 올릴 자료가 맨 위에 보입니다. 순서는 A(전후) → 지금 안 → B(영상)이고, 없는 안은 건너뜁니다.</p>';
+    else {
+      const td = todayIn(p.id);
+      const rule = `<p class="resp pm-rule">${p.규칙 ? esc(p.규칙) : esc(CHL[p.ch] || '')}${td.length ? ` · <b>오늘 이 방에 ${td.length}번 썼습니다(${td.map((r) => esc(String(r.at).slice(11, 16))).join(', ')})</b>` : ''}</p>`;
+      if (biz === 'all') {
+        const rows = bizList.map((b) => ({ b, n: nextFor(p.id, b) })).filter((r) => r.n);
+        body = rule + (rows.length ? `<div class="grp">${rows.map(({ b, n }) => `<button class="row pm-nrow" data-a="pmbiz" data-v="${esc(b)}"><img src="${esc(encodeURI(n.x.thumb))}" alt="" width="${n.x.tw}" height="${n.x.th}" loading="lazy"><div class="m"><div class="t">${esc(b)} · 다음은 ${esc(AN(n.an))}</div><div class="s">${n.last ? `지난번 ${esc(short(n.last.at))} ${esc(AN(rx(n.last).an))}${n.last.plan ? '(예약)' : ''}` : '이 방에 쓴 기록 없음'}</div></div>${api.I.chev}</button>`).join('')}</div>` : '<p class="resp">이 방에 맞는 A · 지금 · B 자료가 없습니다.</p>');
+      } else {
+        const n = nextFor(p.id, biz);
+        body = rule + (n ? card(n.x, 'pm-next', `<div class="pm-nhd"><b>다음 차례 · ${esc(AN(n.an))}</b><span>${n.last ? `지난번 ${esc(short(n.last.at))} ${esc(AN(rx(n.last).an))}${n.last.plan ? '(예약)' : ''}` : '이 방에 쓴 기록 없음'}${n.after ? ` · 그다음 ${esc(AN(n.after))}` : ''}</span></div>`)
+          : `<p class="resp">${esc(biz)}에는 이 방에 맞는 A · 지금 · B 자료가 없습니다.</p>`);
+      }
+    }
+    return `<div class="sec"><span>다음 차례</span>${p ? `<span>${esc(p.짧게)}</span>` : ''}</div>
+      <label class="search pm-room"><span class="pm-lab">방</span><select id="pmRoom" aria-label="방 고르기">${opts}</select></label>${body}`;
+  }
+  function view() {
+    const head = '<div class="pad pm"><div class="hd"><h2 class="title">홍보자료</h2>';
+    if (!data) {
+      if (!loading && !failed) load();
+      return head + `</div><div class="grp"><div class="row"><div class="m"><div class="t">${failed ? '자료 목록을 받지 못했습니다' : '자료 목록을 불러오는 중입니다'}</div><div class="s">${failed ? '인터넷을 확인하고 다시 누르십시오. 한 번 받은 뒤에는 인터넷 없이도 목록과 미리보기가 열립니다.' : '잠시 기다리십시오.'}</div>${failed ? '<div class="acts"><button class="btn q" data-a="pmreload">다시 받기</button></div>' : ''}</div></div></div></div>`;
+    }
+    const its = data.items;
+    const bizList = [...new Set(its.map((x) => x.biz))];
+    if (biz !== 'all' && !bizList.includes(biz)) biz = 'all';
+    const list = its.filter((x) => (ch === 'all' || x.ch.includes(ch)) && (biz === 'all' || x.biz === biz));
+    const chip = (act, v, l, n, on) => `<button class="chip" data-a="${act}" data-v="${esc(v)}" aria-pressed="${on}">${esc(l)}${n === undefined ? '' : ` <b>${n}</b>`}</button>`;
+    const nCh = (c) => its.filter((x) => (c === 'all' || x.ch.includes(c)) && (biz === 'all' || x.biz === biz)).length;
+    const nBz = (b) => its.filter((x) => (ch === 'all' || x.ch.includes(ch)) && (b === 'all' || x.biz === b)).length;
+    const all = logAll();
+    return head + `<span class="d">자료 <b class="num" style="color:var(--ink)">${its.length}</b>개</span></div>
+      <div class="chips" role="group" aria-label="채널">${chip('pmch', 'all', '모든 채널', nCh('all'), ch === 'all')}${CH.map(([c, l]) => chip('pmch', c, l, nCh(c), ch === c)).join('')}</div>
+      <div class="chips" role="group" aria-label="업종">${chip('pmbiz', 'all', '모든 업종', nBz('all'), biz === 'all')}${bizList.map((b) => chip('pmbiz', b, b, nBz(b), biz === b)).join('')}</div>
+      ${nextBlock(bizList)}
+      <div class="sec"><span>자료${ch !== 'all' ? ' · ' + esc(CHL[ch]) : ''}${biz !== 'all' ? ' · ' + esc(biz) : ''}</span><span class="num">${list.length}</span></div>
+      ${list.length ? `<div class="pm-list">${list.map((x) => card(x)).join('')}</div>` : `<div class="grp"><div class="row"><div class="m"><div class="t">여기에 맞는 자료가 아직 없습니다</div><div class="s">${ch === '스토리' ? '스토리 크기(1080×1920) 자료는 아직 만들지 않았습니다. ' : ''}다른 채널이나 업종을 누르십시오.</div></div></div></div>`}
+      <div class="sec"><span>쓴 기록</span><span class="num">${all.length}</span></div>
+      ${all.length ? `<div class="grp">${all.slice(0, 12).map((r) => { const x = rx(r), mi = mine.log.indexOf(r); return `<div class="row pm-lrow"><div class="m"><div class="t">${esc((place(r.room) || {}).짧게 || r.room)} · ${esc(x.biz)} ${esc(AN(x.an))}</div><div class="s">${esc(short(r.at))}${r.seed ? ` · 본부 기록${r.plan ? '(예약)' : ''}` : ' · 이 폰'} · ${esc(x.cap.replace(/\s*\|\s*bigC company\s*$/, ''))}</div></div>${mi >= 0 ? `<button class="btn pm-del" data-a="pmdel" data-i="${mi}" aria-label="이 기록 지우기">지우기</button>` : ''}</div>`; }).join('')}</div>` : ''}
+      <p class="resp">공유는 휴대폰 공유 창으로 파일을 보냅니다. 공유 창이 없는 브라우저에서는 새 창으로 열어 길게 눌러 저장하십시오. 쓴 기록은 이 폰에만 남습니다. 방 목록과 「본부 기록」은 본부 장부에서 옮겨 온 사본입니다.</p></div>`;
+  }
+
+  // ---------- 단추 ----------
+  async function fileOf(x) {
+    if (blobs.has(x.id)) return blobs.get(x.id);
+    const r = await fetch(x.url); if (!r.ok) throw new Error('받기 ' + r.status);
+    const b = await r.blob();
+    const f = new File([b], x.file.split('/').pop(), { type: x.type || b.type });
+    blobs.set(x.id, f); return f;
+  }
+  function fallbackSheet(x, why) {
+    const big = x.kind === '영상' ? `<video class="pm-big" src="${esc(encodeURI(x.url))}" poster="${esc(encodeURI(x.thumb))}" controls playsinline preload="none"></video>` : `<img class="pm-big" src="${esc(encodeURI(x.url))}" alt="${esc(x.cap)}">`;
+    api.openSheet(`<h4>${esc(x.biz)} · ${esc(AN(x.an))}</h4><p class="sub">${esc(why)}</p>${big}
+      <p class="resp" style="margin-top:8px">${x.kind === '영상' ? '새 창에서 영상을 열고 메뉴 → 「다운로드」로 저장하십시오.' : '그림을 길게 눌러 「이미지 저장」을 누르십시오.'} 저장한 뒤 카톡 · 인스타에서 사진으로 고르면 됩니다.</p>
+      <div class="acts"><a class="btn p pm-a" href="${esc(encodeURI(x.url))}" target="_blank" rel="noopener">새 창으로 열기</a><a class="btn pm-a" href="${esc(encodeURI(x.url))}" download="${esc(x.file.split('/').pop())}">파일로 저장</a></div>`);
+  }
+  async function share(b) {
+    const x = item(b.dataset.id); if (!x) return;
+    if (!navigator.share || !navigator.canShare) { fallbackSheet(x, '이 브라우저에는 파일 공유 창이 없습니다.'); return; }
+    let f;
+    const ready = blobs.has(x.id);
+    try { if (!ready) api.toast(`${x.kind} 준비 중입니다…`); f = await fileOf(x); } catch (e) { api.toast('파일을 받지 못했습니다. 인터넷을 확인하십시오.'); return; }
+    if (!navigator.canShare({ files: [f] })) { fallbackSheet(x, '이 폰은 이 파일 종류를 공유 창으로 보내지 못합니다.'); return; }
+    try {
+      await navigator.share({ files: [f], title: x.cap });
+      api.toast('보냈습니다. 방에 올렸으면 「썼어요」를 누르십시오.');
+    } catch (e) {
+      if (e && e.name === 'AbortError') return;
+      if (e && e.name === 'NotAllowedError') { api.toast('준비됐습니다. 「공유」를 한 번 더 누르십시오.'); return; }
+      fallbackSheet(x, '공유 창을 열지 못했습니다.');
+    }
+  }
+  function copyText(t) {
+    let ok = false;
+    try { if (navigator.clipboard && window.isSecureContext) { navigator.clipboard.writeText(t).catch(() => {}); ok = true; } } catch (e) { ok = false; }
+    if (!ok) {
+      const a = document.createElement('textarea'); a.value = t; a.setAttribute('readonly', ''); a.style.cssText = 'position:fixed;top:-200px;opacity:0';
+      document.body.appendChild(a); a.select(); try { ok = document.execCommand('copy'); } catch (e) { ok = false; } a.remove();
+    }
+    return ok;
+  }
+  async function copy(b) {
+    const x = item(b.dataset.id); if (!x || !x.text) return;
+    const path = typeof x.text === 'object' ? x.text[ch] || x.text.기본 || Object.values(x.text)[0] : x.text;
+    let t = texts.get(path);
+    if (t === undefined) {
+      try { const r = await fetch(BASE + rel(path)); if (!r.ok) throw new Error(r.status); t = (await r.text()).replace(/^﻿/, '').trim(); texts.set(path, t); }
+      catch (e) { api.toast('글을 받지 못했습니다. 인터넷을 확인하십시오.'); return; }
+    }
+    const withCap = KAKAO.has(ch) && x.cap;
+    const full = withCap ? `${t}\n\n${x.cap}` : t;
+    const ok = copyText(full);
+    api.openSheet(`<h4>${ok ? '글을 복사했습니다' : '아래 글을 길게 눌러 복사하십시오'}</h4><p class="sub">${esc(x.biz)} · ${[...full].length}자${withCap ? ' · 맨 끝에 카톡 캡션 줄' : ''} · ${esc(rel(path).split('/').pop())}</p>
+      <textarea class="pm-text" readonly rows="12" aria-label="복사한 글">${esc(full)}</textarea>
+      <div class="acts"><button class="btn" data-a="pmclose">닫기</button></div>`);
+    api.toast(ok ? `글 ${[...full].length}자를 복사했습니다.` : '복사가 막혀 있습니다. 글을 길게 눌러 복사하십시오.');
+  }
+  function usedSheet(b) {
+    const x = item(b.dataset.id); if (!x) return;
+    const cur = mine.room && place(mine.room);
+    const btn = (p) => `<button class="row pm-pick" data-a="pmpick" data-id="${esc(x.id)}" data-room="${esc(p.id)}"><div class="m"><div class="t">${esc(p.짧게 || p.이름)}</div>${p.규칙 ? `<div class="s">${esc(p.규칙)}</div>` : ''}</div>${api.I.chev}</button>`;
+    api.openSheet(`<h4>어디에 쓰셨습니까?</h4><p class="sub">${esc(x.biz)} · ${esc(AN(x.an))} · ${esc(x.cap.replace(/\s*\|\s*bigC company\s*$/, ''))}</p>
+      ${cur ? `<div class="sec"><span>지금 고른 방</span></div><div class="grp">${btn(cur)}</div>` : ''}
+      <div class="sec"><span>카톡 방</span></div><div class="grp">${data.rooms.filter((p) => !cur || p.id !== cur.id).map(btn).join('')}</div>
+      <div class="sec"><span>그 밖</span></div><div class="grp">${data.other.filter((p) => !cur || p.id !== cur.id).map(btn).join('')}</div>
+      <p class="resp">누르면 지금 시각과 함께 이 폰에 적습니다.</p>`);
+  }
+  function pick(b) {
+    const x = item(b.dataset.id), p = place(b.dataset.room); if (!x || !p) return;
+    const now = Date.now(), rec = { at: stamp(now).slice(0, 16), ts: now, room: p.id, id: x.id, file: x.file };
+    mine.log.push(rec); saveMine();
+    api.closeSheet(); api.render();
+    const n = ORDER.includes(x.an) ? nextFor(p.id, x.biz) : null;
+    api.toast(`${p.짧게 || p.이름}에 ${AN(x.an)}을 썼다고 적었습니다.${n ? ` 다음은 ${AN(n.an)}입니다.` : ''}`, () => { const i = mine.log.indexOf(rec); if (i >= 0) { mine.log.splice(i, 1); saveMine(); api.render(); } });
+  }
+  const actions = {
+    pmch: (b) => { ch = b.dataset.v; api.render(); },
+    pmbiz: (b) => { biz = b.dataset.v; api.render(); if (b.classList.contains('pm-nrow')) { const v = document.querySelector('#view'); const n = document.querySelector('.pm-next'); if (v && n) v.scrollTop = Math.max(0, n.offsetTop - 120); } },
+    pmshare: (b) => { share(b); },
+    pmcopy: (b) => { copy(b); },
+    pmused: usedSheet,
+    pmpick: pick,
+    pmclose: () => api.closeSheet(),
+    pmreload: () => { load(); api.render(); },
+    pmdel: (b) => { const i = +b.dataset.i, r = mine.log[i]; if (!r) return; mine.log.splice(i, 1); saveMine(); api.render(); api.toast('기록을 지웠습니다.', () => { mine.log.splice(i, 0, r); saveMine(); api.render(); }); },
+  };
+  // 방 고르기(select)는 클릭이 아니라 change 로 받는다 — 그릴 때마다 다시 묶는다
+  function after() {
+    const s = document.querySelector('#pmRoom');
+    if (s && !s.dataset.on) { s.dataset.on = '1'; s.addEventListener('change', () => { mine.room = s.value; saveMine(); api.render(); }); }
+  }
+  return { view, actions, after, load, debug: () => ({ data, mine, ch, biz, next: (r, b) => { const n = data && nextFor(r, b); return n ? { id: n.x.id, an: n.an } : null; } }) };
+};
+
 // bigC company 사장님 앱 · 설치형 층 (WO-029 5판 · WO-030 6판). 시안.html 의 앱 코드(같은 화면 · 같은 장면)에 얹는다.
 // 이 층이 하는 일: PIN 화면 잠금(PBKDF2 해시로 저장) · 누른 상태 저장 · 「설정」 탭(판 · 업종 · 단계 · 예시 · 밝기 · 되돌리기 · 만들 수 있는지)
 //   · 서비스 워커 등록 · 설치 안내 · (6판) 본부판 「오늘」 · 「손님」을 접수 서버(/app/*)에 잇기.
@@ -10,7 +237,7 @@
   // 쇼룸(bigc-company.github.io)과 출처를 나눠 쓴다 → 키 앞에 이 앱이 놓인 폴더 경로를 붙인다 (예: bigc@/a/x7k2/#pin)
   const BASE = 'bigc@' + location.pathname.slice(0, location.pathname.lastIndexOf('/') + 1) + '#';
   const KEY = { pin: BASE + 'pin', state: BASE + 'state', fail: BASE + 'fail', theme: BASE + 'theme', reset: BASE + 'reset',
-    conn: BASE + 'conn', live: BASE + 'live', queue: BASE + 'queue' };
+    conn: BASE + 'conn', live: BASE + 'live', queue: BASE + 'queue', promo: BASE + 'promo' };
   const OLD = { pin: 'bigc5-pin', state: 'bigc5-state', fail: 'bigc5-fail', theme: 'bigc-app-theme' }; // 5판 키(경로 없음)
   const store = {
     get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
@@ -368,6 +595,12 @@
     },
   };
 
+  // ---------- 홍보자료 탭 (WO-034 · _홍보층.js) — 본부판에서만 보인다 ----------
+  // api 는 init 뒤에 생기므로 대리 객체로 넘긴다. 쓴 기록은 KEY.promo 하나에(PIN 잊음 · 예시로 되돌리기에도 남는다 — 예시가 아니라 실제 기록)
+  const promo = window.__bigcPromoLayer ? window.__bigcPromoLayer({ api: new Proxy({}, { get: (_, k) => api[k] }), store, key: KEY.promo, stamp, S: () => S }) : null;
+  const promoOn = () => !!promo && !!S && S.mode === 'hq';
+  const IC_PROMO = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10v4h3l7 4.5v-13L7 10z"/><path d="M17.5 9a4 4 0 0 1 0 6M7 14l1.2 5h2.6l-1-4.4"/></svg>';
+
   // ---------- 설정 화면 ----------
   const IC_SET = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 3.5v2.2M12 18.3v2.2M3.5 12h2.2M18.3 12h2.2M6 6l1.6 1.6M16.4 16.4 18 18M6 18l1.6-1.6M16.4 7.6 18 6"/></svg>';
   const BIZ_KEYS = ['mart', 'food', 'golf', 'agent', 'factory', 'community'];
@@ -429,6 +662,7 @@
     sresetok: () => { wiping = true; clearTimeout(saveT); store.del(KEY.state); try { sessionStorage.setItem(KEY.reset, '1'); } catch (e) { /* 알림만 빠진다 */ } location.reload(); },
     install: () => { if (!deferredInstall) return; const ev = deferredInstall; deferredInstall = null; ev.prompt(); ev.userChoice.finally(() => api.render()); },
     ...connActions,
+    ...(promo ? promo.actions : {}),
   };
   { const sm = actions.smode; actions.smode = (b) => { sm(b); if (S.mode === 'hq' && conn && Date.now() - lastTry > 60000) sync(); }; }
 
@@ -438,11 +672,14 @@
       // 연결돼 있으면 본부판 「오늘」 · 「손님」만 서버 값으로. 아니면 undefined → 시안의 예시 화면
       get today() { return liveOn() ? vLiveToday : undefined; },
       get clients() { return liveOn() ? vLiveClients : undefined; },
+      // 홍보자료: 본부판에서만. 사장님판(업종 시안)에서는 탭도 화면도 없다
+      get promo() { return promoOn() ? promo.view : undefined; },
     },
     actions,
-    tab: () => `<button class="tab" role="tab" data-a="tab" data-t="set" aria-selected="${S.tab === 'set'}" aria-label="설정">${IC_SET}<span>설정</span></button>`,
+    tab: () => (promoOn() ? `<button class="tab" role="tab" data-a="tab" data-t="promo" aria-selected="${S.tab === 'promo'}" aria-label="홍보자료">${IC_PROMO}<span>홍보자료</span></button>` : '')
+      + `<button class="tab" role="tab" data-a="tab" data-t="set" aria-selected="${S.tab === 'set'}" aria-label="설정">${IC_SET}<span>설정</span></button>`,
     key,
-    after: () => { saveSoon(); liveBand(); },
+    after: () => { saveSoon(); liveBand(); if (promoOn() && S.tab === 'promo') promo.after(); },
     onLock: () => { lockStep(!readPin() ? 'set1' : changing ? 'old' : 'enter'); },
     init(a) {
       api = a; S = a.S;
