@@ -1,5 +1,6 @@
-/* bigC company 사장님 앱 · 설치형 6판 · 3106535609 · _만들기.mjs 가 만든 파일 */
-/* 원본: 시안.html 스타일 그대로 (설치형은 맨 아래 덧칠) */
+/* bigC company 사장님 앱 · 설치형 7판 · 810c620cd9 · _만들기.mjs 가 만든 파일 */
+/* Layout: 왼쪽 = 오너 점검 안내 + 판 · 업종 · 단계 바꾸기, 가운데 = 눌러 보는 앱(휴대폰 틀, 화면 높이에 맞춰 붙어 있음), 오른쪽 = 지금 화면에서 볼 것.
+   휴대폰 폭에서는 안내 → 앱(틀 없이 화면 폭) → 볼 것 → 만들 수 있는지 표 순서. 움직임은 120~240ms, 줄임 설정이면 끔. */
 :root{
   --bg:#eaeeee; --app:#f3f5f5; --surface:#ffffff; --surface2:#f6f8f8; --ink:#0f1416; --sub:#58636a;
   --line:rgba(15,20,22,.09); --line2:rgba(15,20,22,.18);
@@ -417,6 +418,85 @@ button.row:active,.row.tap:active{background:var(--surface2)}
 .can .fl span{display:flex;gap:8px;align-items:center}
 .pfoot{margin-top:36px;font-size:14px;color:var(--sub);display:flex;gap:16px;flex-wrap:wrap;justify-content:space-between}
 
+/* ===== WO-039: 2026 하한선(벤치마크\18_앱트렌드_2026\하한선.md) — 움직임 · 질감 · 한 손 =====
+   움직임 토큰: 누름 100 · 짧게 200 · 화면 전환 280 · 시트 420ms(스프링). 줄이기(시스템 · 앱 안 스위치)면 모두 끔. */
+:root{--acc-ink:#086358;--d-press:100ms;--d-short:200ms;--d-med:280ms;--d-long:420ms;--exit:cubic-bezier(.35,0,1,1);
+  --sk:rgba(15,20,22,.07);--sk2:rgba(15,20,22,.13);--glass:rgba(243,245,245,.8);--glass-line:rgba(255,255,255,.9);--glass-shadow:0 10px 30px -12px rgba(15,20,22,.38)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--acc-ink:#7fd8c8;--sk:rgba(238,242,243,.06);--sk2:rgba(238,242,243,.13);--glass:rgba(20,27,29,.74);--glass-line:rgba(255,255,255,.10);--glass-shadow:0 10px 30px -10px rgba(0,0,0,.75)}}
+:root[data-theme="dark"]{--acc-ink:#7fd8c8;--sk:rgba(238,242,243,.06);--sk2:rgba(238,242,243,.13);--glass:rgba(20,27,29,.74);--glass-line:rgba(255,255,255,.10);--glass-shadow:0 10px 30px -10px rgba(0,0,0,.75)}
+/* 화면 전환: 탭 차례대로 오른쪽 · 왼쪽에서 (H13) */
+.view.in-r{animation:inR var(--d-med) var(--ease) backwards}
+.view.in-l{animation:inL var(--d-med) var(--ease) backwards}
+@keyframes inR{from{opacity:0;transform:translateX(24px)}to{opacity:1;transform:none}}
+@keyframes inL{from{opacity:0;transform:translateX(-24px)}to{opacity:1;transform:none}}
+/* 시트: 420ms 스프링 · 바깥 · 끌기 · Esc (H14) */
+.sheet{transition:transform var(--d-long) var(--spring)}
+.scrim{transition:opacity var(--d-med) var(--ease)}
+/* 누름 반응 100ms (H12) */
+.btn,.chip,.tab,.ib,.lockcard,.cand,.send,.seg button,.op2 button{transition:transform var(--d-press) var(--ease),background-color var(--d-short),color var(--d-short),border-color var(--d-short),opacity var(--d-short)}
+.btn:active,.chip:active,.tab:active,.ib:active,.lockcard:active,.cand:active,.seg button:active{transform:scale(.97)}
+/* 고른 칩은 연한 청록(채운 단추는 화면에 하나만 — H11) */
+.chip[aria-pressed="true"]{background:var(--acc-soft);color:var(--acc-ink);border-color:var(--acc);font-weight:600}
+.chip[aria-pressed="true"] b{color:var(--acc-ink)}
+/* 오늘 머리 · 숫자 굴림 · 다 끝낸 빈 상태 */
+.hdr{display:flex;align-items:center;gap:0;flex:none}
+.gear{color:var(--sub)}
+.big span{display:inline-block}
+.big span.roll{animation:roll var(--d-med) var(--spring)}
+@keyframes roll{from{transform:translateY(55%);opacity:0}to{transform:none;opacity:1}}
+.zero{display:flex;align-items:center;gap:10px;font-size:16px;margin:10px 0 0}
+.zero .ck{width:36px;height:36px;flex:none}
+.zero .ck circle{fill:none;stroke:var(--acc);stroke-width:4;stroke-dasharray:176;animation:draw var(--d-long) var(--ease) backwards}
+.zero .ck path{fill:none;stroke:var(--acc);stroke-width:5;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:40;animation:draw2 var(--d-med) var(--ease) .25s backwards}
+@keyframes draw{from{stroke-dashoffset:176}to{stroke-dashoffset:0}}
+@keyframes draw2{from{stroke-dashoffset:40}to{stroke-dashoffset:0}}
+/* 「n건 더 보기」 (H10) */
+.row.more{align-items:center;min-height:48px;padding-top:10px;padding-bottom:10px}
+.row.more .t{font-size:14px;font-weight:600;color:var(--acc-ink)}
+.row.more .cv{width:18px;height:18px;color:var(--acc);flex:none;transition:transform var(--d-short) var(--ease)}
+.row.more[aria-expanded="true"] .cv{transform:rotate(180deg)}
+/* 오늘 돈 (H9 · H17) */
+.money .mv{font:800 28px/1.15 var(--n);letter-spacing:-.02em;margin:2px 0}
+/* 묶은 탭의 나눔 단추 */
+.gseg{margin:6px 0 10px}
+.gseg b{font:700 12px var(--n);color:var(--acc-ink);margin-left:2px}
+/* 스켈레톤 (H15) */
+.sk{position:relative;overflow:hidden;background:var(--sk)!important;border-radius:8px;color:transparent!important;box-shadow:none!important}
+.sk *{visibility:hidden}
+.sk::after{content:"";position:absolute;inset:0;transform:translateX(-100%);background:linear-gradient(90deg,transparent,var(--sk2),transparent);animation:shim 1.1s infinite}
+@keyframes shim{to{transform:translateX(100%)}}
+.skrow{align-items:center;pointer-events:none}
+.skrow .a{width:40px;height:40px;border-radius:50%;flex:none}
+.skrow .b{flex:1;display:grid;gap:8px}
+.skrow .b i{display:block;height:14px}
+.skrow .b i:last-child{width:60%}
+/* 당겨서 새로고침 (H16) */
+.ptr{position:absolute;left:0;right:0;top:10px;height:0;display:flex;justify-content:center;z-index:4;pointer-events:none;opacity:0;transition:opacity var(--d-short)}
+.ptr.on{opacity:1}
+.ptr .ring{width:36px;height:36px;border-radius:50%;background:var(--surface);box-shadow:var(--glass-shadow);display:grid;place-items:center;color:var(--acc)}
+.ptr.spin svg{animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+/* 햅틱 대체: 진동 없는 기기는 빛 번짐 (H20) */
+.tick{animation:tick var(--d-long) var(--ease)}
+@keyframes tick{0%{box-shadow:0 0 0 0 rgba(11,122,110,.45)}100%{box-shadow:0 0 0 14px rgba(11,122,110,0)}}
+/* 떠 있는 유리 탭 띠 · 내리면 작아짐 (H19) — 아래 여백은 띠 높이만큼 */
+.shell .tabs{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);position:absolute;left:10px;right:10px;bottom:10px;z-index:7;border-top:0;border-radius:30px;padding:5px;background:var(--glass);-webkit-backdrop-filter:blur(22px) saturate(1.8);backdrop-filter:blur(22px) saturate(1.8);box-shadow:var(--glass-shadow),inset 0 0 0 1px var(--glass-line);transition:transform var(--d-med) var(--spring)}
+.shell .tabs.tmin{transform:translateY(6px) scale(.94)}
+.shell .tab{min-height:56px;border-radius:25px}
+.shell .tab[aria-selected="true"]{background:var(--acc-soft)}
+.view::after{content:"";display:block;flex:none;height:88px}
+.compose{bottom:80px;border-radius:24px;border:1px solid var(--line);margin:0 8px 8px}
+.toast{bottom:92px}
+@media (prefers-reduced-transparency:reduce),(prefers-contrast:more){
+  .shell .tabs{background:var(--surface);-webkit-backdrop-filter:none;backdrop-filter:none;box-shadow:0 0 0 1px var(--line2)}
+}
+/* 글자 크게 (H23): 앱 안에서 115% · 130% */
+:root[data-size="l"] .view > *,:root[data-size="l"] .sheet .body,:root[data-size="l"] .toast span{zoom:1.15}
+:root[data-size="xl"] .view > *,:root[data-size="xl"] .sheet .body,:root[data-size="xl"] .toast span{zoom:1.3}
+/* 움직임 줄이기 — 앱 안 스위치 (시스템 설정은 맨 아래 미디어 규칙) */
+:root[data-motion="reduce"] *,:root[data-motion="reduce"] *::before,:root[data-motion="reduce"] *::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+:root[data-motion="reduce"] .btn:active,:root[data-motion="reduce"] .chip:active,:root[data-motion="reduce"] .tab:active{transform:none}
+
 @media (max-width:1120px){
   .stage{grid-template-columns:minmax(0,1fr) 410px;gap:32px}
   .hint{grid-column:1/-1}
@@ -433,7 +513,7 @@ button.row:active,.row.tap:active{background:var(--surface2)}
   .lock{inset:0}
   .ctrl{gap:8px}
 }
-@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}.btn:active,.chip:active,.tab:active{transform:none}}
 /* ===== 설치형(5판): 휴대폰 틀 없이 홈 화면 앱으로 전체 화면. 시안.html 의 스타일 뒤에 붙는다 ===== */
 html,body{height:100%}
 html{background:var(--bg)}
@@ -441,9 +521,11 @@ body{overscroll-behavior:none;background:var(--bg)}
 .app{position:fixed;inset:0;padding-top:env(safe-area-inset-top,0px);padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inset-right,0px)}
 .sbar{display:none}
 .lock{inset:0;padding:calc(40px + env(safe-area-inset-top,0px)) 28px calc(18px + env(safe-area-inset-bottom,0px));overflow-y:auto}
-.tabs{grid-template-columns:repeat(6,minmax(0,1fr));padding:4px 2px calc(8px + env(safe-area-inset-bottom,0px))}
+.shell .tabs{bottom:calc(10px + env(safe-area-inset-bottom,0px))}
+.view::after{height:calc(88px + env(safe-area-inset-bottom,0px))}
+.compose{bottom:calc(80px + env(safe-area-inset-bottom,0px))}
 .tab span{white-space:nowrap}
-.toast{bottom:calc(80px + env(safe-area-inset-bottom,0px))}
+.toast{bottom:calc(92px + env(safe-area-inset-bottom,0px))}
 .sheet .body{padding-bottom:calc(22px + env(safe-area-inset-bottom,0px))}
 /* 넓은 화면(PC · 태블릿)에서 열면 가운데 휴대폰 폭으로 */
 @media (min-width:640px){
@@ -479,9 +561,7 @@ body{overscroll-behavior:none;background:var(--bg)}
 .set .cmsg[data-tone="ok"]{color:var(--acc)}
 .band b{flex:none;white-space:nowrap}
 
-/* WO-034: 본부판 홍보자료 탭 — 본부판은 탭 일곱 칸(사장님판은 그대로 여섯) */
-.app[data-mode="hq"] .tabs{grid-template-columns:repeat(7,minmax(0,1fr))}
-.app[data-mode="hq"] .tab span{font-size:11.5px;letter-spacing:-.03em}
+/* WO-034 홍보자료 · WO-039: 탭은 두 판 모두 다섯 칸(본부판 홍보자료는 「홍보」 탭 안, 사장님판 설정은 오늘 톱니) */
 .pm .chips{margin-bottom:0}
 .pm .chips + .chips{padding-top:0}
 .pm-room{margin:0 0 4px;padding-right:6px}
@@ -491,7 +571,7 @@ body{overscroll-behavior:none;background:var(--bg)}
 .pm-rule{margin:6px 2px 10px}
 .pm-rule b{color:var(--wait);font-weight:600}
 .pm-list{display:grid;gap:12px}
-.pm-card{background:var(--surface);border-radius:14px;overflow:hidden;border:1px solid var(--line)}
+.pm-card,.pm-skc{background:var(--surface);border-radius:14px;overflow:hidden;border:1px solid var(--line)}
 .pm-card.pm-next{border:2px solid var(--acc)}
 .pm-nhd{display:flex;flex-direction:column;gap:2px;padding:12px 16px 10px;background:var(--acc-soft)}
 .pm-nhd b{font-size:16px;color:var(--acc)}
@@ -516,3 +596,7 @@ body{overscroll-behavior:none;background:var(--bg)}
 .pm-a.p{color:var(--on-acc)}
 .pm-text{width:100%;min-height:220px;border:1px solid var(--line2);border-radius:12px;padding:12px;font:15px/1.55 var(--f);color:var(--ink);background:var(--surface2);resize:vertical}
 .sheet .pm-pick{min-height:56px}
+
+/* WO-039: 설정 · 보기(밝기 · 글자 크기 · 움직임) · 돌아가기 */
+.set .sseg{margin:10px 0 2px}
+.set .hd .back{margin-left:-10px;color:var(--ink)}
